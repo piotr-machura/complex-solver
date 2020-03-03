@@ -1,7 +1,5 @@
 package algorithm;
 
-import java.util.ArrayList;
-
 // Rectangle
 
 // D--CD_mid--C
@@ -77,15 +75,17 @@ public class Rectangle {
     }
 
     // ArrayList lets dynamicly add objects to it (solutions)
-    public void solveInside(Function f, ArrayList<Point> solutions) {
-        if (area <= 0.001) {
-            solutions.add(new Point(AB_mid.X, BC_mid.Y));
-        } else if (checkInside(f)) {
-            // TODO Póki co to dzieli tylko "pionowo", a powinno na zmiane pionowo-poziomo.
-            Rectangle split1 = new Rectangle(A, AB_mid, CD_mid, D);
-            Rectangle split2 = new Rectangle(AB_mid, B, C, CD_mid);
-            split1.solveInside(f, solutions);
-            split2.solveInside(f, solutions);
+    public void solveInside(Function f) {
+        if (checkInside(f)) {
+            if (area <= 0.001) {
+                f.addSolution(new Point(AB_mid.X, BC_mid.Y));
+            } else {
+                // TODO Póki co to dzieli tylko "pionowo", a powinno na zmiane pionowo-poziomo.
+                Rectangle split1 = new Rectangle(A, AB_mid, CD_mid, D);
+                Rectangle split2 = new Rectangle(AB_mid, B, C, CD_mid);
+                split1.solveInside(f);
+                split2.solveInside(f);
+            }
         }
     }
 
