@@ -84,6 +84,7 @@ public class Rectangle {
                 // TODO Póki co to dzieli tylko "pionowo", a powinno na zmiane pionowo-poziomo.
                 Rectangle split1 = new Rectangle(A, AB_mid, CD_mid, D);
                 Rectangle split2 = new Rectangle(AB_mid, B, C, CD_mid);
+                Rectangle split3 = new Rectangle()
                 split1.solveInside(f);
                 split2.solveInside(f);
             }
