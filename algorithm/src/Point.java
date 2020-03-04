@@ -1,3 +1,7 @@
+package algorithm.src;
+
+import java.lang.Math;
+
 /**
  * Point
  */
