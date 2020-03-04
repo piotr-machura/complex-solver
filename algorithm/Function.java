@@ -3,7 +3,7 @@ package algorithm;
 import java.util.ArrayList;
 
 /**
- * Function, so far just (x, y) -> (x^2, y^2)
+ * Function, so far just (x, y) -> (x, y)
  */
 // TODO: Implement function setting
 public class Function {
@@ -14,15 +14,23 @@ public class Function {
     }
 
     public Point solveFor(Point p) {
-        return new Point(p.X * p.X, p.Y * p.Y);
+        return new Point(p.X, p.Y);
     }
 
     public Point solveFor(double x, double y) {
-        return new Point(x * x, y * y);
+        return new Point(x, y);
     }
 
     public void addSolution(Point p) {
         solutions.add(p);
+    }
+
+    public String stringSolutions() {
+        String out = "";
+        for (Point point : solutions) {
+            out += point.toString();
+        }
+        return out;
     }
 
 }
