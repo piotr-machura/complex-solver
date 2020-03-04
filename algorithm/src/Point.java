@@ -12,7 +12,7 @@ public class Point {
     public Point(double x, double y) {
         X = x;
         Y = y;
-        PHI = Math.atan(Y / X);
+        PHI = Math.atan2(Y, X);
         R = Math.sqrt(X * X + Y * Y);
     }
 

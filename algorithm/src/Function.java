@@ -14,11 +14,11 @@ public class Function {
     }
 
     public Point solveFor(Point p) {
-        return new Point(p.X, p.Y);
+        return new Point(p.X+1, p.Y+1);
     }
 
     public Point solveFor(double x, double y) {
-        return new Point(x, y);
+        return new Point(x+1, y+1);
     }
 
     public void addSolution(Point p) {
@@ -26,7 +26,7 @@ public class Function {
     }
 
     public String stringSolutions() {
-        String out = "";
+        String out = "test: ";
         for (Point point : solutions) {
             out += point.toString();
         }

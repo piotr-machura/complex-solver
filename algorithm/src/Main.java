@@ -13,11 +13,11 @@ public class Main {
         Point D = new Point(-20, 20);
         Rectangle r1 = new Rectangle(A, B, C, D);
 
-        System.out.print(r1.toString() + "\n\n");
-        Rectangle[] split = r1.splitThis();
-        for (Rectangle rectangle : split) {
-            System.out.println(rectangle.toString() + "\n\n");
-        }
+        // System.out.print(r1.toString() + "\n\n");
+        // Rectangle[] split = r1.splitThis();
+        // for (Rectangle rectangle : split) {
+        //     System.out.println(rectangle.toString() + "\n\n");
+        // }
         Function f = new Function();
         r1.solveInside(f);
         System.out.println(f.stringSolutions());

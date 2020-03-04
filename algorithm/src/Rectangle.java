@@ -38,46 +38,42 @@ public class Rectangle {
 
     public boolean checkInside(Function f) {
         boolean hasZeroes = true;
-        double windingNumber = 0;
+
         // d - step of "integration"
         // TODO: d depends on rect size
         double d = 0.001;
+        
         // Starting point: A
         double x = A.X;
         double y = A.Y;
-        Point p_cur = f.solveFor(x, y);
-        // Path A -> B
-        while (x < B.X) {
-            x += d;
-            Point p_next = f.solveFor(x, y);
-            windingNumber += p_next.PHI - p_cur.PHI;
-            p_cur = p_next;
+        
+        double windingNumber = 0;
+
+        while(x<B.X) {
+            windingNumber += f.solveFor(x, y).PHI;
+            x+=d;
         }
-        // Path B -> C
-        while (y < C.Y) {
-            y += d;
-            Point p_next = f.solveFor(x, y);
-            windingNumber += p_next.PHI - p_cur.PHI;
-            p_cur = p_next;
+
+        while(y<C.Y) {
+            windingNumber += f.solveFor(x,y).PHI;
+            y+=d;
         }
-        // Path C -> D
-        while (x > D.X) {
-            x -= d;
-            Point p_next = f.solveFor(x, y);
-            windingNumber += p_next.PHI - p_cur.PHI;
-            p_cur = p_next;
+
+        while(x>D.X) {
+            windingNumber += f.solveFor(x,y).PHI;
+            x-=d;
         }
-        // Path D -> A
-        while (y > A.Y) {
-            y -= d;
-            Point p_next = f.solveFor(x, y);
-            windingNumber += p_next.PHI - p_cur.PHI;
-            p_cur = p_next;
+
+        while(y>A.Y) {
+            windingNumber += f.solveFor(x,y).PHI;
+            y-=d;
         }
+
         System.out.println("Winding number: " + windingNumber + " \n");
         if (windingNumber < 0.001) {
             hasZeroes = false;
         }
+        
         return hasZeroes;
     }
 
@@ -90,12 +86,6 @@ public class Rectangle {
         return split;
     }
 
-    // D--CD_mid--C
-    // | |
-    // AD_mid BC_mid
-    // | |
-    // A--AB_mid--B
-    // ArrayList lets dynamicly add objects to it (solutions)
     public void solveInside(Function f) {
         System.out.println("Checking rectangle: \n" + toString() + "\n");
         if (checkInside(f)) {
