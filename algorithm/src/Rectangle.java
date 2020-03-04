@@ -1,5 +1,3 @@
-package algorithm;
-
 // Rectangle
 
 // D--CD_mid--C
