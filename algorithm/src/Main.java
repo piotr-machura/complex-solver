@@ -16,7 +16,7 @@ public class Main {
 
         Function f = new Function();
         r1.solveInside(f);
-        
+
         System.out.println(f.stringSolutions());
 
     }

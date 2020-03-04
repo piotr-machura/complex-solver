@@ -42,39 +42,55 @@ public class Rectangle {
 
     public boolean checkInside(Function f) {
         // d - step of "integration"
-        // TODO: d depends on rect size
-        double d = 0.1;
-        
+        // ! zmniejszenie d zwiększa mocno windingNumber, a przez to niedokładność
+        // ! "odległosci od inta"
+        // TODO: czyli chyba jednak nie można go ot tak dodawać, trzeba "całkować"
+        double d = 0.0001;
+
         // Starting number: A
         double x = A.re;
         double y = A.im;
-        
+
         double windingNumber = 0;
 
-        while(x<B.re) {
+        while (x < B.re) {
             windingNumber += f.solveFor(new Complex(x, y)).phase();
-            x+=d;
+            x += d;
         }
 
-        while(y<C.im) {
+        while (y < C.im) {
             windingNumber += f.solveFor(new Complex(x, y)).phase();
-            y+=d;
+            y += d;
         }
 
-        while(x>D.re) {
+        while (x > D.re) {
             windingNumber += f.solveFor(new Complex(x, y)).phase();
-            x-=d;
+            x -= d;
         }
 
-        while(y>A.im) {
+        while (y > A.im) {
             windingNumber += f.solveFor(new Complex(x, y)).phase();
-            y-=d;
+            y -= d;
         }
 
-        windingNumber = windingNumber/(2*Math.PI);
+        windingNumber = windingNumber / (2 * Math.PI);
 
         System.out.println("Winding number: " + windingNumber + "\n\n");
-        return windingNumber > 1;
+        /*
+         * Wydaje mi się, ze windingNumber powinien być CAŁKOWITY. Nasz algorytm zbiera
+         * też taki z przecinkiem i wtedy sprawdza nieodpowiednie prostokąty. Jak się
+         * przyjrzysz tym protokątom to niektóre mają niecałkowity niezerowy i w nich na
+         * pewno zera nie ma. nearZero powinno sprawdzić czy wN jest "blisko" swojego
+         * inta, ale trzeba to dopracować
+         */
+
+        return nearZero(windingNumber - (int) windingNumber);
+    }
+
+    // Checks if number is within 0.001 of zero
+    boolean nearZero(double f) {
+        double epsilon = 0.001;
+        return ((-epsilon < f) && (f < epsilon));
     }
 
     Rectangle[] getChildren() {
@@ -89,7 +105,7 @@ public class Rectangle {
     public void solveInside(Function f) {
         System.out.println("Checking rectangle: \n" + toString() + "\n");
         if (checkInside(f)) {
-            if (area <= 1) {
+            if (area <= 0.1) {
                 f.addSolution(new Complex(MIDDLE.re, MIDDLE.im));
             } else {
                 for (Rectangle child : getChildren()) {
@@ -97,7 +113,9 @@ public class Rectangle {
                     child.solveInside(f);
                 }
             }
+        } else {
         }
+        ;
     }
 
 }
