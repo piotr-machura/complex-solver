@@ -10,7 +10,7 @@ package algorithm;
 
 public class Rectangle {
     Point A, B, C, D;
-    Point AB_mid, BC_mid, CD_mid, AD_mid;
+    Point AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
 
     public Rectangle(Point a, Point b, Point c, Point d) {
@@ -18,11 +18,12 @@ public class Rectangle {
         B = b;
         C = c;
         D = d;
-        area = (B.X - A.X) * (C.Y - B.Y);
         AB_mid = new Point(B.X - A.X, A.Y);
         BC_mid = new Point(B.X, C.Y - B.Y);
         CD_mid = new Point(D.X - C.X, C.Y);
         AD_mid = new Point(D.X, D.Y - A.Y);
+        MIDDLE = new Point(BC_mid.X - AD_mid.X, CD_mid.Y - AB_mid.Y);
+        area = (B.X - A.X) * (C.Y - B.Y);
     }
 
     public String toString() {
@@ -78,7 +79,7 @@ public class Rectangle {
     public void solveInside(Function f) {
         if (checkInside(f)) {
             if (area <= 0.001) {
-                f.addSolution(new Point(AB_mid.X, BC_mid.Y));
+                f.addSolution(this.MIDDLE);
             } else {
                 // TODO Póki co to dzieli tylko "pionowo", a powinno na zmiane pionowo-poziomo.
                 Rectangle split1 = new Rectangle(A, AB_mid, CD_mid, D);

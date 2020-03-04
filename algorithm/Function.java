@@ -1,11 +1,14 @@
 package algorithm;
 
 import java.util.ArrayList;
+
 /**
- * Function, so far just z^2
+ * Function, so far just (x, y) -> (x^2, y^2)
  */
+// TODO: Implement function setting
 public class Function {
     ArrayList<Point> solutions;
+
     public Function() {
         solutions = new ArrayList<Point>();
     }
