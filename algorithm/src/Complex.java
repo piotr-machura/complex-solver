@@ -1,3 +1,5 @@
+package algorithm.src;
+
 /******************************************************************************
  *  Compilation:  javac Complex.java
  *  Execution:    java Complex
@@ -30,8 +32,8 @@
 import java.util.Objects;
 
 public class Complex {
-    private final double re;   // the real part
-    private final double im;   // the imaginary part
+    double re;   // the real part
+    double im;   // the imaginary part
 
     // create a new object with the given real and imaginary parts
     public Complex(double real, double imag) {
@@ -98,8 +100,8 @@ public class Complex {
     }
 
     // return the real or imaginary part
-    public double re() { return re; }
-    public double im() { return im; }
+    public double re() { return Math.round(re*1000)/1000; }
+    public double im() { return Math.round(im*1000)/1000; }
 
     // return a / b
     public Complex divides(Complex b) {

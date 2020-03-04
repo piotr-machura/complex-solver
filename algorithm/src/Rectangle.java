@@ -9,22 +9,25 @@ package algorithm.src;
 // A--AB_mid--B
 
 public class Rectangle {
-    Point A, B, C, D;
-    Point AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
+    Complex A, B, C, D;
+    Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
 
-    public Rectangle(Point a, Point b, Point c, Point d) {
+    public Rectangle(Complex a, Complex b, Complex c, Complex d) {
         A = a;
         B = b;
         C = c;
         D = d;
+
         // TODO: tick d determined by size of rect
-        AB_mid = new Point((B.X + A.X) / 2, A.Y);
-        BC_mid = new Point(B.X, (C.Y + B.Y) / 2);
-        CD_mid = new Point((C.X + D.X) / 2, C.Y);
-        AD_mid = new Point(D.X, (D.Y + A.Y) / 2);
-        MIDDLE = new Point((BC_mid.X + AD_mid.X) / 2, (CD_mid.Y + AB_mid.Y) / 2);
-        area = (B.X - A.X) * (C.Y - B.Y);
+
+        AB_mid = new Complex((B.re + A.re) / 2, A.im);
+        BC_mid = new Complex(B.re, (C.im + B.im) / 2);
+        CD_mid = new Complex((C.re + D.re) / 2, C.im);
+        AD_mid = new Complex(D.re, (D.im + A.im) / 2);
+        MIDDLE = new Complex((BC_mid.re + AD_mid.re) / 2, (CD_mid.im + AB_mid.im) / 2);
+
+        area = (B.re - A.re) * (C.im - B.im);
     }
 
     public String toString() {
@@ -32,69 +35,66 @@ public class Rectangle {
         rectString += "D: " + D.toString() + "   ";
         rectString += "C: " + C.toString() + "\n";
         rectString += "A: " + A.toString() + "   ";
-        rectString += "B: " + B.toString();
+        rectString += "B: " + B.toString() + "\n";
+        rectString += "area: " + area;
         return rectString;
     }
 
     public boolean checkInside(Function f) {
-        boolean hasZeroes = true;
-
         // d - step of "integration"
         // TODO: d depends on rect size
-        double d = 0.001;
+        double d = 0.1;
         
-        // Starting point: A
-        double x = A.X;
-        double y = A.Y;
+        // Starting number: A
+        double x = A.re;
+        double y = A.im;
         
         double windingNumber = 0;
 
-        while(x<B.X) {
-            windingNumber += f.solveFor(x, y).PHI;
+        while(x<B.re) {
+            windingNumber += f.solveFor(new Complex(x, y)).phase();
             x+=d;
         }
 
-        while(y<C.Y) {
-            windingNumber += f.solveFor(x,y).PHI;
+        while(y<C.im) {
+            windingNumber += f.solveFor(new Complex(x, y)).phase();
             y+=d;
         }
 
-        while(x>D.X) {
-            windingNumber += f.solveFor(x,y).PHI;
+        while(x>D.re) {
+            windingNumber += f.solveFor(new Complex(x, y)).phase();
             x-=d;
         }
 
-        while(y>A.Y) {
-            windingNumber += f.solveFor(x,y).PHI;
+        while(y>A.im) {
+            windingNumber += f.solveFor(new Complex(x, y)).phase();
             y-=d;
         }
 
-        System.out.println("Winding number: " + windingNumber + " \n");
-        if (windingNumber < 0.001) {
-            hasZeroes = false;
-        }
-        
-        return hasZeroes;
+        windingNumber = windingNumber/(2*Math.PI);
+
+        System.out.println("Winding number: " + windingNumber + "\n\n");
+        return windingNumber > 1;
     }
 
-    Rectangle[] splitThis() {
-        Rectangle[] split = new Rectangle[4];
-        split[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid);
-        split[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE);
-        split[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid);
-        split[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D);
-        return split;
+    Rectangle[] getChildren() {
+        Rectangle[] children = new Rectangle[4];
+        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid);
+        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE);
+        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid);
+        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D);
+        return children;
     }
 
     public void solveInside(Function f) {
         System.out.println("Checking rectangle: \n" + toString() + "\n");
         if (checkInside(f)) {
-            if (area <= 0.1) {
-                f.addSolution(this.MIDDLE);
+            if (area <= 1) {
+                f.addSolution(new Complex(MIDDLE.re, MIDDLE.im));
             } else {
-                Rectangle[] split = splitThis();
-                for (Rectangle rectangle : split) {
-                    rectangle.solveInside(f);
+                for (Rectangle child : getChildren()) {
+                    child.toString();
+                    child.solveInside(f);
                 }
             }
         }

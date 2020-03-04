@@ -2,33 +2,24 @@ package algorithm.src;
 
 import java.util.ArrayList;
 
-/**
- * Function, so far just (x, y) -> (x, y)
- */
-// TODO: Implement function setting
 public class Function {
-    ArrayList<Point> solutions;
 
-    public Function() {
-        solutions = new ArrayList<Point>();
+    ArrayList<Complex> solutions = new ArrayList<Complex>();
+
+    public Complex solveFor(Complex z) {
+        z = z.times(z).minus(new Complex(1,0));
+        z = new Complex(z.re(), z.im());
+        return z;
     }
 
-    public Point solveFor(Point p) {
-        return new Point(p.X+1, p.Y+1);
-    }
-
-    public Point solveFor(double x, double y) {
-        return new Point(x+1, y+1);
-    }
-
-    public void addSolution(Point p) {
-        solutions.add(p);
+    public void addSolution(Complex z) {
+        solutions.add(z);
     }
 
     public String stringSolutions() {
-        String out = "test: ";
-        for (Point point : solutions) {
-            out += point.toString();
+        String out = "solutions: \n";
+        for (Complex s : solutions) {
+            out += s.toString() + "\n";
         }
         return out;
     }
