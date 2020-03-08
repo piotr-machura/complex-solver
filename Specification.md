@@ -53,12 +53,25 @@ Rekurencja zatrzymuje się w momencie, gdy pola prostokątów o niezerowym _W_ s
 
 ## Cele dodatkowe
 
-### Konieczne:
-
 -   Użycie systemu kontroli wersji `git`
 -   Program napisany w `JavaFX`
-
-### Ewentualne:
-
--   Program wielojęzyczny (wersja po angielsku i po polsku)
+-   Program wielojęzyczny (wersja po po polsku)
 -   Program dostępny w licencji _Open Source_
+
+## Terminarz realizacji projektu
+
+## Tabela zadań projektu
+
+| Funkcjonalność                              | Max. pkt. | Uzyskane pkt. | Notatki                                            |
+| ------------------------------------------- | --------- | ------------- | -------------------------------------------------- |
+| GUI                                         | 5         |               | Wprowadzanie funkcji przyciskami                   |
+| Wprowadzanie funkcji z klawiatury           | 3         |               |                                                    |
+| Kolorowanie dziedziny                       | 5         |               | Wraz z wyświetleniem                               |
+| Algorytm liczący _winding number_           | 8         |               | Wraz ze znajdowaniem miejsc zerowych               |
+| Rozwiązanie dowolnych złożeń funkcji        | 12        |               | Obiekt `Function` z podanych danych tworzy funkcję |
+| Rysowanie prostokątów w czasie rzeczywistym | 12        |               |                                                    |
+| Użycie systemu `git`                        | 2         |               | https://github.com/piotrmachura16/AP4-project-java |
+| Wielojęzyczność programu                    | 3         |               | Język podstawowy: ENG                              |
+| **SUMA**                                    | 50        |               |                                                    |
+
+Za poprawnie wykonany projekt chcielibyśmy uzyskać ocenę 5.
