@@ -7,8 +7,8 @@ public class Function {
     ArrayList<Complex> solutions = new ArrayList<Complex>();
 
     public Complex solveFor(Complex z) {
-        z = z.times(z).minus(new Complex(1, 0));
-        z = new Complex(z.re(), z.im());
+        z = z.times(z);
+        z = z.minus(new Complex(1, 0));
         return z;
     }
 

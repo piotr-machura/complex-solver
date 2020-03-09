@@ -12,12 +12,16 @@ public class Rectangle {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
+    InputSpace space;
+    OutputSpace output;
 
-    public Rectangle(Complex a, Complex b, Complex c, Complex d) {
+    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, OutputSpace output) {
         A = a;
         B = b;
         C = c;
         D = d;
+        this.space = space;
+        this.output = output;
 
         // TODO: tick d determined by size of rect
 
@@ -45,7 +49,7 @@ public class Rectangle {
         // ! zmniejszenie d zwiększa mocno windingNumber, a przez to niedokładność
         // ! "odległosci od inta"
         // TODO: czyli chyba jednak nie można go ot tak dodawać, trzeba "całkować"
-        double d = 0.0001;
+        double d = 1;
 
         // Starting number: A
         double x = A.re;
@@ -54,23 +58,39 @@ public class Rectangle {
         double windingNumber = 0;
 
         while (x < B.re) {
-            windingNumber += f.solveFor(new Complex(x, y)).phase();
+            space.addPoint(new Complex(x, y));
+            double prev = f.solveFor(new Complex(x, y)).phase();
             x += d;
+            double now = f.solveFor(new Complex(x, y)).phase();
+            windingNumber += now - prev;
+            System.out.println(now + " było " + prev);
         }
 
         while (y < C.im) {
-            windingNumber += f.solveFor(new Complex(x, y)).phase();
+            space.addPoint(new Complex(x, y));
+            double prev = f.solveFor(new Complex(x, y)).phase();
             y += d;
+            double now = f.solveFor(new Complex(x, y)).phase();
+            windingNumber += now - prev;
+            System.out.println(now + " było " + prev);
         }
 
         while (x > D.re) {
-            windingNumber += f.solveFor(new Complex(x, y)).phase();
+            space.addPoint(new Complex(x, y));
+            double prev = f.solveFor(new Complex(x, y)).phase();
             x -= d;
+            double now = f.solveFor(new Complex(x, y)).phase();
+            windingNumber += now - prev;
+            System.out.println(now + " było " + prev);
         }
 
         while (y > A.im) {
-            windingNumber += f.solveFor(new Complex(x, y)).phase();
+            space.addPoint(new Complex(x, y));
+            double prev = f.solveFor(new Complex(x, y)).phase();
             y -= d;
+            double now = f.solveFor(new Complex(x, y)).phase();
+            windingNumber += now - prev;
+            System.out.println(now + " było " + prev);
         }
 
         windingNumber = windingNumber / (2 * Math.PI);
@@ -95,27 +115,16 @@ public class Rectangle {
 
     Rectangle[] getChildren() {
         Rectangle[] children = new Rectangle[4];
-        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid);
-        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE);
-        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid);
-        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D);
+        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space);
+        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space);
+        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space);
+        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space);
         return children;
     }
 
     public void solveInside(Function f) {
         System.out.println("Checking rectangle: \n" + toString() + "\n");
-        if (checkInside(f)) {
-            if (area <= 0.1) {
-                f.addSolution(new Complex(MIDDLE.re, MIDDLE.im));
-            } else {
-                for (Rectangle child : getChildren()) {
-                    child.toString();
-                    child.solveInside(f);
-                }
-            }
-        } else {
-        }
-        ;
+        checkInside(f);
     }
 
 }
