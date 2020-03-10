@@ -1,6 +1,8 @@
-# Program rozwiązujący funkcje zespolone
+### Programowanie obiektowe | Specyfikacja projektu
 
 _Piotr Machura, Kacper Ledwosiński_
+
+# Kalkulator rozwiązujący i rysujący funkcje zespolone
 
 ## Cel główny
 
@@ -14,7 +16,7 @@ Dodatkowo kalkulator wykorzystuje metodę kolorowania dziedziny aby wyświetlić
 
 ### Metoda kolorowania dziedziny
 
-NArysowanie wykresu funkcji $f: \mathbb{C}\rightarrow \mathbb{C}$ ze względu na naturę liczb zespolonych wymagałoby czterowymiarowego układu współrzędnych, co jest niewykonalne w trójwymiarowej rzeczywistości. Z pomocą przychodzi metoda kolorowania dziedziny, polegajaca na nadaniu każdemu punktowi w _input space_ koloru odpowiadającego fazie $\phi = arg(f(z))$ o jasności proporcjonalnej do $r=|f(z)|$. Pozwala to na łatwą wizualną ocenę przybliżonych miejsc zerowych.
+NArysowanie wykresu funkcji $f: \mathbb{C}\rightarrow \mathbb{C}$ ze względu na naturę liczb zespolonych wymagałoby czterowymiarowego układu współrzędnych. Z pomocą przychodzi metoda kolorowania dziedziny, polegajaca na nadaniu każdemu punktowi w _input space_ koloru odpowiadającego fazie $\phi = arg(f(z))$ o jasności proporcjonalnej do $r=|f(z)|$. Pozwala to na łatwą wizualną ocenę przybliżonych miejsc zerowych.
 
 ### Indeks punktu względem krzywej
 
@@ -74,14 +76,15 @@ Użytkownik wpisuje funckję którą chce rozwiązać i otrzymuje wykres oraz mi
 
 | Funkcjonalność                              | Max. pkt. | Uzyskane pkt. | Notatki                                                     |
 | ------------------------------------------- | --------- | ------------- | ----------------------------------------------------------- |
-| GUI                                         | 5         |               | Wprowadzanie funkcji przyciskami                            |
-| Wprowadzanie funkcji z klawiatury           | 3         |               |                                                             |
-| Kolorowanie dziedziny                       | 5         |               | Wraz z wyświetleniem i zapisywaniem do pliku .jpg           |
-| Algorytm liczący _winding number_           | 8         |               | Wraz ze znajdowaniem miejsc zerowych i zapisywaniem do .txt |
-| Rozwiązanie dowolnych złożeń funkcji        | 12        |               | Obiekt `Function` z podanych danych tworzy funkcję          |
-| Rysowanie prostokątów w czasie rzeczywistym | 12        |               |                                                             |
-| Użycie systemu `git`                        | 2         |               | https://github.com/piotrmachura16/AP4-project-java          |
-| Wielojęzyczność programu                    | 3         |               | Język podstawowy: ENG                                       |
-| **SUMA**                                    | 50        |               |                                                             |
+| GUI                                         | ...       |               | Wprowadzanie funkcji przyciskami                            |
+| Wprowadzanie funkcji z klawiatury           | ...       |               |                                                             |
+| Kolorowanie dziedziny                       | ...       |               | Wraz z wyświetleniem i zapisywaniem do pliku .jpg           |
+| Algorytm liczący _winding number_           | ...       |               | Wraz ze znajdowaniem miejsc zerowych i zapisywaniem do .txt |
+| Rozwiązanie dowolnych złożeń funkcji        | ...       |               | Obiekt `Function` z podanych danych tworzy funkcję          |
+| Rysowanie prostokątów w czasie rzeczywistym | ...       |               |                                                             |
+| Użycie systemu `git`                        | ...       |               | https://github.com/piotrmachura16/AP4-project-java          |
+| Wielojęzyczność programu                    | ...       |               | Język podstawowy: ENG                                       |
+| Zapisywanie wyników do plików .jpg i .txt   | ...       |               | Język podstawowy: ENG                                       |
+| **SUMA**                                    | ...       |               |                                                             |
 
 Za poprawnie wykonany projekt chcielibyśmy uzyskać ocenę 5.

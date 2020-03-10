@@ -2,7 +2,7 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Program rozwiązujący funkcje zespolone</title>
+        <title>Programowanie obiektowe | Specyfikacja projektu</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
@@ -21,15 +21,16 @@
         <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
     </head>
     <body class="vscode-light">
-        <h1 id="program-rozwi%c4%85zuj%c4%85cy-funkcje-zespolone">Program rozwiązujący funkcje zespolone</h1>
+        <h3 id="programowanie-obiektowe--specyfikacja-projektu">Programowanie obiektowe | Specyfikacja projektu</h3>
 <p><em>Piotr Machura, Kacper Ledwosiński</em></p>
+<h1 id="kalkulator-rozwi%c4%85zuj%c4%85cy-i-rysuj%c4%85cy-funkcje-zespolone">Kalkulator rozwiązujący i rysujący funkcje zespolone</h1>
 <h2 id="cel-g%c5%82%c3%b3wny">Cel główny</h2>
 <p>Celem projektu jest stworzenie kalkulatora znajdującego miejsca zerowe funkcji zespolonych zmiennej zespolonej. Użytkownik za pomocą interfejsu graficznego podaje funkcję, z której zostaje utworzony obiekt <code>Function</code> zawierający listę rozwiązań <code>solutions</code>. Następnie algorytm matematyczny wykorzystujący <em>&quot;winding number&quot;</em> <em>(indeks punktu względem krzywej, patrz sekcja &quot;Podłoże matematyczne&quot;)</em> oraz rekurencyjną bisekcję na płaszczyźnie zespolonej <strong>znajduje przybliżone miejsca zerowe</strong> <code>Function</code> i umieszcza je w <code>solutions</code>, skąd mogą zostać <strong>wyświetlone na ekran</strong>.</p>
 <p>Dodatkowo kalkulator wykorzystuje metodę kolorowania dziedziny aby wyświetlić obszary <em>input space</em> i <em>output space</em> funkcji <em>(patrz sekcja &quot;Podłoże matematyczne)</em> oraz rysuje przeprowadzaną na płaszczyźnie zespolonej bisekcję w czasie rzeczywistym.</p>
 <h2 id="pod%c5%82o%c5%bce-matematyczne">Podłoże matematyczne</h2>
 <img src="file:///c:\Users\piotr\Projekty\AP4-project-java\io_spac.jpg" alt="iospace" width="350"/>
 <h3 id="metoda-kolorowania-dziedziny">Metoda kolorowania dziedziny</h3>
-<p>NArysowanie wykresu funkcji <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>:</mo><mi mathvariant="double-struck">C</mi><mo>→</mo><mi mathvariant="double-struck">C</mi></mrow><annotation encoding="application/x-tex">f: \mathbb{C}\rightarrow \mathbb{C}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbb">C</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbb">C</span></span></span></span></span> ze względu na naturę liczb zespolonych wymagałoby czterowymiarowego układu współrzędnych, co jest niewykonalne w trójwymiarowej rzeczywistości. Z pomocą przychodzi metoda kolorowania dziedziny, polegajaca na nadaniu każdemu punktowi w <em>input space</em> koloru odpowiadającego fazie <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi><mo>=</mo><mi>a</mi><mi>r</mi><mi>g</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi = arg(f(z))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span> o jasności proporcjonalnej do <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>=</mo><mi mathvariant="normal">∣</mi><mi>f</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">r=|f(z)|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mord">∣</span></span></span></span>. Pozwala to na łatwą wizualną ocenę przybliżonych miejsc zerowych.</p>
+<p>NArysowanie wykresu funkcji <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>:</mo><mi mathvariant="double-struck">C</mi><mo>→</mo><mi mathvariant="double-struck">C</mi></mrow><annotation encoding="application/x-tex">f: \mathbb{C}\rightarrow \mathbb{C}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbb">C</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbb">C</span></span></span></span></span> ze względu na naturę liczb zespolonych wymagałoby czterowymiarowego układu współrzędnych. Z pomocą przychodzi metoda kolorowania dziedziny, polegajaca na nadaniu każdemu punktowi w <em>input space</em> koloru odpowiadającego fazie <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi><mo>=</mo><mi>a</mi><mi>r</mi><mi>g</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\phi = arg(f(z))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span> o jasności proporcjonalnej do <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo>=</mo><mi mathvariant="normal">∣</mi><mi>f</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">r=|f(z)|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mord">∣</span></span></span></span>. Pozwala to na łatwą wizualną ocenę przybliżonych miejsc zerowych.</p>
 <h3 id="indeks-punktu-wzgl%c4%99dem-krzywej">Indeks punktu względem krzywej</h3>
 <img src="file:///c:\Users\piotr\Projekty\AP4-project-java\wn.jpg" alt="iospace" width="350"/>
 <p><strong>Indeks punktu</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">z_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> <strong>względem krzywej</strong> <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> jest to ilość okrążeń wykonywanych przez punkt <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span> wokół <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">z_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> przy jednym okrążeniu krzywej <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span>. Przyjmuje on zatem jedynie wartości całkowite lub 0, jeśli <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">z_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> nie zawiera się wewnatrz krzywej <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span>. Na płaszczyźnie zespolonej określony jest jako:</p>
@@ -77,55 +78,61 @@
 <tbody>
 <tr>
 <td>GUI</td>
-<td>5</td>
+<td>...</td>
 <td></td>
 <td>Wprowadzanie funkcji przyciskami</td>
 </tr>
 <tr>
 <td>Wprowadzanie funkcji z klawiatury</td>
-<td>3</td>
+<td>...</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Kolorowanie dziedziny</td>
-<td>5</td>
+<td>...</td>
 <td></td>
 <td>Wraz z wyświetleniem i zapisywaniem do pliku .jpg</td>
 </tr>
 <tr>
 <td>Algorytm liczący <em>winding number</em></td>
-<td>8</td>
+<td>...</td>
 <td></td>
 <td>Wraz ze znajdowaniem miejsc zerowych i zapisywaniem do .txt</td>
 </tr>
 <tr>
 <td>Rozwiązanie dowolnych złożeń funkcji</td>
-<td>12</td>
+<td>...</td>
 <td></td>
 <td>Obiekt <code>Function</code> z podanych danych tworzy funkcję</td>
 </tr>
 <tr>
 <td>Rysowanie prostokątów w czasie rzeczywistym</td>
-<td>12</td>
+<td>...</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Użycie systemu <code>git</code></td>
-<td>2</td>
+<td>...</td>
 <td></td>
 <td><a href="https://github.com/piotrmachura16/AP4-project-java">https://github.com/piotrmachura16/AP4-project-java</a></td>
 </tr>
 <tr>
 <td>Wielojęzyczność programu</td>
-<td>3</td>
+<td>...</td>
+<td></td>
+<td>Język podstawowy: ENG</td>
+</tr>
+<tr>
+<td>Zapisywanie wyników do plików .jpg i .txt</td>
+<td>...</td>
 <td></td>
 <td>Język podstawowy: ENG</td>
 </tr>
 <tr>
 <td><strong>SUMA</strong></td>
-<td>50</td>
+<td>...</td>
 <td></td>
 <td></td>
 </tr>
