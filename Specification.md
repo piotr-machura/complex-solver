@@ -1,10 +1,3 @@
----
-geometry: margin=2cm
-header-includes:
-    - \renewcommand{\familydefault}{\sfdefault}
-    - \fontfamily{arial}\selectfont
----
-
 # Program rozwiązujący funkcje zespolone
 
 _Piotr Machura, Kacper Ledwosiński_
@@ -17,7 +10,7 @@ Dodatkowo kalkulator wykorzystuje metodę kolorowania dziedziny aby wyświetlić
 
 ## Podłoże matematyczne
 
-![](io_spac.jpg)
+<img src="io_spac.jpg" alt="iospace" width="350"/>
 
 ### Metoda kolorowania dziedziny
 
@@ -25,7 +18,7 @@ NArysowanie wykresu funkcji $f: \mathbb{C}\rightarrow \mathbb{C}$ ze względu na
 
 ### Indeks punktu względem krzywej
 
-![](wn.jpg)
+<img src="wn.jpg" alt="iospace" width="350"/>
 
 **Indeks punktu** $z_0$ **względem krzywej** $C$ jest to ilość okrążeń wykonywanych przez punkt $z$ wokół $z_0$ przy jednym okrążeniu krzywej $C$. Przyjmuje on zatem jedynie wartości całkowite lub 0, jeśli $z_0$ nie zawiera się wewnatrz krzywej $C$. Na płaszczyźnie zespolonej określony jest jako:
 
