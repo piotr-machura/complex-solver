@@ -48,7 +48,7 @@ Rekurencja zatrzymuje się w momencie, gdy pola prostokątów o niezerowym _W_ s
 
 <img src="main_window.jpg" alt="iospace" width="350"/>
 
-Program akceptuje wzór funkcji zarówno z klawiatury jak z wbudowanych przycisków. Rozmiar początkowego prostokąta określa `Radius size` - `Auto` narysuje prostokąt wystarczająco duży, by znaleźć jedno miejsce zerowe, pole tekstowe `Custom` pozwala wprowadzić własny rozmiar startowego prostokąta. Po kliknięciu przycisku `Solve` otwiera się nowe okno z rozwiązaniem, podczas gdy główne okno pozostaje otwarte do dalszego wykorzystania.
+Program akceptuje wzór funkcji zarówno z klawiatury jak z wbudowanych przycisków. Rozmiar początkowego prostokąta określa `Radius size` - `Auto` narysuje prostokąt 20x20 lub wystarczająco duży, by znaleźć jedno miejsce zerowe (hiperłącze wyświetla tą informację), pole tekstowe `Custom` pozwala wprowadzić własny rozmiar startowego prostokąta. Po kliknięciu przycisku `Solve` otwiera się nowe okno z rozwiązaniem, podczas gdy główne okno pozostaje otwarte do dalszego wykorzystania.
 
 <img src="func_window.jpg" alt="iospace" width="350"/>
 
@@ -84,7 +84,7 @@ Użytkownik wpisuje funckję którą chce rozwiązać i otrzymuje wykres oraz mi
 | Rysowanie prostokątów w czasie rzeczywistym | ...       |               |                                                             |
 | Użycie systemu `git`                        | ...       |               | https://github.com/piotrmachura16/AP4-project-java          |
 | Wielojęzyczność programu                    | ...       |               | Język podstawowy: ENG                                       |
-| Zapisywanie wyników do plików .jpg i .txt   | ...       |               | Język podstawowy: ENG                                       |
+| Zapisywanie wyników do plików .jpg i .txt   | ...       |               |                                                             |
 | **SUMA**                                    | ...       |               |                                                             |
 
 Za poprawnie wykonany projekt chcielibyśmy uzyskać ocenę 5.
