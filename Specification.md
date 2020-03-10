@@ -38,11 +38,23 @@ Liczbę obrotów _W_ nazywać będziemy dalej zamiennie z _winding number_ i jes
 
 ### Algortym szukający miejsc zerowych
 
-Algorytm zaczyna więc od narysowania prostokąta wystarczająco dużego, aby zawarło się w nim co najmniej jedno miejsce zerowe (_istnieje opcja pozwolenia użytkownikowi na wybór rozmiaru startowego prostokąta_). Następnie dzieli prostokąt na cztery mniejsze i sprawdza, czy _winding number_ każdego z nich jest niezerowy. Jeśli jest **zerowy**, to wewnątrz nie ma miejsca zerowego i taki prostokąt zostaje **odrzucony**. Jeśli jest **niezerowy**, to taki prostokąt zostaje znowu podzielony na cztery itd. (_tzw. struktura [quad tree](https://en.wikipedia.org/wiki/Quadtree)_)
+Algorytm zaczyna więc od narysowania prostokąta wystarczająco dużego, aby zawarło się w nim co najmniej jedno miejsce zerowe (_ustawienie_ `Radius size - auto`). Następnie dzieli prostokąt na cztery mniejsze i sprawdza, czy _winding number_ każdego z nich jest niezerowy. Jeśli jest **zerowy**, to wewnątrz nie ma miejsca zerowego i taki prostokąt zostaje **odrzucony**. Jeśli jest **niezerowy**, to taki prostokąt zostaje znowu podzielony na cztery itd. (_tzw. struktura [quad tree](https://en.wikipedia.org/wiki/Quadtree)_)
 
 Rekurencja zatrzymuje się w momencie, gdy pola prostokątów o niezerowym _W_ są **odpowiednio małe** i zwraca ich **środki** jako przybliżone miejsca zerowe funkcji.
 
 ## Interfejs użytkownika
+
+<img src="main_window.jpg" alt="iospace" width="350"/>
+
+Program akceptuje wzór funkcji zarówno z klawiatury jak z wbudowanych przycisków. Rozmiar początkowego prostokąta określa `Radius size` - `Auto` narysuje prostokąt wystarczająco duży, by znaleźć jedno miejsce zerowe, pole tekstowe `Custom` pozwala wprowadzić własny rozmiar startowego prostokąta. Po kliknięciu przycisku `Solve` otwiera się nowe okno z rozwiązaniem, podczas gdy główne okno pozostaje otwarte do dalszego wykorzystania.
+
+<img src="func_window.jpg" alt="iospace" width="350"/>
+
+Wykresy `Input space` i `Output space` można przewijać oraz ''rozszerzać'', okienko `Solutions` wyświetla listę znalezionych rozwiązań ( z suwakiem), przycisk `More Accuracy` pozwala dokładniej obliczyć miejsca zerowe (zmniejsza najmniejszy dopuszczalny prostokąt np. 10-krotnie), przycisk `How did you find this?` odtwarza na `Input space` animację algorytmu rysujacego prostokąty i liczącego ich _winding number_ w spowolnieniu (nie będzie też śledził całego procesu, tylko do pewnego momentu). Hiperłącza `Log to .txt` i `Save output as .jpg` robią to, co na nich pisze.
+
+## Scenariusz użycia
+
+Użytkownik wpisuje funckję którą chce rozwiązać i otrzymuje wykres oraz miejsca zerowe. program pozwala na otwarcie wielu okien `Function`, pozwalając porównywać wykresy i miejsca zerowe. Wyniki mogą zostać zapisane jako pliki .txt (rozwiązania) oraz .jpg (wykres `Output space`).
 
 ## Cele dodatkowe
 
@@ -53,18 +65,23 @@ Rekurencja zatrzymuje się w momencie, gdy pola prostokątów o niezerowym _W_ s
 
 ## Terminarz realizacji projektu
 
+1. Specyfikacja - III. zajęcia
+2. Prototype - GUI, działający algorytm (dla zakodowanych ''na twardo'' funkcji) oraz kolorowanie dziedziny - V. zajęcia
+3. Release candidate - obiekt `Function`, odczytywanie funkcji z przycisków, miejsca zerowe dowolnych funkcji - X. zajęcia
+4. Final - odczytywanie funkcji z klawiatury, reszta funkcjonalności - XV. zajęcia
+
 ## Tabela zadań projektu
 
-| Funkcjonalność                              | Max. pkt. | Uzyskane pkt. | Notatki                                            |
-| ------------------------------------------- | --------- | ------------- | -------------------------------------------------- |
-| GUI                                         | 5         |               | Wprowadzanie funkcji przyciskami                   |
-| Wprowadzanie funkcji z klawiatury           | 3         |               |                                                    |
-| Kolorowanie dziedziny                       | 5         |               | Wraz z wyświetleniem                               |
-| Algorytm liczący _winding number_           | 8         |               | Wraz ze znajdowaniem miejsc zerowych               |
-| Rozwiązanie dowolnych złożeń funkcji        | 12        |               | Obiekt `Function` z podanych danych tworzy funkcję |
-| Rysowanie prostokątów w czasie rzeczywistym | 12        |               |                                                    |
-| Użycie systemu `git`                        | 2         |               | https://github.com/piotrmachura16/AP4-project-java |
-| Wielojęzyczność programu                    | 3         |               | Język podstawowy: ENG                              |
-| **SUMA**                                    | 50        |               |                                                    |
+| Funkcjonalność                              | Max. pkt. | Uzyskane pkt. | Notatki                                                     |
+| ------------------------------------------- | --------- | ------------- | ----------------------------------------------------------- |
+| GUI                                         | 5         |               | Wprowadzanie funkcji przyciskami                            |
+| Wprowadzanie funkcji z klawiatury           | 3         |               |                                                             |
+| Kolorowanie dziedziny                       | 5         |               | Wraz z wyświetleniem i zapisywaniem do pliku .jpg           |
+| Algorytm liczący _winding number_           | 8         |               | Wraz ze znajdowaniem miejsc zerowych i zapisywaniem do .txt |
+| Rozwiązanie dowolnych złożeń funkcji        | 12        |               | Obiekt `Function` z podanych danych tworzy funkcję          |
+| Rysowanie prostokątów w czasie rzeczywistym | 12        |               |                                                             |
+| Użycie systemu `git`                        | 2         |               | https://github.com/piotrmachura16/AP4-project-java          |
+| Wielojęzyczność programu                    | 3         |               | Język podstawowy: ENG                                       |
+| **SUMA**                                    | 50        |               |                                                             |
 
 Za poprawnie wykonany projekt chcielibyśmy uzyskać ocenę 5.
