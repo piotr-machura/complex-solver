@@ -3,7 +3,7 @@ package algorithm.src;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-/**
+/*
  * Main
  */
 public class Main {

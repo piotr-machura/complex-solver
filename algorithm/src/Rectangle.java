@@ -115,8 +115,8 @@ public class Rectangle {
         System.out.println("Winding number: " + windingNumber + "\n\n");
 
         // Checks if winding number sufficiently bigger than zero
-        final double epsilon = 0.001;
-        return windingNumber > epsilon;
+        final double epsilon = 0.01;
+        return Math.abs(windingNumber) > epsilon;
     }
 
     /*
