@@ -61,7 +61,7 @@ Użytkownik wpisuje funckję którą chce rozwiązać i otrzymuje wykres oraz mi
 ## Cele dodatkowe
 
 -   Użycie systemu kontroli wersji `git`
--   Program napisany w `JavaFX`
+-   Testy programu napisane w `JUnit`
 -   Program wielojęzyczny (wersja po po polsku)
 -   Program dostępny w licencji _Open Source_
 
