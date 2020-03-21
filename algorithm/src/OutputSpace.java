@@ -5,23 +5,19 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class OutputSpace extends JPanel {
-
-    /**
-     *Does nothing but tehre is an error without it
-     */
     private static final long serialVersionUID = 1L;
 
     float zoomX = 200, zoomY = 200;
     float scaleX = 4, scaleY = 4;
     Function f;
-    ArrayList<Complex> rect_points =  new ArrayList<Complex>();
+    ArrayList<Complex> sq_points = new ArrayList<Complex>();
 
     public OutputSpace(Function f) {
         this.f = f;
     }
 
     public void addPoint(Complex p) {
-        rect_points.add(p);
+        sq_points.add(p);
         this.repaint();
     }
 
@@ -31,9 +27,13 @@ public class OutputSpace extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(getWidth() / 2, getHeight() / 2);
 
-        double tickX = scaleX/zoomX;
-        double tickY = scaleY/zoomY;
+        double tickX = scaleX / zoomX;
+        double tickY = scaleY / zoomY;
 
+        /*
+         * Paints output space with small 1x1 pixel rectangles, color chosen as follows:
+         * hue = phase, saturation = 1, brightness = radius
+         */
         for (int j = -getHeight() / 2; j < getHeight() / 2; j++) {
             for (int i = -getWidth() / 2; i < getWidth() / 2; i++) {
 
@@ -42,29 +42,35 @@ public class OutputSpace extends JPanel {
 
                 double fi = Math.atan2(x, y) / (2 * Math.PI);
                 double r = Math.sqrt(x * x + y * y);
-                if(r>1) r=1;
+                if (r > 1)
+                    r = 1;
 
-                g2.setColor(Color.getHSBColor((float)fi, 1, (float)r));
+                g2.setColor(Color.getHSBColor((float) fi, 1, (float) r));
                 g2.fillRect(i, j, 1, 1);
 
             }
         }
 
+        /*
+         * (comments needed) co tu sie kurde dzieje
+         */
         g2.setColor(Color.gray);
-        g2.drawLine(-getWidth()/2,0, getWidth()/2, 0);
-        g2.drawLine(0,-getHeight()/2,0, getHeight()/2);
+        g2.drawLine(-getWidth() / 2, 0, getWidth() / 2, 0);
+        g2.drawLine(0, -getHeight() / 2, 0, getHeight() / 2);
 
         g2.setColor(Color.gray);
-        for(int i=-(int)(getWidth()/(2*zoomX/scaleX))-1; i<(int)(getWidth()/(2*zoomX/scaleX))+1; i++) {
-            g2.fillRect((int)(i*zoomX/scaleX)-1, -5, 2,10);
+        for (int i = -(int) (getWidth() / (2 * zoomX / scaleX)) - 1; i < (int) (getWidth() / (2 * zoomX / scaleX))
+                + 1; i++) {
+            g2.fillRect((int) (i * zoomX / scaleX) - 1, -5, 2, 10);
         }
-        for(int i=-(int)(getHeight()/(2*zoomY/scaleY))-1; i<(int)(getHeight()/(2*zoomY/scaleY))+1; i++) {
-            g2.fillRect(-5,(int)(i*zoomY/scaleY)-1, 10,2);
+        for (int i = -(int) (getHeight() / (2 * zoomY / scaleY)) - 1; i < (int) (getHeight() / (2 * zoomY / scaleY))
+                + 1; i++) {
+            g2.fillRect(-5, (int) (i * zoomY / scaleY) - 1, 10, 2);
         }
 
         g2.setColor(Color.black);
-        for(Complex p : rect_points) {
-            g2.fillRect((int)(p.re * zoomY / scaleY)-2, (int)(p.im * zoomY / scaleY)-2, 4, 4);
+        for (Complex p : sq_points) {
+            g2.fillRect((int) (p.re * zoomY / scaleY) - 2, (int) (p.im * zoomY / scaleY) - 2, 4, 4);
         }
 
     }

@@ -31,9 +31,9 @@ public class Main {
         Complex C = new Complex(2, 2);
         Complex D = new Complex(-2, 2);
 
-        Rectangle r1 = new Rectangle(A, B, C, D, space, output);
-        
-        r1.solveInside(f);
+        Rectangle s1 = new Rectangle(A, B, C, D, space, output);
+
+        s1.solveInside(f);
 
         System.out.println(f.stringSolutions());
 
