@@ -2,13 +2,11 @@ package algorithm.src;
 
 /*
 *       Rectangle
-
     D-----CD_mid-----C
     |                |
   AD_mid   MIDDLE   BC_mid
     |                |
     A-----AB_mid-----B
-
 */
 
 public class Rectangle {
