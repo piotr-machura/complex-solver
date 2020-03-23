@@ -5,8 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-/**
- * CalculatorFrame v0.0.2
+/*
+ * CalculatorFrame v0.1.0
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -24,6 +24,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     // Other elements
     JTextField funcInput;
     Font mathFont;
+
+    // String to be passed further as function f(z)
+    String fz;
 
     public CalculatorFrame() throws HeadlessException {
         /*
@@ -55,8 +58,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             @Override
             public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    // ! Placeholder response
-                    System.out.println("enter to solve when in textfield");
+                    actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "solve"));
                 }
             }
 
@@ -185,16 +187,46 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         String afterCaret = currentText.substring(caretPosition, currentText.length());
 
         switch (buttonID) {
+
             case "solve":
+                /*
+                 * Set fn equal to input field and fix missing brackets
+                 */
+                this.fz = funcInput.getText();
+                // Fix missing brackets and notify the user about that
+                // TODO: Create a seperate function attemptFix() which will do this and more
+                long countOBr = fz.chars().filter(ch -> ch == '(').count();
+                long countCBr = fz.chars().filter(ch -> ch == ')').count();
+                if (countOBr > countCBr) {
+                    while (countOBr > countCBr) {
+                        this.fz += ")";
+                        countCBr += 1;
+                    }
+                    funcInput.setText(this.fz);
+                    JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+                // TODO: this will (in the future) invoke a new window and a solving algorithm
                 break;
 
-            case "CE": // Clear input text field
+            case "CE":
+
+                /*
+                 * Clear text field and refocus
+                 */
+
                 funcInput.setText("");
                 funcInput.requestFocus();
                 break;
 
-            case "back": // Delete character before caret
-                if (caretPosition == 0) { // Edge case: caret at the beginning -> do nothing
+            case "back":
+
+                /*
+                 * Delete character before caret. Edge case: caret at the beginning -> do
+                 * nothing.
+                 */
+
+                if (caretPosition == 0) {
                     funcInput.requestFocus();
                     break;
                 }
@@ -212,7 +244,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 });
                 break;
 
-            default: // Puts buttonID at caret. Adds an opening bracket for functions.
+            default:
+
+                /*
+                 * Puts buttonID at caret. Adds an opening bracket for functions.
+                 */
+
                 String putAtCaret = buttonID;
                 if (fnButtons.keySet().contains(buttonID) && !buttonID.equals("e") && !buttonID.equals("pi")) {
                     putAtCaret += "(";
