@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 
 /*
- * CalculatorFrame v0.1.0
+ * CalculatorFrame v0.1.2
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -50,7 +50,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
          */
         funcInput = new JTextField();
         funcInput.setPreferredSize(new Dimension(450, 50));
-        mathFont = new Font("SansSerif", Font.ITALIC, 24);
+        mathFont = new Font("SansSerif", Font.PLAIN, 24);
         funcInput.setFont(mathFont);
 
         // Press enter to solve
@@ -84,6 +84,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         nmbButtons = new JButton[10];
         for (int i = 0; i < nmbButtons.length; i++) {
             nmbButtons[i] = new JButton("" + i);
+            // Add action commands and wire up action lsitener
             nmbButtons[i].setActionCommand("" + i);
             nmbButtons[i].addActionListener(this);
         }
@@ -91,16 +92,20 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         // Operator buttons. Each buttons "name" and function is its hash key
         opButtons = new HashMap<String, JButton>();
         opButtons.put("z", new JButton("z"));
-        opButtons.put(",", new JButton(","));
+        opButtons.put("i", new JButton("i"));
+        opButtons.put("e", new JButton("e"));
+        opButtons.put(".", new JButton("."));
         opButtons.put("+", new JButton("+"));
         opButtons.put("-", new JButton("-"));
         opButtons.put("*", new JButton("*"));
-        opButtons.put("/", new JButton(","));
+        opButtons.put("/", new JButton("/"));
         opButtons.put("^", new JButton("^"));
         opButtons.put("(", new JButton("("));
         opButtons.put(")", new JButton(")"));
         opButtons.put("CE", new JButton("CE"));
         opButtons.put("back", new JButton("<-"));
+
+        // Add action commands and wire up action listener
         for (final String opKey : opButtons.keySet()) {
             opButtons.get(opKey).setActionCommand(opKey);
             opButtons.get(opKey).addActionListener(this);
@@ -108,21 +113,21 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         // Function buttons. Each buttons "name" and function is its hash key
         fnButtons = new HashMap<String, JButton>();
-        fnButtons.put("e", new JButton("e"));
-        fnButtons.put("pi", new JButton("pi"));
         fnButtons.put("ln", new JButton("ln"));
         fnButtons.put("sin", new JButton("sin"));
         fnButtons.put("cos", new JButton("cos"));
         fnButtons.put("tan", new JButton("tan"));
         fnButtons.put("sinh", new JButton("sinh"));
         fnButtons.put("cosh", new JButton("cosh"));
+
+        // Add action commands and wire up action listener
         for (final String fnKey : fnButtons.keySet()) {
             fnButtons.get(fnKey).setActionCommand(fnKey);
             fnButtons.get(fnKey).addActionListener(this);
         }
 
         // Arranging buttons in button container (see specification)
-        buttonsContainer.setLayout(new GridLayout(0, 5));
+        buttonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             buttonsContainer.add(nmbButtons[i]);
         }
@@ -131,18 +136,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         for (int i = 4; i < 7; i++) {
             buttonsContainer.add(nmbButtons[i]);
         }
+        buttonsContainer.add(opButtons.get("e"));
         buttonsContainer.add(fnButtons.get("sin"));
-        buttonsContainer.add(fnButtons.get("e"));
         for (int i = 7; i < 10; i++) {
             buttonsContainer.add(nmbButtons[i]);
         }
-        buttonsContainer.add(fnButtons.get("cos"));
         buttonsContainer.add(fnButtons.get("ln"));
+        buttonsContainer.add(fnButtons.get("cos"));
+        buttonsContainer.add(opButtons.get("."));
         buttonsContainer.add(nmbButtons[0]);
-        buttonsContainer.add(opButtons.get(","));
         buttonsContainer.add(opButtons.get("z"));
+        buttonsContainer.add(opButtons.get("i"));
         buttonsContainer.add(fnButtons.get("tan"));
-        buttonsContainer.add(fnButtons.get("pi"));
         buttonsContainer.add(opButtons.get("+"));
         buttonsContainer.add(opButtons.get("-"));
         buttonsContainer.add(opButtons.get("*"));
@@ -154,7 +159,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         buttonsContainer.add(fnButtons.get("cosh"));
 
         // Adding button container to center panel
-        buttonsContainer.setPreferredSize(new Dimension(325, 325));
+        buttonsContainer.setPreferredSize(new Dimension(350, 325));
         centerPanel.setLayout(new FlowLayout());
         centerPanel.add(buttonsContainer, BorderLayout.CENTER);
 
@@ -189,12 +194,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         switch (buttonID) {
 
             case "solve":
+
                 /*
-                 * Set fn equal to input field and fix missing brackets
+                 * Set fn equal to input field and attempt to fix it to meet the standards
                  */
+
                 this.fz = funcInput.getText();
-                // Fix missing brackets and notify the user about that
-                // TODO: Create a seperate function attemptFix() which will do this and more
+
+                // TODO:
+                /*
+                 * Create a seperate function attemptFix() to fix missing brackets, missing "*",
+                 * notify about inputs which are not fuctions, notify about invalid inputs etc.
+                 */
+
                 long countOBr = fz.chars().filter(ch -> ch == '(').count();
                 long countCBr = fz.chars().filter(ch -> ch == ')').count();
                 if (countOBr > countCBr) {
@@ -206,6 +218,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
                             JOptionPane.WARNING_MESSAGE);
                 }
+
                 // TODO: this will (in the future) invoke a new window and a solving algorithm
                 break;
 
@@ -251,7 +264,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  */
 
                 String putAtCaret = buttonID;
-                if (fnButtons.keySet().contains(buttonID) && !buttonID.equals("e") && !buttonID.equals("pi")) {
+                if (fnButtons.keySet().contains(buttonID)) {
                     putAtCaret += "(";
                 }
                 String newText = beforeCaret + putAtCaret + afterCaret;
