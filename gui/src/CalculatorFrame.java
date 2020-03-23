@@ -45,7 +45,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         /*
          * Setting up input text field
          */
-        funcInput = new JTextField("Function here");
+        funcInput = new JTextField();
         funcInput.setPreferredSize(new Dimension(400, 50));
         mathFont = new Font("SansSerif", Font.ITALIC, 24);
         funcInput.setFont(mathFont);
@@ -53,7 +53,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         // Press enter to solve
         funcInput.addKeyListener(new KeyListener() {
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == 10) {
                     // ! Placeholder response
                     System.out.println("enter to solve when in textfield");
@@ -61,11 +61,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             }
 
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(final KeyEvent e) {
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyReleased(final KeyEvent e) {
             }
 
         });
@@ -77,6 +77,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         /*
          * Setting up calculator buttons
          */
+
         // Numbers 0-9
         nmbButtons = new JButton[10];
         for (int i = 0; i < nmbButtons.length; i++) {
@@ -85,7 +86,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             nmbButtons[i].addActionListener(this);
         }
 
-        // Operator buttons
+        // Operator buttons. Each buttons "name" and function is its hash key
         opButtons = new HashMap<String, JButton>();
         opButtons.put("z", new JButton("z"));
         opButtons.put(",", new JButton(","));
@@ -98,12 +99,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         opButtons.put(")", new JButton(")"));
         opButtons.put("CE", new JButton("CE"));
         opButtons.put("back", new JButton("Backspace"));
-        for (String opKey : opButtons.keySet()) {
+        for (final String opKey : opButtons.keySet()) {
             opButtons.get(opKey).setActionCommand(opKey);
             opButtons.get(opKey).addActionListener(this);
         }
 
-        // Function buttons
+        // Function buttons. Each buttons "name" and function is its hash key
         fnButtons = new HashMap<String, JButton>();
         fnButtons.put("e", new JButton("e"));
         fnButtons.put("pi", new JButton("pi"));
@@ -113,7 +114,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         fnButtons.put("tan", new JButton("tan"));
         fnButtons.put("sinh", new JButton("sinh"));
         fnButtons.put("cosh", new JButton("cosh"));
-        for (String fnKey : fnButtons.keySet()) {
+        for (final String fnKey : fnButtons.keySet()) {
             fnButtons.get(fnKey).setActionCommand(fnKey);
             fnButtons.get(fnKey).addActionListener(this);
         }
@@ -175,23 +176,71 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String button = e.getActionCommand();
-        switch (button) {
-            // TODO: implement all action listeners
+    public void actionPerformed(final ActionEvent e) {
+        final String buttonID = e.getActionCommand();
 
+        int caretPosition = funcInput.getCaretPosition();
+        String currentText = funcInput.getText();
+        String beforeCaret = currentText.substring(0, caretPosition);
+        String afterCaret = currentText.substring(caretPosition, currentText.length());
+
+        switch (buttonID) {
+            case "solve":
+                break;
+            case "CE":
+
+                // Clear and refocus
+                funcInput.setText("");
+                funcInput.requestFocus();
+                break;
+            case "back":
+
+                // Delete character before caret
+                funcInput.setText(beforeCaret.substring(0, beforeCaret.length() - 1) + afterCaret);
+
+                // Refocus on text field and move caret to the left
+                funcInput.requestFocus();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        funcInput.setCaretPosition(caretPosition - 1);
+                    }
+
+                });
+                break;
             default:
-                System.out.println("not implemented");
+
+                // Puts buttonID at caret. tmpMoveCaretBy will be finalized later.
+                String putAtCaret = buttonID;
+                int tmpMoveCaretBy = putAtCaret.length();
+
+                // Add brackets for functions
+                if (fnButtons.keySet().contains(buttonID) && !buttonID.equals("e") && !buttonID.equals("pi")) {
+                    putAtCaret += "()";
+                    tmpMoveCaretBy += 1;
+                }
+                String newText = beforeCaret + putAtCaret + afterCaret;
+                funcInput.setText(newText);
+
+                // Refocus on text field and move caret to the right
+                funcInput.requestFocus();
+                final int moveCaretBy = tmpMoveCaretBy;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        funcInput.setCaretPosition(caretPosition + moveCaretBy);
+                    }
+
+                });
                 break;
         }
-
     }
 
     /*
      * Test
      */
-    public static void main(String[] args) {
-        CalculatorFrame frame = new CalculatorFrame();
+    public static void main(final String[] args) {
+        final CalculatorFrame frame = new CalculatorFrame();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
