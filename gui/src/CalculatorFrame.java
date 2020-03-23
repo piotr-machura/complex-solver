@@ -30,7 +30,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
          * Basic parameters
          */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setSize(800, 500);
+        this.setSize(600, 500);
         this.setResizable(false);
         this.setTitle("Complex function grapher");
 
@@ -46,7 +46,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
          * Setting up input text field
          */
         funcInput = new JTextField();
-        funcInput.setPreferredSize(new Dimension(400, 50));
+        funcInput.setPreferredSize(new Dimension(450, 50));
         mathFont = new Font("SansSerif", Font.ITALIC, 24);
         funcInput.setFont(mathFont);
 
@@ -98,7 +98,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         opButtons.put("(", new JButton("("));
         opButtons.put(")", new JButton(")"));
         opButtons.put("CE", new JButton("CE"));
-        opButtons.put("back", new JButton("Backspace"));
+        opButtons.put("back", new JButton("<-"));
         for (final String opKey : opButtons.keySet()) {
             opButtons.get(opKey).setActionCommand(opKey);
             opButtons.get(opKey).addActionListener(this);
@@ -152,7 +152,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         buttonsContainer.add(fnButtons.get("cosh"));
 
         // Adding button container to center panel
-        buttonsContainer.setPreferredSize(new Dimension(550, 325));
+        buttonsContainer.setPreferredSize(new Dimension(325, 325));
         centerPanel.setLayout(new FlowLayout());
         centerPanel.add(buttonsContainer, BorderLayout.CENTER);
 
@@ -187,15 +187,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         switch (buttonID) {
             case "solve":
                 break;
-            case "CE":
 
-                // Clear and refocus
+            case "CE": // Clear input text field
                 funcInput.setText("");
                 funcInput.requestFocus();
                 break;
-            case "back":
 
-                // Delete character before caret
+            case "back": // Delete character before caret
+                if (caretPosition == 0) { // Edge case: caret at the beginning -> do nothing
+                    funcInput.requestFocus();
+                    break;
+                }
+
                 funcInput.setText(beforeCaret.substring(0, beforeCaret.length() - 1) + afterCaret);
 
                 // Refocus on text field and move caret to the left
@@ -208,23 +211,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
                 });
                 break;
-            default:
 
-                // Puts buttonID at caret. tmpMoveCaretBy will be finalized later.
+            default: // Puts buttonID at caret. Adds an opening bracket for functions.
                 String putAtCaret = buttonID;
-                int tmpMoveCaretBy = putAtCaret.length();
-
-                // Add brackets for functions
                 if (fnButtons.keySet().contains(buttonID) && !buttonID.equals("e") && !buttonID.equals("pi")) {
-                    putAtCaret += "()";
-                    tmpMoveCaretBy += 1;
+                    putAtCaret += "(";
                 }
                 String newText = beforeCaret + putAtCaret + afterCaret;
                 funcInput.setText(newText);
 
                 // Refocus on text field and move caret to the right
                 funcInput.requestFocus();
-                final int moveCaretBy = tmpMoveCaretBy;
+                final int moveCaretBy = putAtCaret.length();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
