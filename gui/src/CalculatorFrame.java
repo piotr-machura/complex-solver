@@ -194,11 +194,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         switch (buttonID) {
 
             case "solve":
-
                 /*
                  * Set fn equal to input field and attempt to fix it to meet the standards
                  */
-
                 this.fz = funcInput.getText();
 
                 // TODO:
@@ -206,7 +204,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  * Create a seperate function attemptFix() to fix missing brackets, missing "*",
                  * notify about inputs which are not fuctions, notify about invalid inputs etc.
                  */
-
                 long countOBr = fz.chars().filter(ch -> ch == '(').count();
                 long countCBr = fz.chars().filter(ch -> ch == ')').count();
                 if (countOBr > countCBr) {
@@ -223,22 +220,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "CE":
-
                 /*
                  * Clear text field and refocus
                  */
-
                 funcInput.setText("");
                 funcInput.requestFocus();
                 break;
 
             case "back":
-
                 /*
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing.
                  */
-
                 if (caretPosition == 0) {
                     funcInput.requestFocus();
                     break;
@@ -258,11 +251,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             default:
-
                 /*
                  * Puts buttonID at caret. Adds an opening bracket for functions.
                  */
-
                 String putAtCaret = buttonID;
                 if (fnButtons.keySet().contains(buttonID)) {
                     putAtCaret += "(";
