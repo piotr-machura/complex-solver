@@ -44,12 +44,12 @@ public class Complex {
     // return a string representation of the invoking Complex object
     public String toString() {
         if (im == 0)
-            return re + "";
+            return String.format("%.2f", re) + "";
         if (re == 0)
-            return im + "i";
+            return String.format("%.2f", im) + "i";
         if (im < 0)
-            return re + " - " + (-im) + "i";
-        return re + " + " + im + "i";
+            return String.format("%.2f", re) + " - " + String.format("%.2f", -im) + "i";
+        return String.format("%.2f", re) + " + " + String.format("%.2f", im) + "i";
     }
 
     // return abs/modulus/magnitude
