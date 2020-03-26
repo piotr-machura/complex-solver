@@ -126,7 +126,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             fnButtons.get(fnKey).addActionListener(this);
         }
 
-        // Arranging buttons in button container (see specification)
+        // Arranging buttons in button container in respective order
         buttonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             buttonsContainer.add(nmbButtons[i]);
@@ -203,6 +203,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /*
                  * Create a seperate function attemptFix() to fix missing brackets, missing "*",
                  * notify about inputs which are not fuctions, notify about invalid inputs etc.
+                 * Lots of regex required.
                  */
                 long countOBr = fz.chars().filter(ch -> ch == '(').count();
                 long countCBr = fz.chars().filter(ch -> ch == ')').count();
@@ -232,6 +233,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing.
                  */
+                // TODO: if in fron of a function (ex. sin()) make it delete the whole function
                 if (caretPosition == 0) {
                     funcInput.requestFocus();
                     break;
@@ -246,7 +248,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     public void run() {
                         funcInput.setCaretPosition(caretPosition - 1);
                     }
-
                 });
                 break;
 
@@ -269,7 +270,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     public void run() {
                         funcInput.setCaretPosition(caretPosition + moveCaretBy);
                     }
-
                 });
                 break;
         }

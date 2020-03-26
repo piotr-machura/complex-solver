@@ -53,10 +53,10 @@ public class Rectangle {
     /*
      * Arg (-2+0i) = pi, ale Arg(-2-0.01i) = -pi+odrobine, czyli zmiana jest prawie
      * 2pi. Problem jest przy "mijaniu" osi ujemnych Re, bo wtedy jest przeskok o
-     * 2pi w fazie. Trzeba na to wymyślić coś bardzo mądrego bo moment "minięcia"
-     * ujemnych Re zależy od funkcji f. Dodatkowo powoduje to dodawanie
-     * nieprawidłowych punktów jako miejsca zerowe. Trzeba też nauczyć tą rekurencję
-     * kiedy ma się zabić bo potrafi dodać 30 takich samych miejsc zerowych.
+     * 2pi w fazie. Dopisałem do klasy Complex funkcję zwracającą fazę [0, 2pi] +
+     * 2kpi gdzie k będzie obecnym winding number, trzeba ją tylko zaimplementować.
+     * Trzeba też nauczyć tą rekurencję kiedy ma się zabić bo potrafi dodać 30
+     * takich samych miejsc zerowych.
      */
     public Boolean checkInside(Function f) {
         /*

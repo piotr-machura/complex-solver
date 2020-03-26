@@ -1,5 +1,6 @@
 package algorithm.src;
 
+// ? Who created this
 /******************************************************************************
  *  Compilation:  javac Complex.java
  *  Execution:    java Complex
@@ -62,6 +63,7 @@ public class Complex {
         return Math.atan2(im, re);
     }
 
+    // ! Made by: Piotr Machura for the purpouses of winding number algorithm
     // returns phase as phi +2kPI, where phi = [0, 2pi], returns 0 for point 0+0i
     public double kPhase(int k) {
         double y = Math.abs(im);
@@ -83,7 +85,7 @@ public class Complex {
         } else if (re > 0 && im < 0) {
             return Math.atan(x / y) + 3 / 2 * Math.PI + 2 * k * Math.PI;
         } else {
-            return 0 + 2 * k * Math.PI;
+            throw new ArithmeticException("Phase undefined for point " + this);
         }
     }
 
