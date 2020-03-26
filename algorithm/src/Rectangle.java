@@ -1,7 +1,7 @@
 package algorithm.src;
 
 /*
-*       Rectangle
+        Rectangle
     D-----CD_mid-----C
     |                |
   AD_mid   MIDDLE   BC_mid
@@ -16,11 +16,11 @@ public class Rectangle {
     InputSpace space;
     OutputSpace output;
 
-    /*
-     * Constructs a rectangle using points A, B, C, D bound to provided input and
-     * output spaces.
-     */
     public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, OutputSpace output) {
+        /*
+         * Constructs a rectangle using points A, B, C, D bound to provided input and
+         * output spaces.
+         */
         A = a;
         B = b;
         C = c;
@@ -49,79 +49,79 @@ public class Rectangle {
         return rectString;
     }
 
+    // ! Wiem już dlaczego nie działa i w obecnym systemie nie ma prawa działać
     /*
-     * Checks if winding number of a given rectangle is not close to zero.
+     * Arg (-2+0i) = pi, ale Arg(-2-0.01i) = -pi+odrobine, czyli zmiana jest prawie
+     * 2pi. Problem jest przy "mijaniu" osi ujemnych Re, bo wtedy jest przeskok o
+     * 2pi w fazie. Trzeba na to wymyślić coś bardzo mądrego bo moment "minięcia"
+     * ujemnych Re zależy od funkcji f. Dodatkowo powoduje to dodawanie
+     * nieprawidłowych punktów jako miejsca zerowe. Trzeba też nauczyć tą rekurencję
+     * kiedy ma się zabić bo potrafi dodać 30 takich samych miejsc zerowych.
      */
-    // ! Btw to sie zesrało, znowu pokazuje winding number~~0
     public Boolean checkInside(Function f) {
+        /*
+         * Checks if winding number of a given rectangle is not close to zero.
+         */
 
         // Tick of "integration" - 1/10th of side length
         double d = Math.sqrt(this.area) / 10;
         double windingNumber = 0;
-        System.out.println("Tick: " + d + "\n");
 
         // Starting number: A
         double x = A.re;
         double y = A.im;
 
         // Path A->B (going right)
-        System.out.println("\nA -> B");
         while (x < B.re) {
             space.addPoint(new Complex(x, y));
             double prev = f.solveFor(new Complex(x, y)).phase();
             x += d;
             double now = f.solveFor(new Complex(x, y)).phase();
             windingNumber += now - prev;
-            System.out.println(now + " było " + prev);
         }
 
         // Path B->C (going up)
-        System.out.println("B -> C");
         while (y < C.im) {
             space.addPoint(new Complex(x, y));
             double prev = f.solveFor(new Complex(x, y)).phase();
             y += d;
             double now = f.solveFor(new Complex(x, y)).phase();
             windingNumber += now - prev;
-            System.out.println(now + " było " + prev);
         }
 
         // Path C->D (going left)
-        System.out.println("C -> D");
         while (x > D.re) {
             space.addPoint(new Complex(x, y));
             double prev = f.solveFor(new Complex(x, y)).phase();
             x -= d;
             double now = f.solveFor(new Complex(x, y)).phase();
             windingNumber += now - prev;
-            System.out.println(now + " było " + prev);
         }
 
         // Path D->A (going down)
-        System.out.println("D -> A");
         while (y > A.im) {
             space.addPoint(new Complex(x, y));
             double prev = f.solveFor(new Complex(x, y)).phase();
             y -= d;
             double now = f.solveFor(new Complex(x, y)).phase();
             windingNumber += now - prev;
-            System.out.println(now + " było " + prev);
+
         }
 
-        // Total number of revolutions - (total phase change) / 2 PI
+        // Total number of revolutions = (total phase change) / 2 PI
         windingNumber = windingNumber / (2 * Math.PI);
-        System.out.println("Winding number: " + windingNumber + "\n\n");
+        // System.out.println("Winding number: " + windingNumber + "\n\n");
 
         // Checks if winding number sufficiently bigger than zero
         final double epsilon = 0.01;
         return Math.abs(windingNumber) > epsilon;
     }
 
-    /*
-     * Splits the rectangle into 4 children, enumerated starting bottom left
-     * clockwise
-     */
     Rectangle[] getChildren() {
+        /*
+         * Splits the rectangle into 4 children, enumerated starting bottom left
+         * clockwise
+         */
         Rectangle[] children = new Rectangle[4];
         children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space, output);
         children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space, output);
@@ -130,14 +130,15 @@ public class Rectangle {
         return children;
     }
 
-    /*
-     * Recursively checks rectangle's winding number, splitting it into 4 children
-     * if it's big and viable and discarding it if it's not viable. If it's small
-     * and viable, adds it's middle to f's solution list
-     */
     public void solveInside(Function f) {
-        System.out.println("Checking rectangle: \n" + toString() + "\n");
+        /*
+         * Recursively checks rectangle's winding number, splitting it into 4 children
+         * if it's big and viable and discarding it if it's not viable. If it's small
+         * and viable, adds it's middle to f's solution list
+         */
+        // System.out.println("Checking rectangle: \n" + toString() + "\n");
         if (this.checkInside(f)) {
+
             if (this.area <= 0.001) {
                 f.addSolution(this.MIDDLE);
             } else {

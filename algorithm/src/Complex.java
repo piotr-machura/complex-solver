@@ -32,8 +32,8 @@ package algorithm.src;
 import java.util.Objects;
 
 public class Complex {
-    double re;   // the real part
-    double im;   // the imaginary part
+    double re; // the real part
+    double im; // the imaginary part
 
     // create a new object with the given real and imaginary parts
     public Complex(double real, double imag) {
@@ -43,10 +43,13 @@ public class Complex {
 
     // return a string representation of the invoking Complex object
     public String toString() {
-        if (im == 0) return re + "";
-        if (re == 0) return im + "i";
-        if (im <  0) return re + " - " + (-im) + "i";
-        return re + " + " + im + "i";
+        if (im == 0)
+            return String.format("%.2f", re) + "";
+        if (re == 0)
+            return String.format("%.2f", im) + "i";
+        if (im < 0)
+            return String.format("%.2f", re) + " - " + String.format("%.2f", -im) + "i";
+        return String.format("%.2f", re) + " + " + String.format("%.2f", im) + "i";
     }
 
     // return abs/modulus/magnitude
@@ -59,9 +62,34 @@ public class Complex {
         return Math.atan2(im, re);
     }
 
+    // returns phase as phi +2kPI, where phi = [0, 2pi], returns 0 for point 0+0i
+    public double kPhase(int k) {
+        double y = Math.abs(im);
+        double x = Math.abs(re);
+        if (re > 0 && im == 0) {
+            return 0 + 2 * k * Math.PI;
+        } else if (re > 0 && im > 0) {
+            return Math.atan(y / x) + 2 * k * Math.PI;
+        } else if (re == 0 && im > 0) {
+            return Math.PI / 2 + 2 * k * Math.PI;
+        } else if (re < 0 && im > 0) {
+            return Math.atan(x / y) + Math.PI / 2 + 2 * k * Math.PI;
+        } else if (re < 0 && im == 0) {
+            return Math.PI + 2 * k * Math.PI;
+        } else if (re < 0 && im < 0) {
+            return Math.atan(y / x) + Math.PI + 2 * k * Math.PI;
+        } else if (re == 0 && im < 0) {
+            return 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else if (re > 0 && im < 0) {
+            return Math.atan(x / y) + 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else {
+            return 0 + 2 * k * Math.PI;
+        }
+    }
+
     // return a new Complex object whose value is (this + b)
     public Complex plus(Complex b) {
-        Complex a = this;             // invoking object
+        Complex a = this; // invoking object
         double real = a.re + b.re;
         double imag = a.im + b.im;
         return new Complex(real, imag);
@@ -95,13 +123,18 @@ public class Complex {
 
     // return a new Complex object whose value is the reciprocal of this
     public Complex reciprocal() {
-        double scale = re*re + im*im;
+        double scale = re * re + im * im;
         return new Complex(re / scale, -im / scale);
     }
 
     // return the real or imaginary part
-    public double re() { return Math.round(re*1000)/1000; }
-    public double im() { return Math.round(im*1000)/1000; }
+    public double re() {
+        return Math.round(re * 1000) / 1000;
+    }
+
+    public double im() {
+        return Math.round(im * 1000) / 1000;
+    }
 
     // return a / b
     public Complex divides(Complex b) {
@@ -128,8 +161,6 @@ public class Complex {
     public Complex tan() {
         return sin().divides(cos());
     }
-    
-
 
     // a static version of plus
     public static Complex plus(Complex a, Complex b) {
@@ -141,8 +172,10 @@ public class Complex {
 
     // See Section 3.3.
     public boolean equals(Object x) {
-        if (x == null) return false;
-        if (this.getClass() != x.getClass()) return false;
+        if (x == null)
+            return false;
+        if (this.getClass() != x.getClass())
+            return false;
         Complex that = (Complex) x;
         return (this.re == that.re) && (this.im == that.im);
     }

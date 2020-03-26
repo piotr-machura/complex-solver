@@ -32,9 +32,7 @@ public class Main {
         Complex D = new Complex(-2, 2);
 
         Rectangle s1 = new Rectangle(A, B, C, D, space, output);
-
         s1.solveInside(f);
-
         System.out.println(f.stringSolutions());
 
     }

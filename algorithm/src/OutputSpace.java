@@ -31,8 +31,8 @@ public class OutputSpace extends JPanel {
         double tickY = scaleY / zoomY;
 
         /*
-         * Paints output space with small 1x1 pixel rectangles, color chosen as follows:
-         * hue = phase, saturation = 1, brightness = radius
+         * Paints output space with 1x1 pixel rectangles, color chosen as follows: hue =
+         * phase, saturation = 1, brightness = radius
          */
         for (int j = -getHeight() / 2; j < getHeight() / 2; j++) {
             for (int i = -getWidth() / 2; i < getWidth() / 2; i++) {
@@ -51,10 +51,8 @@ public class OutputSpace extends JPanel {
             }
         }
 
-        /*
-         * (explenation needed)
-         */
-        // ? co tu sie dzieje
+        // ? Co się tutaj dzieje
+
         g2.setColor(Color.gray);
         g2.drawLine(-getWidth() / 2, 0, getWidth() / 2, 0);
         g2.drawLine(0, -getHeight() / 2, 0, getHeight() / 2);

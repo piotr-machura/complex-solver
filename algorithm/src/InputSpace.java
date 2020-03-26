@@ -54,10 +54,8 @@ public class InputSpace extends JPanel {
             }
         }
 
-        /*
-         * (explenation needed)
-         */
-        // ? co tu sie dzieje
+        // ? Co się tutaj dzieje
+
         g2.setColor(Color.gray);
         g2.drawLine(-getWidth() / 2, 0, getWidth() / 2, 0);
         g2.drawLine(0, -getHeight() / 2, 0, getHeight() / 2);
