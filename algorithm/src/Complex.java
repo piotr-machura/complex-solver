@@ -62,6 +62,31 @@ public class Complex {
         return Math.atan2(im, re);
     }
 
+    // returns phase as phi +2kPI, where phi = [0, 2pi], returns 0 for point 0+0i
+    public double kPhase(int k) {
+        double y = Math.abs(im);
+        double x = Math.abs(re);
+        if (re > 0 && im == 0) {
+            return 0 + 2 * k * Math.PI;
+        } else if (re > 0 && im > 0) {
+            return Math.atan(y / x) + 2 * k * Math.PI;
+        } else if (re == 0 && im > 0) {
+            return Math.PI / 2 + 2 * k * Math.PI;
+        } else if (re < 0 && im > 0) {
+            return Math.atan(x / y) + Math.PI / 2 + 2 * k * Math.PI;
+        } else if (re < 0 && im == 0) {
+            return Math.PI + 2 * k * Math.PI;
+        } else if (re < 0 && im < 0) {
+            return Math.atan(y / x) + Math.PI + 2 * k * Math.PI;
+        } else if (re == 0 && im < 0) {
+            return 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else if (re > 0 && im < 0) {
+            return Math.atan(x / y) + 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else {
+            return 0 + 2 * k * Math.PI;
+        }
+    }
+
     // return a new Complex object whose value is (this + b)
     public Complex plus(Complex b) {
         Complex a = this; // invoking object
