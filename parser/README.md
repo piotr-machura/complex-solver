@@ -1,6 +1,6 @@
-### This is a library forked from https://github.com/sbesada/java.math.expression.parser and slightly adapted to suit our needs. Wherever things were changed, there is an appropriate comment.
-
 # java.math.expression.parser
+
+# This is a library forked from https://github.com/sbesada/java.math.expression.parser and slightly adapted to suit our needs. There is an appropriate comment wherever things were changed.
 
 java math expression parser is a maven project that lets you parse or evaluate math expressions.
 
@@ -40,8 +40,8 @@ It is even faster than them. This library is 10 times faster and **it is tested 
 -   Expressions in vars
 
         String f_xs = "x+5*y+(3 -y)";
-        final Point xo = new Point("x", "1+1");
-        final Point yo = new Point("y", "0+2*0+1*5-5 +1^4")
+        final Variable xo = new Variable("x", "1+1");
+        final Variable yo = new Variable("y", "0+2*0+1*5-5 +1^4")
 
 ## Examples:
 
@@ -54,22 +54,22 @@ In the test package you can see more examples with different constructors
         ParserResult result = Parser.eval(f_x);
         assertTrue(result.getValue() == 28.0);
 
-        final Point xo = new Point("x", new Double(2));
+        final Variable xo = new Variable("x", new Double(2));
         f_x = "2.35*e^(-3)*x";
 
         result = Parser.eval(f_x, xo);
         assertTrue(result.getValue() == 0.2339992213289606);
 
 
-        final Point xo = new Point("x", new Double(2));
-        final Point zo = new Point("z", new Double(1));
+        final Variable xo = new Variable("x", new Double(2));
+        final Variable zo = new Variable("z", new Double(1));
         String f_xs = " 2*(-(((z*3)*sqrt(x^(2)))+3))";
 
         Parser.Eval(f_xs, xo, zo);
 
         String f_xs = "x+5*y+(3 -y)";
-        final Point xo = new Point("x", "1+1");
-        final Point yo = new Point("y", "0+2*0+1*5-5 +1^4"); //math expression in vars
+        final Variable xo = new Variable("x", "1+1");
+        final Variable yo = new Variable("y", "0+2*0+1*5-5 +1^4"); //math expression in vars
 
         ParserResult result = Parser.eval(f_xs, xo, yo);
 
@@ -82,11 +82,11 @@ The last version supports expressions with complex numbers and multiple vars. He
 
         String f_x = " e^(1*x*acos((3/2-2j)^(pi)))";
 
-        Point xo = new Point("x", new Complex(1, 2));
+        Variable xo = new Variable("x", new Complex(1, 2));
         ParserResult result = Parser.eval(f_x, xo);
 
         String f_x = "1+j +x";
-        final Point xo = new Point("x", "2 +j"); //complex math expression in vars
+        final Variable xo = new Variable("x", "2 +j"); //complex math expression in vars
 
         ParserResult result = Parser.eval(f_x, xo);
 
