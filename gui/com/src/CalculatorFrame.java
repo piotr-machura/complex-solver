@@ -1,6 +1,11 @@
-package gui.src;
+package gui.com.src;
 
 import javax.swing.*;
+
+import parser.src.function.*;
+import parser.src.main.*;
+import parser.src.util.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
@@ -199,7 +204,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  */
                 this.fz = funcInput.getText();
 
-                // TODO:
+                // TODO: attemptFix()
                 /*
                  * Create a seperate function attemptFix() to fix missing brackets, missing "*",
                  * notify about inputs which are not fuctions, notify about invalid inputs etc.
@@ -280,6 +285,10 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      */
     public static void main(final String[] args) {
         final CalculatorFrame frame = new CalculatorFrame();
+        String f_x = "x+j";
+        final Variable xo = new Variable("x", new Complex(1, 2));
+        ParserResult result = Parser.eval(f_x, xo);
+        System.out.println("real:" + result.getComplexValue().getR() + " imag:" + result.getComplexValue().getI());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
