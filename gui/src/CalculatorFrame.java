@@ -1,13 +1,9 @@
 package gui.src;
 
 import javax.swing.*;
-
-import parser.src.function.*;
-import parser.src.main.*;
-import parser.src.util.*;
-
 import java.awt.*;
 import java.awt.event.*;
+
 import java.util.HashMap;
 
 /*
@@ -221,8 +217,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
                             JOptionPane.WARNING_MESSAGE);
                 }
-
-                // TODO: this will (in the future) invoke a new window and a solving algorithm
+                FunctionFrame fFrame = new FunctionFrame(fz);
+                fFrame.setVisible(true);
                 break;
 
             case "CE":
@@ -285,10 +281,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      */
     public static void main(final String[] args) {
         final CalculatorFrame frame = new CalculatorFrame();
-        String f_x = "x+j";
-        final Variable xo = new Variable("x", new Complex(1, 2));
-        ParserResult result = Parser.eval(f_x, xo);
-        System.out.println("real:" + result.getComplexValue().getR() + " imag:" + result.getComplexValue().getI());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

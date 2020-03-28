@@ -9,10 +9,9 @@ public class Function {
 
     public Complex solveFor(Complex z) {
         /*
-         * Requires implementation of parsing function from string. So far it's just
-         * f(z) = z for ease of math.
+         * Requires implementation of parsing function from package "parser". So far
+         * it's just f(z) = z for ease of math.
          */
-        // TODO: Parsing implementation
         return z;
     }
 
