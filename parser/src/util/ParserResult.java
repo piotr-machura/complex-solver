@@ -2,21 +2,21 @@ package parser.src.util;
 
 import parser.src.function.Complex;
 
-/**
+/*
  * The Class ParserResult.
  */
 public class ParserResult {
 
-	/** The value. */
+	/* The value. */
 	private Double value;
 
-	/** The complex value. */
+	/* The complex value. */
 	private Complex complexValue;
 
-	/** The complex. */
+	/* The complex. */
 	private boolean complex;
 
-	/**
+	/*
 	 * Gets the value.
 	 *
 	 * @return the value
@@ -25,7 +25,7 @@ public class ParserResult {
 		return value;
 	}
 
-	/**
+	/*
 	 * Sets the value.
 	 *
 	 * @param value the new value
@@ -35,7 +35,7 @@ public class ParserResult {
 		complex = false;
 	}
 
-	/**
+	/*
 	 * Gets the complex value.
 	 *
 	 * @return the complex value
@@ -44,7 +44,7 @@ public class ParserResult {
 		return complexValue;
 	}
 
-	/**
+	/*
 	 * Sets the complex value.
 	 *
 	 * @param complexValue the new complex value
@@ -54,7 +54,7 @@ public class ParserResult {
 		complex = true;
 	}
 
-	/**
+	/*
 	 * Checks if is complex.
 	 *
 	 * @return true, if is complex
@@ -63,7 +63,7 @@ public class ParserResult {
 		return complex;
 	}
 
-	/**
+	/*
 	 * Sets the complex.
 	 *
 	 * @param complex the new complex

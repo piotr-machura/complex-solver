@@ -1,26 +1,26 @@
 package parser.src.main;
 
-/**
+/*
  * The Class ParserManager.
  */
 public class ParserManager {
 
-	/** The deegre. */
+	/* The deegre. */
 	private boolean deegre = false;
 
 	// ..... Other configuration values //
 
-	/** The instance. */
+	/* The instance. */
 	private static ParserManager instance = null;
 
-	/**
+	/*
 	 * Instantiates a new parser manager.
 	 */
 	protected ParserManager() {
 
 	}
 
-	/**
+	/*
 	 * getInstance.
 	 *
 	 * @return single instance of ParserManager
@@ -32,7 +32,7 @@ public class ParserManager {
 		return instance;
 	}
 
-	/**
+	/*
 	 * isDeegre.
 	 *
 	 * @return true, if is deegre
@@ -41,7 +41,7 @@ public class ParserManager {
 		return deegre;
 	}
 
-	/**
+	/*
 	 * setDeegre.
 	 *
 	 * @param deegre the new deegre

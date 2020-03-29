@@ -2,547 +2,632 @@ package parser.src.function;
 
 import parser.src.exception.CalculatorException;
 
-/**
- * The Class Complex.
+/*
+ * Complex.
  */
 public class Complex {
 
-	/** real. */
-	private double r;
+    /* real. */
+    private double re;
 
-	/** imaginary. */
-	private double i;
+    /* imaginary. */
+    private double im;
 
-	/**
-	 * Complex.
-	 *
-	 * @param r the r
-	 * @param i the i
-	 */
-	public Complex(final double r, final double i) {
-		this.r = r;
-		this.i = i;
-	}
+    /*
+     * Complex.
+     *
+     * @param re the re
+     *
+     * @param im the im
+     */
+    public Complex(final double re, final double im) {
+        this.re = re;
+        this.im = im;
+    }
 
-	/**
-	 * Complex.
-	 */
-	public Complex() {
-		r = 0.0;
-		i = 0.0;
-	}
+    /*
+     * Complex.
+     */
+    public Complex() {
+        re = 0.0;
+        im = 0.0;
+    }
 
-	/**
-	 * Gets the r.
-	 *
-	 * @return the r
-	 */
-	public double getR() {
-		return r;
-	}
+    /*
+     * Gets the r.
+     *
+     * @return the r
+     */
+    public double getRe() {
+        return re;
+    }
 
-	/**
-	 * Sets the r.
-	 *
-	 * @param r the new r
-	 */
-	public void setR(final double r) {
-		this.r = r;
-	}
+    /*
+     * Sets the re.
+     *
+     * @param re the new re
+     */
+    public void setRe(final double re) {
+        this.re = re;
+    }
 
-	/**
-	 * Gets the i.
-	 *
-	 * @return the i
-	 */
-	public double getI() {
+    /*
+     * Gets the im.
+     *
+     * @return the im
+     */
+    public double getIm() {
 
-		return i;
-	}
+        return im;
+    }
 
-	/**
-	 * Sets the i.
-	 *
-	 * @param i the new i
-	 */
-	public void setI(final double i) {
-		this.i = i;
-	}
+    /*
+     * Sets the im.
+     *
+     * @param im the new im
+     */
+    public void setIm(final double im) {
+        this.im = im;
+    }
 
-	/**
-	 * add.
-	 *
-	 * @param a the a
-	 * @param b the b
-	 * @return the complex
-	 */
-	public static Complex add(final Complex a, final Complex b) {
-		final double real = a.r + b.r;
-		final double imag = a.i + b.i;
-		return new Complex(real, imag);
-	}
+    // ! Made by: Piotr Machura for the purpouses of winding number algorithm
+    /*
+     * toString.
+     */
+    public String toString() {
+        if (im == 0)
+            return String.format("%.2f", re) + "";
+        if (re == 0)
+            return String.format("%.2f", im) + "i";
+        if (im < 0)
+            return String.format("%.2f", re) + " - " + String.format("%.2f", -im) + "i";
+        return String.format("%.2f", re) + " + " + String.format("%.2f", im) + "i";
+    }
 
-	/**
-	 * add.
-	 *
-	 * @param real the real
-	 * @param c the c
-	 * @return the complex
-	 */
-	public static Complex add(final double real, final Complex c) {
-		return new Complex(c.r + real, c.i);
-	}
+    // ! Made by: Piotr Machura for the purpouses of winding number algorithm
+    /*
+     * Returns phase as phi +2kPI, where phi = [0, 2pi], returns 0 for point 0+0i
+     *
+     * @ param k the k-th phase
+     * 
+     * @ return the phase
+     * 
+     * @ throws CalculatorException the calculator exception
+     */
+    public static double kPhase(Complex z, int k) throws CalculatorException {
+        double y = Math.abs(z.im);
+        double x = Math.abs(z.re);
+        if (z.re > 0 && z.im == 0) {
+            return 0 + 2 * k * Math.PI;
+        } else if (z.re > 0 && z.im > 0) {
+            return Math.atan(y / x) + 2 * k * Math.PI;
+        } else if (z.re == 0 && z.im > 0) {
+            return Math.PI / 2 + 2 * k * Math.PI;
+        } else if (z.re < 0 && z.im > 0) {
+            return Math.atan(x / y) + Math.PI / 2 + 2 * k * Math.PI;
+        } else if (z.re < 0 && z.im == 0) {
+            return Math.PI + 2 * k * Math.PI;
+        } else if (z.re < 0 && z.im < 0) {
+            return Math.atan(y / x) + Math.PI + 2 * k * Math.PI;
+        } else if (z.re == 0 && z.im < 0) {
+            return 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else if (z.re > 0 && z.im < 0) {
+            return Math.atan(x / y) + 3 / 2 * Math.PI + 2 * k * Math.PI;
+        } else {
+            throw new CalculatorException("Phase undefined for point " + z);
+        }
+    }
 
-	/**
-	 * sub.
-	 *
-	 * @param a the a
-	 * @param b the b
-	 * @return the complex
-	 */
-	public static Complex sub(final Complex a, final Complex b) {
-		final double real = a.r - b.r;
-		final double imag = a.i - b.i;
-		return new Complex(real, imag);
-	}
+    /*
+     * add.
+     *
+     * @param a the a
+     * 
+     * @param b the b
+     * 
+     * @return the complex
+     */
+    public static Complex add(final Complex a, final Complex b) {
+        final double real = a.re + b.re;
+        final double imag = a.im + b.im;
+        return new Complex(real, imag);
+    }
 
-	/**
-	 * Sub.
-	 *
-	 * @param real the real
-	 * @param c the c
-	 * @return the complex
-	 */
-	public static Complex sub(final double real, final Complex c) {
-		return new Complex(c.r - real, c.i);
-	}
+    /*
+     * add.
+     *
+     * @param real the real
+     * 
+     * @param c the c
+     * 
+     * @return the complex
+     */
+    public static Complex add(final double real, final Complex c) {
+        return new Complex(c.re + real, c.im);
+    }
 
-	/**
-	 * multiply.
-	 *
-	 * @param a the a
-	 * @param b the b
-	 * @return the complex
-	 */
-	public static Complex mul(final Complex a, final Complex b) {
-		final double real = (a.r * b.r) - (a.i * b.i);
-		final double imag = (a.i * b.r) + (a.r * b.i);
-		return new Complex(real, imag);
-	}
+    /*
+     * sub.
+     *
+     * @param a the a
+     * 
+     * @param b the b
+     * 
+     * @return the complex
+     */
+    public static Complex sub(final Complex a, final Complex b) {
+        final double real = a.re - b.re;
+        final double imag = a.im - b.im;
+        return new Complex(real, imag);
+    }
 
-	/**
-	 * conjugate.
-	 *
-	 * @param c the c
-	 * @return the complex
-	 */
-	public static Complex conjugate(final Complex c) {
-		return new Complex(c.r, -c.i);
-	}
+    /*
+     * Sub.
+     *
+     * @param real the real
+     * 
+     * @param c the c
+     * 
+     * @return the complex
+     */
+    public static Complex sub(final double real, final Complex c) {
+        return new Complex(c.re - real, c.im);
+    }
 
-	/**
-	 * div.
-	 *
-	 * @param a the a
-	 * @param b the b
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public static Complex div(final Complex a, final Complex b) throws CalculatorException {
+    /*
+     * multiply.
+     *
+     * @param a the a
+     * 
+     * @param b the b
+     * 
+     * @return the complex
+     */
+    public static Complex mul(final Complex a, final Complex b) {
+        final double real = (a.re * b.re) - (a.im * b.im);
+        final double imag = (a.im * b.re) + (a.re * b.im);
+        return new Complex(real, imag);
+    }
 
-		if ((b.r == 0) && (b.i == 0)) {
-			throw new CalculatorException("The complex number b is 0");
-		}
+    /*
+     * conjugate.
+     *
+     * @param c the c
+     * 
+     * @return the complex
+     */
+    public static Complex conjugate(final Complex c) {
+        return new Complex(c.re, -c.im);
+    }
 
-		final double c = Math.pow(b.r, 2);
-		final double d = Math.pow(b.i, 2);
+    /*
+     * div.
+     *
+     * @param a the a
+     * 
+     * @param b the b
+     * 
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public static Complex div(final Complex a, final Complex b) throws CalculatorException {
 
-		double real;
-		double imag;
-		real = (a.r * b.r) + (a.i * b.i);
-		real /= (c + d);
-		imag = (a.i * b.r) - (a.r * b.i);
-		imag /= (c + d);
+        if ((b.re == 0) && (b.im == 0)) {
+            throw new CalculatorException("The complex number b is 0");
+        }
 
-		return new Complex(real, imag);
-	}
+        final double c = Math.pow(b.re, 2);
+        final double d = Math.pow(b.im, 2);
 
-	/**
-	 * abs.
-	 *
-	 * @param z the z
-	 * @return the double
-	 */
-	public static double abs(final Complex z) {
-		double x, y, ans, temp;
-		x = Math.abs(z.r);
-		y = Math.abs(z.i);
-		if (x == 0.0) {
-			ans = y;
-		} else if (y == 0.0) {
-			ans = x;
-		} else if (x > y) {
-			temp = y / x;
-			ans = x * Math.sqrt(1.0 + (temp * temp));
-		} else {
-			temp = x / y;
-			ans = y * Math.sqrt(1.0 + (temp * temp));
-		}
-		return ans;
-	}
+        double real;
+        double imag;
+        real = (a.re * b.re) + (a.im * b.im);
+        real /= (c + d);
+        imag = (a.im * b.re) - (a.re * b.im);
+        imag /= (c + d);
 
-	/**
-	 * sqrt.
-	 *
-	 * @param c the c
-	 * @return the complex
-	 */
-	public static Complex sqrt(final Complex c) {
-		double real, imag;
-		double x, y, w, r;
+        return new Complex(real, imag);
+    }
 
-		Complex result = null;
+    /*
+     * abs.
+     *
+     * @param z the z
+     * 
+     * @return the double
+     */
+    public static double abs(final Complex z) {
+        double x, y, ans, temp;
+        x = Math.abs(z.re);
+        y = Math.abs(z.im);
+        if (x == 0.0) {
+            ans = y;
+        } else if (y == 0.0) {
+            ans = x;
+        } else if (x > y) {
+            temp = y / x;
+            ans = x * Math.sqrt(1.0 + (temp * temp));
+        } else {
+            temp = x / y;
+            ans = y * Math.sqrt(1.0 + (temp * temp));
+        }
+        return ans;
+    }
 
-		if ((c.r == 0.0) && (c.i == 0.0)) {
-			result = new Complex();
-		} else {
-			x = Math.abs(c.r);
-			y = Math.abs(c.i);
-			if (x >= y) {
-				r = y / x;
-				w = Math.sqrt(x) * Math.sqrt(0.5 * (1.0 + Math.sqrt(1.0 + (r * r))));
-			} else {
-				r = x / y;
-				w = Math.sqrt(y) * Math.sqrt(0.5 * (r + Math.sqrt(1.0 + (r * r))));
-			}
-			if (c.r >= 0.0) {
-				real = w;
-				imag = c.i / (2.0 * w);
-			} else {
-				imag = (c.i >= 0) ? w : -w;
-				real = c.i / (2.0 * imag);
-			}
-			result = new Complex(real, imag);
-		}
+    /*
+     * sqrt.
+     *
+     * @param c the c
+     * 
+     * @return the complex
+     */
+    public static Complex sqrt(final Complex c) {
+        double real, imag;
+        double x, y, w, r;
 
-		return result;
-	}
+        Complex result = null;
 
-	/**
-	 * Complex.
-	 *
-	 * @param x the x
-	 * @param c the c
-	 * @return the complex
-	 */
-	public static Complex mul(final double x, final Complex c) {
-		final Complex result = new Complex();
-		result.r = c.r * x;
-		result.i = c.i * x;
-		return result;
-	}
+        if ((c.re == 0.0) && (c.im == 0.0)) {
+            result = new Complex();
+        } else {
+            x = Math.abs(c.re);
+            y = Math.abs(c.im);
+            if (x >= y) {
+                r = y / x;
+                w = Math.sqrt(x) * Math.sqrt(0.5 * (1.0 + Math.sqrt(1.0 + (r * r))));
+            } else {
+                r = x / y;
+                w = Math.sqrt(y) * Math.sqrt(0.5 * (r + Math.sqrt(1.0 + (r * r))));
+            }
+            if (c.re >= 0.0) {
+                real = w;
+                imag = c.im / (2.0 * w);
+            } else {
+                imag = (c.im >= 0) ? w : -w;
+                real = c.im / (2.0 * imag);
+            }
+            result = new Complex(real, imag);
+        }
 
-	/**
-	 * div.
-	 *
-	 * @param x the x
-	 * @param c the c
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public static Complex div(final double x, final Complex c) throws CalculatorException {
-		if (x == 0) {
-			throw new CalculatorException("scalar is 0");
-		}
-		final Complex result = new Complex();
-		result.r = c.r / x;
-		result.i = c.i / x;
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * inverse.
-	 *
-	 * @return the complex
-	 */
-	public Complex inverse() {
-		final Complex result = new Complex();
-		final double a = r * r;
-		final double b = i * i;
-		if ((a == 0) && (b == 0)) {
-			result.r = 0;
-			result.i = 0;
-		} else {
-			result.r = r / (a + b);
-			result.i = i / (a + b);
-		}
-		return result;
+    /*
+     * Complex.
+     *
+     * @param x the x
+     * 
+     * @param c the c
+     * 
+     * @return the complex
+     */
+    public static Complex mul(final double x, final Complex c) {
+        final Complex result = new Complex();
+        result.re = c.re * x;
+        result.im = c.im * x;
+        return result;
+    }
 
-	}
+    /*
+     * div.
+     *
+     * @param x the x
+     * 
+     * @param c the c
+     * 
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public static Complex div(final double x, final Complex c) throws CalculatorException {
+        if (x == 0) {
+            throw new CalculatorException("scalar is 0");
+        }
+        final Complex result = new Complex();
+        result.re = c.re / x;
+        result.im = c.im / x;
+        return result;
+    }
 
-	/**
-	 * pow.
-	 *
-	 * @param c the c
-	 * @param exp the exp
-	 * @return the complex
-	 */
-	/*
-	 * public static Complex pow(final Complex c, final int exp) throws CalculatorException { double x = 0.0, y = 0.0;
-	 * int sign; for (int i = 0; i <= exp; i++) { sign = ((i % 2) == 0) ? 1 : -1; // real x += Combination.calc(exp, 2 *
-	 * i) * Math.pow(c.r, exp - (2 * i)) * Math.pow(c.i, 2 * i) * sign; if (exp == (2 * i)) { break; } // imaginary y +=
-	 * Combination.calc(exp, (2 * i) + 1) * Math.pow(c.r, exp - ((2 * i) + 1)) * Math.pow(c.i, (2 * i) + 1) sign; }
-	 * return new Complex(x, y); }
-	 */
-	/**
-	 *
-	 * pow
-	 *
-	 * @param c
-	 * @param exp
-	 * @return
-	 */
-	public static Complex pow(final Complex c, final Double exp) {
-		return c.pow(exp);
-	}
+    /*
+     * inverse.
+     *
+     * @return the complex
+     */
+    public Complex inverse() {
+        final Complex result = new Complex();
+        final double a = re * re;
+        final double b = im * im;
+        if ((a == 0) && (b == 0)) {
+            result.re = 0;
+            result.im = 0;
+        } else {
+            result.re = re / (a + b);
+            result.im = im / (a + b);
+        }
+        return result;
 
-	/**
-	 * power.
-	 *
-	 * @param c the c
-	 * @param exp the exp
-	 * @return the complex
-	 */
-	public static Complex pow(final Complex c, final Complex exp) {
-		return c.pow(exp);
-	}
+    }
 
-	/**
-	 * module.
-	 *
-	 * @return the double
-	 */
-	public double module() {
-		return Math.sqrt((r * r) + (i * i));
-	}
+    /*
+     * pow.
+     *
+     * @param c the c
+     * 
+     * @param exp the exp
+     * 
+     * @return the complex
+     */
+    /*
+     * public static Complex pow(final Complex c, final int exp) throws
+     * CalculatorException { double x = 0.0, y = 0.0; int sign; for (int i = 0; i <=
+     * exp; i++) { sign = ((i % 2) == 0) ? 1 : -1; // real x +=
+     * Combination.calc(exp, 2 * i) * Math.pow(c.r, exp - (2 * i)) * Math.pow(c.i, 2
+     * * i) * sign; if (exp == (2 * i)) { break; } // imaginary y +=
+     * Combination.calc(exp, (2 * i) + 1) * Math.pow(c.r, exp - ((2 * i) + 1)) *
+     * Math.pow(c.i, (2 * i) + 1) sign; } return new Complex(x, y); }
+     */
+    /*
+     *
+     * pow
+     *
+     * @param c
+     * 
+     * @param exp
+     * 
+     * @return
+     */
+    public static Complex pow(final Complex c, final Double exp) {
+        return c.pow(exp);
+    }
 
-	/**
-	 * arg.
-	 *
-	 * @return the double
-	 */
-	public double arg() {
+    /*
+     * power.
+     *
+     * @param c the c
+     * 
+     * @param exp the exp
+     * 
+     * @return the complex
+     */
+    public static Complex pow(final Complex c, final Complex exp) {
+        return c.pow(exp);
+    }
 
-		double angle = Math.atan2(i, r);
-		if (angle < 0) {
-			angle = (2 * Math.PI) + angle;
-		}
-		return (angle * 180) / Math.PI;
+    /*
+     * module.
+     *
+     * @return the double
+     */
+    public double module() {
+        return Math.sqrt((re * re) + (im * im));
+    }
 
-	}
+    /*
+     * arg.
+     *
+     * @return the double
+     */
+    public double arg() {
 
-	/**
-	 * negate.
-	 *
-	 * @return the complex
-	 */
-	public Complex negate() {
-		return new Complex(-r, -i);
-	}
+        double angle = Math.atan2(im, re);
+        if (angle < 0) {
+            angle = (2 * Math.PI) + angle;
+        }
+        return (angle * 180) / Math.PI;
 
-	/**
-	 * exp.
-	 *
-	 * @return the complex
-	 */
-	// E^c
-	public Complex exp() {
-		final double exp_x = Math.exp(r);
-		return new Complex(exp_x * Math.cos(i), exp_x * Math.sin(i));
-	}
+    }
 
-	/**
-	 * log10().
-	 *
-	 * @return the complex
-	 */
-	public Complex log10() {
+    /*
+     * negate.
+     *
+     * @return the complex
+     */
+    public Complex negate() {
+        return new Complex(-re, -im);
+    }
 
-		final double rpart = Math.sqrt((r * r) + (i * i));
-		double ipart = Math.atan2(i, r);
-		if (ipart > Math.PI) {
-			ipart = ipart - (2.0 * Math.PI);
-		}
-		return new Complex(Math.log10(rpart), (1 / Math.log(10)) * ipart);
+    /*
+     * exp.
+     *
+     * @return the complex
+     */
+    // E^c
+    public Complex exp() {
+        final double exp_x = Math.exp(re);
+        return new Complex(exp_x * Math.cos(im), exp_x * Math.sin(im));
+    }
 
-	}
+    /*
+     * log10().
+     *
+     * @return the complex
+     */
+    public Complex log10() {
 
-	/**
-	 * log natural log.
-	 *
-	 * @return the complex
-	 */
-	public Complex log() {
-		return new Complex(Math.log(abs(this)), Math.atan2(i, r));
+        final double rpart = Math.sqrt((re * re) + (im * im));
+        double ipart = Math.atan2(im, re);
+        if (ipart > Math.PI) {
+            ipart = ipart - (2.0 * Math.PI);
+        }
+        return new Complex(Math.log10(rpart), (1 / Math.log(10)) * ipart);
 
-	}
+    }
 
-	/**
-	 * sqrt.
-	 *
-	 * @return the complex
-	 */
-	public Complex sqrt() {
-		final double r = Math.sqrt((this.r * this.r) + (i * i));
-		final double rpart = Math.sqrt(0.5 * (r + this.r));
-		double ipart = Math.sqrt(0.5 * (r - this.r));
-		if (i < 0.0) {
-			ipart = -ipart;
-		}
-		return new Complex(rpart, ipart);
-	}
+    /*
+     * log natural log.
+     *
+     * @return the complex
+     */
+    public Complex log() {
+        return new Complex(Math.log(abs(this)), Math.atan2(im, re));
 
-	/**
-	 * Cbrt.
-	 *
-	 * @param a the a
-	 * @return the complex
-	 */
-	public static Complex cbrt(final Complex a) {
-		Complex z = new Complex();
-		if (a.i != 0.0) {
-			z.r = Math.cbrt(abs(a)) * Math.cos(a.arg() / 3.0);
-			z.i = Math.cbrt(abs(a)) * Math.sin(a.arg() / 3.0);
-		} else {
-			z = new Complex(Math.cbrt(a.r), 0);
-		}
-		return z;
-	}
+    }
 
-	/**
-	 * pow.
-	 *
-	 * @param exp the exp
-	 * @return the complex
-	 */
-	public Complex pow(final Complex exp) {
-		Complex a = this.log();
-		a = mul(exp, a);
-		return a.exp();
-	}
+    /*
+     * sqrt.
+     *
+     * @return the complex
+     */
+    public Complex sqrt() {
+        final double r = Math.sqrt((this.re * this.re) + (im * im));
+        final double rpart = Math.sqrt(0.5 * (r + this.re));
+        double ipart = Math.sqrt(0.5 * (r - this.re));
+        if (im < 0.0) {
+            ipart = -ipart;
+        }
+        return new Complex(rpart, ipart);
+    }
 
-	/**
-	 * pow.
-	 *
-	 * @param exp the exp
-	 * @return the complex
-	 */
-	public Complex pow(final double exp) {
-		Complex a = this.log();
-		a = mul(exp, a);
-		return a.exp();
-	}
+    /*
+     * Cbrt.
+     *
+     * @param a the a
+     * 
+     * @return the complex
+     */
+    public static Complex cbrt(final Complex a) {
+        Complex z = new Complex();
+        if (a.im != 0.0) {
+            z.re = Math.cbrt(abs(a)) * Math.cos(a.arg() / 3.0);
+            z.im = Math.cbrt(abs(a)) * Math.sin(a.arg() / 3.0);
+        } else {
+            z = new Complex(Math.cbrt(a.re), 0);
+        }
+        return z;
+    }
 
-	/**
-	 * sin.
-	 *
-	 * @return the complex
-	 */
-	public Complex sin() {
-		return new Complex(Math.sin(r) * Math.cosh(i), Math.cos(r) * Math.sinh(i));
-	}
+    /*
+     * pow.
+     *
+     * @param exp the exp
+     * 
+     * @return the complex
+     */
+    public Complex pow(final Complex exp) {
+        Complex a = this.log();
+        a = mul(exp, a);
+        return a.exp();
+    }
 
-	/**
-	 * cos.
-	 *
-	 * @return the complex
-	 */
-	public Complex cos() {
-		return new Complex(Math.cos(r) * Math.cosh(i), -StrictMath.sin(r) * Math.sinh(i));
-	}
+    /*
+     * pow.
+     *
+     * @param exp the exp
+     * 
+     * @return the complex
+     */
+    public Complex pow(final double exp) {
+        Complex a = this.log();
+        a = mul(exp, a);
+        return a.exp();
+    }
 
-	/**
-	 * tan.
-	 *
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public Complex tan() throws CalculatorException {
-		return div(this.sin(), this.cos());
-	}
+    /*
+     * sin.
+     *
+     * @return the complex
+     */
+    public Complex sin() {
+        return new Complex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
+    }
 
-	/**
-	 * asin.
-	 *
-	 * @return the complex
-	 */
-	public Complex asin() {
-		final Complex IM = new Complex(0.0, -1.0);
-		final Complex ZP = mul(this, IM);
-		final Complex ZM = add((sub(new Complex(1.0, 0.0), mul(this, this))).sqrt(), ZP);
-		return mul(ZM.log(), new Complex(0.0, 1.0));
-	}
+    /*
+     * cos.
+     *
+     * @return the complex
+     */
+    public Complex cos() {
+        return new Complex(Math.cos(re) * Math.cosh(im), -StrictMath.sin(re) * Math.sinh(im));
+    }
 
-	/**
-	 * acos.
-	 *
-	 * @return the complex
-	 */
-	public Complex acos() {
-		final Complex IM = new Complex(0.0, -1.0);
-		final Complex ZM = add(mul((sub(new Complex(1.0, 0.0), mul(this, this))).sqrt(), IM), this);
-		return mul(ZM.log(), new Complex(0.0, 1.0));
-	}
+    /*
+     * tan.
+     *
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public Complex tan() throws CalculatorException {
+        return div(this.sin(), this.cos());
+    }
 
-	/**
-	 * atan.
-	 *
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public Complex atan() throws CalculatorException {
-		final Complex IM = new Complex(0.0, -1.0);
-		final Complex ZP = new Complex(r, i - 1.0);
-		final Complex ZM = new Complex(-r, -i - 1.0);
-		return div(2.0, mul(IM, (div(ZP, ZM).log())));
-	}
+    /*
+     * asin.
+     *
+     * @return the complex
+     */
+    public Complex asin() {
+        final Complex IM = new Complex(0.0, -1.0);
+        final Complex ZP = mul(this, IM);
+        final Complex ZM = add((sub(new Complex(1.0, 0.0), mul(this, this))).sqrt(), ZP);
+        return mul(ZM.log(), new Complex(0.0, 1.0));
+    }
 
-	/**
-	 * sinh.
-	 *
-	 * @return the complex
-	 */
-	public Complex sinh() {
-		return new Complex(Math.sinh(r) * Math.cos(i), Math.cosh(r) * Math.sin(i));
-	}
+    /*
+     * acos.
+     *
+     * @return the complex
+     */
+    public Complex acos() {
+        final Complex IM = new Complex(0.0, -1.0);
+        final Complex ZM = add(mul((sub(new Complex(1.0, 0.0), mul(this, this))).sqrt(), IM), this);
+        return mul(ZM.log(), new Complex(0.0, 1.0));
+    }
 
-	/**
-	 * cosh.
-	 *
-	 * @return the complex
-	 */
-	public Complex cosh() {
-		return new Complex(Math.cosh(r) * Math.cos(i), Math.sinh(r) * Math.sin(i));
-	}
+    /*
+     * atan.
+     *
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public Complex atan() throws CalculatorException {
+        final Complex IM = new Complex(0.0, -1.0);
+        final Complex ZP = new Complex(re, im - 1.0);
+        final Complex ZM = new Complex(-re, -im - 1.0);
+        return div(2.0, mul(IM, (div(ZP, ZM).log())));
+    }
 
-	/**
-	 * tanh.
-	 *
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public Complex tanh() throws CalculatorException {
-		return div(this.sinh(), this.cosh());
-	}
+    /*
+     * sinh.
+     *
+     * @return the complex
+     */
+    public Complex sinh() {
+        return new Complex(Math.sinh(re) * Math.cos(im), Math.cosh(re) * Math.sin(im));
+    }
 
-	/**
-	 * atanh.
-	 *
-	 * @return the complex
-	 * @throws CalculatorException the calculator exception
-	 */
-	public Complex atanh() throws CalculatorException {
-		return sub((add(1.0, this)).log(), div(2.0, ((sub(1.0, this)).negate()).log()));
-	}
+    /*
+     * cosh.
+     *
+     * @return the complex
+     */
+    public Complex cosh() {
+        return new Complex(Math.cosh(re) * Math.cos(im), Math.sinh(re) * Math.sin(im));
+    }
+
+    /*
+     * tanh.
+     *
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public Complex tanh() throws CalculatorException {
+        return div(this.sinh(), this.cosh());
+    }
+
+    /*
+     * atanh.
+     *
+     * @return the complex
+     * 
+     * @throws CalculatorException the calculator exception
+     */
+    public Complex atanh() throws CalculatorException {
+        return sub((add(1.0, this)).log(), div(2.0, ((sub(1.0, this)).negate()).log()));
+    }
 
 }

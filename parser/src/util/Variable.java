@@ -2,34 +2,34 @@ package parser.src.util;
 
 import parser.src.function.Complex;
 
-/**
+/*
  * The Class Point.
  */
 public class Variable {
 
-	/** The var. */
+	/* The var. */
 	private String var;
 
-	/** The value. */
+	/* The value. */
 	private Double value;
 
-	/** The complex value. */
+	/* The complex value. */
 	private Complex complexValue;
 
-	/** The string value. */
+	/* The string value. */
 	private String stringValue;
 
-	/** The complex. */
+	/* The complex. */
 	private boolean complex;
 
-	/**
+	/*
 	 * Instantiates a new point.
 	 */
 	public Variable() {
 
 	}
 
-	/**
+	/*
 	 * Instantiates a new point.
 	 *
 	 * @param var the var
@@ -41,7 +41,7 @@ public class Variable {
 		complex = false;
 	}
 
-	/**
+	/*
 	 * Instantiates a new point.
 	 *
 	 * @param var the var
@@ -53,7 +53,7 @@ public class Variable {
 		complex = true;
 	}
 
-	/**
+	/*
 	 * Instantiates a new point.
 	 *
 	 * @param var the var
@@ -65,7 +65,7 @@ public class Variable {
 
 	}
 
-	/**
+	/*
 	 * getter var.
 	 *
 	 * @return the var
@@ -74,7 +74,7 @@ public class Variable {
 		return var;
 	}
 
-	/**
+	/*
 	 * setter var.
 	 *
 	 * @param var the new var
@@ -83,7 +83,7 @@ public class Variable {
 		this.var = var;
 	}
 
-	/**
+	/*
 	 * getter Value.
 	 *
 	 * @return the value
@@ -92,7 +92,7 @@ public class Variable {
 		return value;
 	}
 
-	/**
+	/*
 	 * setter Value.
 	 *
 	 * @param value the new value
@@ -101,7 +101,7 @@ public class Variable {
 		this.value = value;
 	}
 
-	/**
+	/*
 	 * getter complexValue.
 	 *
 	 * @return the complex value
@@ -110,7 +110,7 @@ public class Variable {
 		return complexValue;
 	}
 
-	/**
+	/*
 	 * setter complexValue.
 	 *
 	 * @param complexValue the new complex value
@@ -119,7 +119,7 @@ public class Variable {
 		this.complexValue = complexValue;
 	}
 
-	/**
+	/*
 	 * isComplex.
 	 *
 	 * @return true, if is complex
@@ -128,7 +128,7 @@ public class Variable {
 		return complex;
 	}
 
-	/**
+	/*
 	 * setter complex.
 	 *
 	 * @param complex the new complex
@@ -137,7 +137,7 @@ public class Variable {
 		this.complex = complex;
 	}
 
-	/**
+	/*
 	 * Gets the string value.
 	 *
 	 * @return the string value
@@ -146,7 +146,7 @@ public class Variable {
 		return stringValue;
 	}
 
-	/**
+	/*
 	 * Sets the string value.
 	 *
 	 * @param stringValue the new string value

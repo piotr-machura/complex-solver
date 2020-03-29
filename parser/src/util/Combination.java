@@ -2,12 +2,12 @@ package parser.src.util;
 
 import parser.src.exception.CalculatorException;
 
-/**
+/*
  * The Class Combination.
  */
 public class Combination {
 
-	/**
+	/*
 	 * calc.
 	 *
 	 * @param m the m

@@ -7,65 +7,65 @@ import parser.src.main.ParserManager;
 import parser.src.exception.CalculatorException;
 
 
-/**
+/*
  * The Class ComplexFunction.
  */
 public class ComplexFunction {
 
-	/** The Constant SIN. */
+	/* The Constant SIN. */
 	public static final String SIN = "sin";
 
-	/** The Constant COS. */
+	/* The Constant COS. */
 	public static final String COS = "cos";
 
-	/** The Constant SINH. */
+	/* The Constant SINH. */
 	public static final String SINH = "sinh";
 
-	/** The Constant COSH. */
+	/* The Constant COSH. */
 	public static final String COSH = "cosh";
 
-	/** The Constant TAN. */
+	/* The Constant TAN. */
 	public static final String TAN = "tan";
 
-	/** The Constant TANH. */
+	/* The Constant TANH. */
 	public static final String TANH = "tanh";
 
-	/** The Constant ASIN. */
+	/* The Constant ASIN. */
 	public static final String ASIN = "asin";
 
-	/** The Constant ACOS. */
+	/* The Constant ACOS. */
 	public static final String ACOS = "acos";
 
-	/** The Constant ATAN. */
+	/* The Constant ATAN. */
 	public static final String ATAN = "atan";
 
-	/** The Constant E. */
+	/* The Constant E. */
 	public static final String E = "e";
 
-	/** The Constant PI. */
+	/* The Constant PI. */
 	public static final String PI = "pi";
 
-	/** The Constant LN. */
+	/* The Constant LN. */
 	public static final String LN = "ln";
 
-	/** The Constant LOG. */
+	/* The Constant LOG. */
 	public static final String LOG = "log";
 
-	/** The Constant SQRT. */
+	/* The Constant SQRT. */
 	public static final String SQRT = "sqrt";
 
-	/** The Constant CBRT. */
+	/* The Constant CBRT. */
 	public static final String CBRT = "cbrt";
 
-	/** setup. */
+	/* setup. */
 	public boolean degree = false;
 
-	/**
+	/*
 	 * f(x,y,z,...)
 	 */
 	private String f;
 
-	/**
+	/*
 	 * FunctionXs.
 	 *
 	 * @param f the f
@@ -76,7 +76,7 @@ public class ComplexFunction {
 
 	}
 
-	/**
+	/*
 	 * getter f(x,y,z,...)
 	 *
 	 * @return the f
@@ -85,7 +85,7 @@ public class ComplexFunction {
 		return f;
 	}
 
-	/**
+	/*
 	 * setter f(x,y,z,...)
 	 *
 	 * @param f the new f
@@ -94,7 +94,7 @@ public class ComplexFunction {
 		this.f = f;
 	}
 
-	/**
+	/*
 	 * getValue f(x0,y0,z0...)
 	 *
 	 * @param values (sort the values taking into account the variables)
@@ -111,7 +111,7 @@ public class ComplexFunction {
 		return eval(f, values, vars);
 	}
 
-	/**
+	/*
 	 * eval.
 	 *
 	 * @param f the f
@@ -571,7 +571,7 @@ public class ComplexFunction {
 		return value;
 	}
 
-	/**
+	/*
 	 * nextFunction.
 	 *
 	 * @param f the f
@@ -630,7 +630,7 @@ public class ComplexFunction {
 		return result;
 	}
 
-	/**
+	/*
 	 * nextMinusFunction.
 	 *
 	 * @param f the f
@@ -689,7 +689,7 @@ public class ComplexFunction {
 		return result;
 	}
 
-	/**
+	/*
 	 * isValidCharacter.
 	 *
 	 * @param character the character
@@ -785,7 +785,7 @@ public class ComplexFunction {
 		return result;
 	}
 
-	/**
+	/*
 	 * isValidNumericAndCharacter.
 	 *
 	 * @param character the character
@@ -911,7 +911,7 @@ public class ComplexFunction {
 		return result;
 	}
 
-	/**
+	/*
 	 * nextBracket.
 	 *
 	 * @param f the f

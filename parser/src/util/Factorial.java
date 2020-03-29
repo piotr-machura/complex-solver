@@ -2,12 +2,12 @@ package parser.src.util;
 
 import parser.src.exception.CalculatorException;
 
-/**
+/*
  * The Class Factorial.
  */
 public class Factorial {
 
-	/**
+	/*
 	 * cal.
 	 *
 	 * @param m the m
