@@ -14,9 +14,7 @@ class FunctionFrame extends JFrame {
     final String fz;
 
     FunctionFrame(String fz) {
-        /*
-         * Basic parameters
-         */
+        /* Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 500);
         this.setResizable(false);

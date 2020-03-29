@@ -1,5 +1,9 @@
 package algorithm.src;
 
+import parser.src.function.*;
+import parser.src.main.*;
+import parser.src.util.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,10 +13,10 @@ public class InputSpace extends JPanel {
 
     float zoomX = 200, zoomY = 200;
     float scaleX = 4, scaleY = 4;
-    Function f;
+    String f;
     ArrayList<Complex> sq_points = new ArrayList<Complex>();
 
-    public InputSpace(Function f) {
+    public InputSpace(String f) {
         this.f = f;
     }
 
@@ -39,12 +43,17 @@ public class InputSpace extends JPanel {
 
                 double x = i * tickX;
                 double y = j * tickY;
-                Complex z = new Complex(x, y);
+                Variable z0 = new Variable("z", new Complex(x, y));
 
-                z = f.solveFor(z);
+                Complex z = Parser.eval(f, z0).getComplexValue();
+                double fi;
+                try {
+                    fi = Complex.kPhase(z, 0) / 2 / Math.PI;
+                } catch (Exception e) {
+                    fi = 0;
+                }
 
-                double fi = z.phase() / 2 / Math.PI;
-                double r = z.abs();
+                double r = Complex.abs(z);
                 if (r > 1)
                     r = 1;
 
@@ -72,7 +81,7 @@ public class InputSpace extends JPanel {
 
         g2.setColor(Color.black);
         for (Complex p : sq_points) {
-            g2.fillRect((int) (p.re * zoomY / scaleY) - 2, (int) (p.im * zoomY / scaleY) - 2, 4, 4);
+            g2.fillRect((int) (p.getRe() * zoomY / scaleY) - 2, (int) (p.getIm() * zoomY / scaleY) - 2, 4, 4);
         }
     }
 

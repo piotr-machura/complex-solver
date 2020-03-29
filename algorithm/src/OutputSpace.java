@@ -1,5 +1,7 @@
 package algorithm.src;
 
+import parser.src.function.Complex;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,10 +11,10 @@ public class OutputSpace extends JPanel {
 
     float zoomX = 200, zoomY = 200;
     float scaleX = 4, scaleY = 4;
-    Function f;
+    String f;
     ArrayList<Complex> sq_points = new ArrayList<Complex>();
 
-    public OutputSpace(Function f) {
+    public OutputSpace(String f) {
         this.f = f;
     }
 
@@ -69,7 +71,7 @@ public class OutputSpace extends JPanel {
 
         g2.setColor(Color.black);
         for (Complex p : sq_points) {
-            g2.fillRect((int) (p.re * zoomY / scaleY) - 2, (int) (p.im * zoomY / scaleY) - 2, 4, 4);
+            g2.fillRect((int) (p.getRe()* zoomY / scaleY) - 2, (int) (p.getIm() * zoomY / scaleY) - 2, 4, 4);
         }
 
     }

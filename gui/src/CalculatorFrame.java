@@ -12,49 +12,43 @@ import java.util.HashMap;
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    // Panels
+    /* Panels */
     JPanel upperPanel, centerPanel, bottomPanel;
     JPanel buttonsContainer;
 
-    // Buttons
+    /* Buttons */
     JButton[] nmbButtons;
     HashMap<String, JButton> fnButtons;
     HashMap<String, JButton> opButtons;
     JButton solveButton;
 
-    // Other elements
+    /* Other elements */
     JTextField funcInput;
     Font mathFont;
 
-    // String to be passed further as function f(z)
+    /* String to be passed further as function f(z) */
     String fz;
 
     public CalculatorFrame() throws HeadlessException {
-        /*
-         * Basic parameters
-         */
+        /* Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 500);
         this.setResizable(false);
         this.setTitle("Complex function grapher");
 
-        /*
-         * Initializing panels
-         */
+        /* Initializing panels */
         centerPanel = new JPanel();
         buttonsContainer = new JPanel();
         upperPanel = new JPanel();
         bottomPanel = new JPanel();
 
-        /*
-         * Setting up input text field
-         */
+        /* Setting up input text field */
         funcInput = new JTextField();
         funcInput.setPreferredSize(new Dimension(450, 50));
         mathFont = new Font("SansSerif", Font.PLAIN, 24);
         funcInput.setFont(mathFont);
 
-        // Press enter to solve
+        /* Press enter to solve */
         funcInput.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(final KeyEvent e) {
@@ -73,24 +67,22 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         });
 
-        // Adding function input to upper panel
+        /* Adding function input to upper panel */
         upperPanel.setLayout(new FlowLayout());
         upperPanel.add(funcInput);
 
-        /*
-         * Setting up calculator buttons
-         */
+        /* Setting up calculator buttons */
 
-        // Numbers 0-9
+        /* Numbers 0-9 */
         nmbButtons = new JButton[10];
         for (int i = 0; i < nmbButtons.length; i++) {
             nmbButtons[i] = new JButton("" + i);
-            // Add action commands and wire up action lsitener
+            /* Add action commands and wire up action listener */
             nmbButtons[i].setActionCommand("" + i);
             nmbButtons[i].addActionListener(this);
         }
 
-        // Operator buttons. Each buttons "name" and function is its hash key
+        /* Operator buttons. Each buttons "name" and function is its hash key */
         opButtons = new HashMap<String, JButton>();
         opButtons.put("z", new JButton("z"));
         opButtons.put("i", new JButton("i"));
@@ -106,13 +98,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         opButtons.put("CE", new JButton("CE"));
         opButtons.put("back", new JButton("<-"));
 
-        // Add action commands and wire up action listener
+        /* Add action commands and wire up action listener */
         for (final String opKey : opButtons.keySet()) {
             opButtons.get(opKey).setActionCommand(opKey);
             opButtons.get(opKey).addActionListener(this);
         }
 
-        // Function buttons. Each buttons "name" and function is its hash key
+        /* Function buttons. Each buttons "name" and function is its hash key */
         fnButtons = new HashMap<String, JButton>();
         fnButtons.put("ln", new JButton("ln"));
         fnButtons.put("sin", new JButton("sin"));
@@ -121,13 +113,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         fnButtons.put("sinh", new JButton("sinh"));
         fnButtons.put("cosh", new JButton("cosh"));
 
-        // Add action commands and wire up action listener
+        /* Add action commands and wire up action listener */
         for (final String fnKey : fnButtons.keySet()) {
             fnButtons.get(fnKey).setActionCommand(fnKey);
             fnButtons.get(fnKey).addActionListener(this);
         }
 
-        // Arranging buttons in button container in respective order
+        /* Arranging buttons in button container in respective order */
         buttonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             buttonsContainer.add(nmbButtons[i]);
@@ -159,23 +151,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         buttonsContainer.add(fnButtons.get("sinh"));
         buttonsContainer.add(fnButtons.get("cosh"));
 
-        // Adding button container to center panel
+        /* Adding button container to center panel */
         buttonsContainer.setPreferredSize(new Dimension(350, 325));
         centerPanel.setLayout(new FlowLayout());
         centerPanel.add(buttonsContainer, BorderLayout.CENTER);
 
-        /*
-         * Setting up bottom panel
-         */
+        /* Setting up bottom panel */
         solveButton = new JButton("Solve");
         solveButton.setPreferredSize(new Dimension(140, 50));
         solveButton.setActionCommand("solve");
         solveButton.addActionListener(this);
         bottomPanel.add(solveButton);
 
-        /*
-         * Adding main panels to frame
-         */
+        /* Adding main panels to frame */
         this.setLayout(new BorderLayout());
         this.add(upperPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -195,16 +183,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         switch (buttonID) {
 
             case "solve":
-                /*
-                 * Set fn equal to input field and attempt to fix it to meet the standards
-                 */
+                /* Set fn equal to input field and attempt to fix it to meet the standards */
                 this.fz = funcInput.getText();
 
                 // TODO: attemptFix()
                 /*
                  * Create a seperate function attemptFix() to fix missing brackets, missing "*",
                  * notify about inputs which are not fuctions, notify about invalid inputs etc.
-                 * Lots of regex required.
                  */
                 long countOBr = fz.chars().filter(ch -> ch == '(').count();
                 long countCBr = fz.chars().filter(ch -> ch == ')').count();
@@ -222,9 +207,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "CE":
-                /*
-                 * Clear text field and refocus
-                 */
+                /* Clear text field and refocus */
                 funcInput.setText("");
                 funcInput.requestFocus();
                 break;
@@ -232,7 +215,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             case "back":
                 /*
                  * Delete character before caret. Edge case: caret at the beginning -> do
-                 * nothing.
+                 * nothing
                  */
                 // TODO: if in fron of a function (ex. sin()) make it delete the whole function
                 if (caretPosition == 0) {
@@ -242,7 +225,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
                 funcInput.setText(beforeCaret.substring(0, beforeCaret.length() - 1) + afterCaret);
 
-                // Refocus on text field and move caret to the left
+                /* Refocus on text field and move caret to the left */
                 funcInput.requestFocus();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -253,9 +236,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             default:
-                /*
-                 * Puts buttonID at caret. Adds an opening bracket for functions.
-                 */
+                /* Puts buttonID at caret. Adds an opening bracket for functions. */
                 String putAtCaret = buttonID;
                 if (fnButtons.keySet().contains(buttonID)) {
                     putAtCaret += "(";
@@ -263,7 +244,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 String newText = beforeCaret + putAtCaret + afterCaret;
                 funcInput.setText(newText);
 
-                // Refocus on text field and move caret to the right
+                /* Refocus on text field and move caret to the right */
                 funcInput.requestFocus();
                 final int moveCaretBy = putAtCaret.length();
                 SwingUtilities.invokeLater(new Runnable() {
@@ -276,9 +257,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         }
     }
 
-    /*
-     * Test
-     */
+    /* Test */
     public static void main(final String[] args) {
         final CalculatorFrame frame = new CalculatorFrame();
         frame.setLocationRelativeTo(null);
