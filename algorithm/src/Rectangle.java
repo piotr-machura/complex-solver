@@ -1,7 +1,9 @@
 package algorithm.src;
 
 import java.util.ArrayList;
+import javax.swing.*;
 
+import parser.src.exception.CalculatorException;
 import parser.src.function.*;
 import parser.src.main.*;
 import parser.src.util.*;
@@ -63,8 +65,18 @@ public class Rectangle {
     /*
      * Arg (-2+0i) = pi, ale Arg(-2-0.01i) = -pi+odrobine, czyli zmiana jest prawie
      * 2pi. Problem jest przy "mijaniu" osi ujemnych Re, bo wtedy jest przeskok o
-     * 2pi w fazie. Dopisałem do klasy Complex funkcję zwracającą fazę [0, 2pi] +
-     * 2kpi gdzie k będzie obecnym winding number, trzeba ją tylko zaimplementować.
+     * 2pi w fazie.
+     *
+     * Dopisałem do klasy Complex funkcję zwracającą fazę [0, 2pi]. Jeśli faza
+     * przeszła z bardzo małej do bardzo dużej (mocno dodatnie deltaPhi), tzn, że
+     * przekroczono oś dodatnich x w kierunku przeciwnym do wskazówek zegara (z
+     * małej fazy do bardzo dużej), tzn. odejmujemy od zmiany fazy 2pi (bo punkt się
+     * "cofnął").
+     *
+     * Jeśli faza przeszła z bardzo dużej do bardzo małej (mocno ujemne deltaPhi),
+     * tzn. przekroczono oś dodatnich x w kierunku przeciwnym do wsk. zegara, tzn
+     * dodajemy do zmiany fazy 2pi
+     *
      * Trzeba też nauczyć tą rekurencję kiedy ma się zabić bo potrafi dodać 30
      * takich samych miejsc zerowych.
      */
@@ -76,10 +88,9 @@ public class Rectangle {
      */
     public Boolean checkInside(String f) {
 
-        /* Tick of "integration" - 1/10th of side length */
-        double d = Math.sqrt(this.area) / 10;
+        /* Tick of "integration" - 1/20th of side length */
+        double d = Math.sqrt(this.area) / 20;
         double windingNumber = 0;
-        int k = 0;
 
         /* Starting number: A */
         double x = A.getRe();
@@ -90,12 +101,18 @@ public class Rectangle {
             try {
                 space.addPoint(new Complex(x, y));
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.kPhase(prev, k);
+                double prevPhi = Complex.phase(prev);
                 x += d;
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.kPhase(now, k);
-                windingNumber += nowPhi - prevPhi;
-            } catch (Exception e) {
+                double nowPhi = Complex.phase(now);
+                double deltaPhi = nowPhi - prevPhi;
+                if (deltaPhi > Math.PI) {
+                    deltaPhi -= 2 * Math.PI;
+                } else if (deltaPhi < -Math.PI) {
+                    deltaPhi += 2 * Math.PI;
+                }
+                windingNumber += deltaPhi;
+            } catch (CalculatorException e) {
                 x += d;
             }
 
@@ -106,12 +123,18 @@ public class Rectangle {
             try {
                 space.addPoint(new Complex(x, y));
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.kPhase(prev, k);
+                double prevPhi = Complex.phase(prev);
                 y += d;
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.kPhase(now, k);
-                windingNumber += nowPhi - prevPhi;
-            } catch (Exception e) {
+                double nowPhi = Complex.phase(now);
+                double deltaPhi = nowPhi - prevPhi;
+                if (deltaPhi > Math.PI) {
+                    deltaPhi -= 2 * Math.PI;
+                } else if (deltaPhi < -Math.PI) {
+                    deltaPhi += 2 * Math.PI;
+                }
+                windingNumber += deltaPhi;
+            } catch (CalculatorException e) {
                 y += d;
             }
         }
@@ -121,34 +144,45 @@ public class Rectangle {
             try {
                 space.addPoint(new Complex(x, y));
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.kPhase(prev, k);
+                double prevPhi = Complex.phase(prev);
                 x -= d;
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.kPhase(now, k);
-                windingNumber += nowPhi - prevPhi;
-            } catch (Exception e) {
+                double nowPhi = Complex.phase(now);
+                double deltaPhi = nowPhi - prevPhi;
+                if (deltaPhi > Math.PI) {
+                    deltaPhi -= 2 * Math.PI;
+                } else if (deltaPhi < -Math.PI) {
+                    deltaPhi += 2 * Math.PI;
+                }
+                windingNumber += deltaPhi;
+            } catch (CalculatorException e) {
                 x -= d;
             }
         }
 
         /* Path D->A (going down) */
+        // System.out.println("DA");
         while (y > A.getIm()) {
             try {
                 space.addPoint(new Complex(x, y));
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.kPhase(prev, k);
-                x -= d;
+                double prevPhi = Complex.phase(prev);
+                y -= d;
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.kPhase(now, k);
-                windingNumber += nowPhi - prevPhi;
+                double nowPhi = Complex.phase(now);
+                double deltaPhi = nowPhi - prevPhi;
+                if (deltaPhi > Math.PI) {
+                    deltaPhi -= 2 * Math.PI;
+                } else if (deltaPhi < -Math.PI) {
+                    deltaPhi += 2 * Math.PI;
+                }
+                windingNumber += deltaPhi;
             } catch (Exception e) {
                 x -= d;
             }
         }
-
         /* Total number of revolutions = (total phase change) / 2 PI */
         windingNumber = windingNumber / (2 * Math.PI);
-        // System.out.println("Winding number: " + windingNumber + "\n\n");
 
         /* Checks if winding number sufficiently bigger than zero */
         final double epsilon = 0.1;
@@ -179,11 +213,8 @@ public class Rectangle {
      * and viable, adds it's middle to f's solution list
      */
     public void solveInside(String f, ArrayList<Complex> solutions) {
-
-        System.out.println("Checking rectangle: \n" + toString() + "\n");
         if (this.checkInside(f)) {
-
-            if (this.area <= 0.001) {
+            if (this.area <= 1e-10) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
@@ -195,17 +226,30 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-        String f = "e^z-1";
+        String f = "sin(z)";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         OutputSpace output = new OutputSpace(f);
-        Complex A = new Complex(-2, -2);
-        Complex B = new Complex(2, -2);
-        Complex C = new Complex(2, 2);
-        Complex D = new Complex(-2, 2);
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setSize(300, 300);
+        frame.add(space);
+        frame.setVisible(true);
+
+        JFrame frame2 = new JFrame();
+        frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame2.setSize(300, 300);
+        frame2.add(output);
+        frame2.setVisible(true);
+
+        Complex A = new Complex(-5, -5);
+        Complex B = new Complex(5, -5);
+        Complex C = new Complex(5, 5);
+        Complex D = new Complex(-5, 5);
         ArrayList<Complex> solutions = new ArrayList<Complex>();
         Rectangle s1 = new Rectangle(A, B, C, D, space, output);
-        System.out.println("Started solving...\n");
+        System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
         s1.solveInside(f, solutions);
         System.out.println(solutions);
     }

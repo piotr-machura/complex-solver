@@ -76,43 +76,44 @@ public class Complex {
      */
     public String toString() {
         if (im == 0)
-            return String.format("%.2f", re) + "";
+            return String.format("%.6f", re) + "";
         if (re == 0)
-            return String.format("%.2f", im) + "i";
+            return String.format("%.6f", im) + "i";
         if (im < 0)
-            return String.format("%.2f", re) + " - " + String.format("%.2f", -im) + "i";
-        return String.format("%.2f", re) + " + " + String.format("%.2f", im) + "i";
+            return String.format("%.6f", re) + " - " + String.format("%.6f", -im) + "i";
+        return String.format("%.6f", re) + " + " + String.format("%.6f", im) + "i";
     }
 
     // ! Made by: Piotr Machura for the purpouses of winding number algorithm
     /*
-     * Returns phase as phi +2kPI, where phi = [0, 2pi], returns 0 for point 0+0i
+     * Returns phase as phi +2kPI, where phi = [0, 2pi], throws CalculatorException
+     * for point 0+0i
      *
      * @ param k the k-th phase
-     * 
+     *
      * @ return the phase
-     * 
+     *
      * @ throws CalculatorException the calculator exception
      */
-    public static double kPhase(Complex z, int k) throws CalculatorException {
+    public static double phase(Complex z) throws CalculatorException {
         double y = Math.abs(z.im);
         double x = Math.abs(z.re);
         if (z.re > 0 && z.im == 0) {
-            return 0 + 2 * k * Math.PI;
+            return 0;
         } else if (z.re > 0 && z.im > 0) {
-            return Math.atan(y / x) + 2 * k * Math.PI;
+            return Math.atan(y / x);
         } else if (z.re == 0 && z.im > 0) {
-            return Math.PI / 2 + 2 * k * Math.PI;
+            return 0.5 * Math.PI;
         } else if (z.re < 0 && z.im > 0) {
-            return Math.atan(x / y) + Math.PI / 2 + 2 * k * Math.PI;
+            return Math.atan(x / y) + Math.PI / 2;
         } else if (z.re < 0 && z.im == 0) {
-            return Math.PI + 2 * k * Math.PI;
+            return Math.PI;
         } else if (z.re < 0 && z.im < 0) {
-            return Math.atan(y / x) + Math.PI + 2 * k * Math.PI;
+            return Math.atan(y / x) + Math.PI;
         } else if (z.re == 0 && z.im < 0) {
-            return 3 / 2 * Math.PI + 2 * k * Math.PI;
+            return 1.5 * Math.PI;
         } else if (z.re > 0 && z.im < 0) {
-            return Math.atan(x / y) + 3 / 2 * Math.PI + 2 * k * Math.PI;
+            return Math.atan(x / y) + 1.5 * Math.PI;
         } else {
             throw new CalculatorException("Phase undefined for point " + z);
         }
@@ -122,9 +123,9 @@ public class Complex {
      * add.
      *
      * @param a the a
-     * 
+     *
      * @param b the b
-     * 
+     *
      * @return the complex
      */
     public static Complex add(final Complex a, final Complex b) {
@@ -137,9 +138,9 @@ public class Complex {
      * add.
      *
      * @param real the real
-     * 
+     *
      * @param c the c
-     * 
+     *
      * @return the complex
      */
     public static Complex add(final double real, final Complex c) {
@@ -150,9 +151,9 @@ public class Complex {
      * sub.
      *
      * @param a the a
-     * 
+     *
      * @param b the b
-     * 
+     *
      * @return the complex
      */
     public static Complex sub(final Complex a, final Complex b) {
@@ -165,9 +166,9 @@ public class Complex {
      * Sub.
      *
      * @param real the real
-     * 
+     *
      * @param c the c
-     * 
+     *
      * @return the complex
      */
     public static Complex sub(final double real, final Complex c) {
@@ -178,9 +179,9 @@ public class Complex {
      * multiply.
      *
      * @param a the a
-     * 
+     *
      * @param b the b
-     * 
+     *
      * @return the complex
      */
     public static Complex mul(final Complex a, final Complex b) {
@@ -193,7 +194,7 @@ public class Complex {
      * conjugate.
      *
      * @param c the c
-     * 
+     *
      * @return the complex
      */
     public static Complex conjugate(final Complex c) {
@@ -204,11 +205,11 @@ public class Complex {
      * div.
      *
      * @param a the a
-     * 
+     *
      * @param b the b
-     * 
+     *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public static Complex div(final Complex a, final Complex b) throws CalculatorException {
@@ -234,7 +235,7 @@ public class Complex {
      * abs.
      *
      * @param z the z
-     * 
+     *
      * @return the double
      */
     public static double abs(final Complex z) {
@@ -259,7 +260,7 @@ public class Complex {
      * sqrt.
      *
      * @param c the c
-     * 
+     *
      * @return the complex
      */
     public static Complex sqrt(final Complex c) {
@@ -297,9 +298,9 @@ public class Complex {
      * Complex.
      *
      * @param x the x
-     * 
+     *
      * @param c the c
-     * 
+     *
      * @return the complex
      */
     public static Complex mul(final double x, final Complex c) {
@@ -313,11 +314,11 @@ public class Complex {
      * div.
      *
      * @param x the x
-     * 
+     *
      * @param c the c
-     * 
+     *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public static Complex div(final double x, final Complex c) throws CalculatorException {
@@ -354,9 +355,9 @@ public class Complex {
      * pow.
      *
      * @param c the c
-     * 
+     *
      * @param exp the exp
-     * 
+     *
      * @return the complex
      */
     /*
@@ -373,9 +374,9 @@ public class Complex {
      * pow
      *
      * @param c
-     * 
+     *
      * @param exp
-     * 
+     *
      * @return
      */
     public static Complex pow(final Complex c, final Double exp) {
@@ -386,9 +387,9 @@ public class Complex {
      * power.
      *
      * @param c the c
-     * 
+     *
      * @param exp the exp
-     * 
+     *
      * @return the complex
      */
     public static Complex pow(final Complex c, final Complex exp) {
@@ -484,7 +485,7 @@ public class Complex {
      * Cbrt.
      *
      * @param a the a
-     * 
+     *
      * @return the complex
      */
     public static Complex cbrt(final Complex a) {
@@ -502,7 +503,7 @@ public class Complex {
      * pow.
      *
      * @param exp the exp
-     * 
+     *
      * @return the complex
      */
     public Complex pow(final Complex exp) {
@@ -515,7 +516,7 @@ public class Complex {
      * pow.
      *
      * @param exp the exp
-     * 
+     *
      * @return the complex
      */
     public Complex pow(final double exp) {
@@ -546,7 +547,7 @@ public class Complex {
      * tan.
      *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public Complex tan() throws CalculatorException {
@@ -580,7 +581,7 @@ public class Complex {
      * atan.
      *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public Complex atan() throws CalculatorException {
@@ -612,7 +613,7 @@ public class Complex {
      * tanh.
      *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public Complex tanh() throws CalculatorException {
@@ -623,7 +624,7 @@ public class Complex {
      * atanh.
      *
      * @return the complex
-     * 
+     *
      * @throws CalculatorException the calculator exception
      */
     public Complex atanh() throws CalculatorException {

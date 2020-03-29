@@ -48,7 +48,7 @@ public class InputSpace extends JPanel {
                 Complex z = Parser.eval(f, z0).getComplexValue();
                 double fi;
                 try {
-                    fi = Complex.kPhase(z, 0) / 2 / Math.PI;
+                    fi = Complex.phase(z) / 2 / Math.PI;
                 } catch (Exception e) {
                     fi = 0;
                 }
