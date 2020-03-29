@@ -59,7 +59,7 @@ public class Rectangle {
         return rectString;
     }
 
-    // ! Wiem już dlaczego nie działa i w obecnym systemie nie ma prawa działać
+    // ! To jeszcze nie działa
     /*
      * Arg (-2+0i) = pi, ale Arg(-2-0.01i) = -pi+odrobine, czyli zmiana jest prawie
      * 2pi. Problem jest przy "mijaniu" osi ujemnych Re, bo wtedy jest przeskok o
