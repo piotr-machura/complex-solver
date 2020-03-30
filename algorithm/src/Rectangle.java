@@ -20,25 +20,49 @@ import parser.src.util.*;
 public class Rectangle {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
-    double area;
+    double area, accuracy;
     InputSpace space;
-    OutputSpace output;
 
     /*
      * Rectangle.
      *
      * Constructs a rectangle using points A, B, C, D (as shown above) bound to
-     * provided input and output spaces.
+     * provided input space, with accuracy explicitely provided.
      */
-    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, OutputSpace output) {
+    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, int accuracy) {
 
         A = a;
         B = b;
         C = c;
         D = d;
         this.space = space;
-        this.output = output;
+        this.accuracy = Math.pow(10, -5 * accuracy);
 
+        /* Calculating mid-points based on given points */
+        AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
+        BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
+        CD_mid = new Complex((C.getRe() + D.getRe()) / 2, C.getIm());
+        AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
+        MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
+
+        /* Calculating area of rectangle */
+        area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
+    }
+
+    /*
+     * Rectangle.
+     *
+     * Constructs a rectangle using points A, B, C, D (as shown above) bound to
+     * provided input space, with baseline accuracy
+     */
+    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space) {
+
+        A = a;
+        B = b;
+        C = c;
+        D = d;
+        this.space = space;
+        accuracy = 10e-5;
         /* Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
         BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
@@ -74,11 +98,12 @@ public class Rectangle {
      * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
      * (1.8PI - 2PI = -0.2PI, correct phase change)
      */
-    // ! tutaj wciąż sporo nie działa. Czasem jest dziwny błąd:
+    // ! tutaj wciąż sporo nie działa. Czasem jest błąd:
     // ! phase undefined for point NaN + NaN i
+    // ! Jakby coś było nie tak z czytaniem liczb
     public Boolean checkInside(String f) {
 
-        /* Tick of "integration" - 0.001 of side length */
+        /* Tick of "integration" - 1000 points checked per side length */
         double d = 0.001 * Math.sqrt(this.area);
         double windingNumber = 0;
 
@@ -89,22 +114,25 @@ public class Rectangle {
         /* Path A->B (going right) */
         while (x < B.getRe()) {
             try {
-                space.addPoint(new Complex(x, y));
+                /* For small rectangles there is no need to draw them */
+                if (this.area > 0.001 && space != null) {
+                    space.addPoint(new Complex(x, y));
+                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 x += d;
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
                 double deltaPhi = nowPhi - prevPhi;
-                if (deltaPhi > 1.8 * Math.PI) {
+                if (deltaPhi > 1.9 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -1.8 * Math.PI) {
+                } else if (deltaPhi < -1.9 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
                 // TODO: This means zero was encountered, needs to move rectangle slightly
-                e.printStackTrace();
+                // e.printStackTrace();
                 if (x + d < B.getRe()) {
                     x += d;
                 } else {
@@ -117,7 +145,9 @@ public class Rectangle {
         /* Path B->C (going up) */
         while (y < C.getIm()) {
             try {
-                space.addPoint(new Complex(x, y));
+                if (this.area > 0.001 && space != null) {
+                    space.addPoint(new Complex(x, y));
+                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 y += d;
@@ -132,7 +162,7 @@ public class Rectangle {
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
                 // TODO: This means zero was encountered, needs to move rectangle slightly
-                e.printStackTrace();
+                // e.printStackTrace();
                 if (y + d < C.getIm()) {
                     y += d;
                 } else {
@@ -144,7 +174,9 @@ public class Rectangle {
         /* Path C->D (going left) */
         while (x > D.getRe()) {
             try {
-                space.addPoint(new Complex(x, y));
+                if (this.area > 0.001 && space != null) {
+                    space.addPoint(new Complex(x, y));
+                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 x -= d;
@@ -159,7 +191,7 @@ public class Rectangle {
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
                 // TODO: This means zero was encountered, needs to move rectangle slightly
-                e.printStackTrace();
+                // e.printStackTrace();
                 if (x - d > D.getRe()) {
                     x -= d;
                 } else {
@@ -172,7 +204,9 @@ public class Rectangle {
         // System.out.println("DA");
         while (y > A.getIm()) {
             try {
-                space.addPoint(new Complex(x, y));
+                if (this.area > 0.001 && space != null) {
+                    space.addPoint(new Complex(x, y));
+                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 y -= d;
@@ -187,7 +221,7 @@ public class Rectangle {
                 windingNumber += deltaPhi;
             } catch (Exception e) {
                 // TODO: This means zero was encountered, needs to move rectangle slightly
-                e.printStackTrace();
+                // e.printStackTrace();
                 if (y - d > A.getIm()) {
                     y -= d;
                 } else {
@@ -212,10 +246,10 @@ public class Rectangle {
     Rectangle[] getChildren() {
 
         Rectangle[] children = new Rectangle[4];
-        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space, output);
-        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space, output);
-        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space, output);
-        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space, output);
+        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space);
+        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space);
+        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space);
+        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space);
         return children;
     }
 
@@ -228,7 +262,7 @@ public class Rectangle {
      */
     public void solveInside(String f, ArrayList<Complex> solutions) {
         if (this.checkInside(f)) {
-            if (this.area <= 1e-10) {
+            if (this.area <= accuracy) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
@@ -240,7 +274,7 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-        String f = "z^2-sin(z)";
+        String f = "sin(z^2)";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         OutputSpace output = new OutputSpace(f);
@@ -262,7 +296,7 @@ public class Rectangle {
         Complex C = new Complex(5, 5);
         Complex D = new Complex(-5, 5);
         ArrayList<Complex> solutions = new ArrayList<Complex>();
-        Rectangle s1 = new Rectangle(A, B, C, D, space, output);
+        Rectangle s1 = new Rectangle(A, B, C, D, null);
         System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
         s1.solveInside(f, solutions);
         System.out.println(solutions);

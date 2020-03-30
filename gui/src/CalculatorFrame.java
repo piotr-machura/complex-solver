@@ -25,9 +25,15 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     /* Other elements */
     JTextField funcInput;
     Font mathFont;
+    private static ImageIcon ICON = new ImageIcon("/cIcon.png"); //! Nie działa
 
     /* String to be passed further as function f(z) */
     String fz;
+    int accuracy;
+    int sizeOfRect;
+
+    final static int DEF_ACCURACY = 1;
+    final static int DEF_SIZEOFRECT = 10;
 
     public CalculatorFrame() throws HeadlessException {
         /* Basic parameters */
@@ -35,6 +41,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setSize(600, 500);
         this.setResizable(false);
         this.setTitle("Complex function grapher");
+
+        this.setIconImage(ICON.getImage());
 
         /* Initializing panels */
         centerPanel = new JPanel();
@@ -202,7 +210,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
                             JOptionPane.WARNING_MESSAGE);
                 }
-                FunctionFrame fFrame = new FunctionFrame(fz);
+                FunctionFrame fFrame = new FunctionFrame(fz, DEF_ACCURACY, DEF_SIZEOFRECT);
                 fFrame.setVisible(true);
                 break;
 
