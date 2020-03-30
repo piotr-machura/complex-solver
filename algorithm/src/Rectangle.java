@@ -61,35 +61,25 @@ public class Rectangle {
         return rectString;
     }
 
-    // ! To jeszcze nie działa
-    /*
-     * Arg (-2+0i) = pi, ale Arg(-2-0.01i) = -pi+odrobine, czyli zmiana jest prawie
-     * 2pi. Problem jest przy "mijaniu" osi ujemnych Re, bo wtedy jest przeskok o
-     * 2pi w fazie.
-     *
-     * Dopisałem do klasy Complex funkcję zwracającą fazę [0, 2pi]. Jeśli faza
-     * przeszła z bardzo małej do bardzo dużej (mocno dodatnie deltaPhi), tzn, że
-     * przekroczono oś dodatnich x w kierunku przeciwnym do wskazówek zegara (z
-     * małej fazy do bardzo dużej), tzn. odejmujemy od zmiany fazy 2pi (bo punkt się
-     * "cofnął").
-     *
-     * Jeśli faza przeszła z bardzo dużej do bardzo małej (mocno ujemne deltaPhi),
-     * tzn. przekroczono oś dodatnich x w kierunku przeciwnym do wsk. zegara, tzn
-     * dodajemy do zmiany fazy 2pi
-     *
-     * Trzeba też nauczyć tą rekurencję kiedy ma się zabić bo potrafi dodać 30
-     * takich samych miejsc zerowych.
-     */
-
     /*
      * checkInside.
      *
      * Checks if winding number of a given rectangle is NOT close to zero.
+     *
+     * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
+     * means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi (-1.8PI
+     * +2PI = 0.2PI, correct phase change).
+     *
+     * If the phase went small -> big (ex. 0.1PI -> 1.9 PI, deltaPhi == 1.8PI) this
+     * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
+     * (1.8PI - 2PI = -0.2PI, correct phase change)
      */
+    // ! tutaj wciąż sporo nie działa. Czasem jest dziwny błąd:
+    // ! phase undefined for point NaN + NaN i
     public Boolean checkInside(String f) {
 
-        /* Tick of "integration" - 1/20th of side length */
-        double d = Math.sqrt(this.area) / 20;
+        /* Tick of "integration" - 0.001 of side length */
+        double d = 0.001 * Math.sqrt(this.area);
         double windingNumber = 0;
 
         /* Starting number: A */
@@ -106,14 +96,20 @@ public class Rectangle {
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
                 double deltaPhi = nowPhi - prevPhi;
-                if (deltaPhi > Math.PI) {
+                if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -Math.PI) {
+                } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                x += d;
+                // TODO: This means zero was encountered, needs to move rectangle slightly
+                e.printStackTrace();
+                if (x + d < B.getRe()) {
+                    x += d;
+                } else {
+                    break;
+                }
             }
 
         }
@@ -128,14 +124,20 @@ public class Rectangle {
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
                 double deltaPhi = nowPhi - prevPhi;
-                if (deltaPhi > Math.PI) {
+                if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -Math.PI) {
+                } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                y += d;
+                // TODO: This means zero was encountered, needs to move rectangle slightly
+                e.printStackTrace();
+                if (y + d < C.getIm()) {
+                    y += d;
+                } else {
+                    break;
+                }
             }
         }
 
@@ -149,14 +151,20 @@ public class Rectangle {
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
                 double deltaPhi = nowPhi - prevPhi;
-                if (deltaPhi > Math.PI) {
+                if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -Math.PI) {
+                } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                x -= d;
+                // TODO: This means zero was encountered, needs to move rectangle slightly
+                e.printStackTrace();
+                if (x - d > D.getRe()) {
+                    x -= d;
+                } else {
+                    break;
+                }
             }
         }
 
@@ -171,14 +179,20 @@ public class Rectangle {
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
                 double deltaPhi = nowPhi - prevPhi;
-                if (deltaPhi > Math.PI) {
+                if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -Math.PI) {
+                } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (Exception e) {
-                x -= d;
+                // TODO: This means zero was encountered, needs to move rectangle slightly
+                e.printStackTrace();
+                if (y - d > A.getIm()) {
+                    y -= d;
+                } else {
+                    break;
+                }
             }
         }
         /* Total number of revolutions = (total phase change) / 2 PI */
@@ -226,14 +240,14 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-        String f = "sin(z)";
+        String f = "z^2-sin(z)";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         OutputSpace output = new OutputSpace(f);
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(300, 300);
+        frame.setSize(800, 800);
         frame.add(space);
         frame.setVisible(true);
 

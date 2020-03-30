@@ -70,8 +70,9 @@ public class OutputSpace extends JPanel {
         }
 
         g2.setColor(Color.black);
-        for (Complex p : sq_points) {
-            g2.fillRect((int) (p.getRe()* zoomY / scaleY) - 2, (int) (p.getIm() * zoomY / scaleY) - 2, 4, 4);
+        for (int i = 0; i < sq_points.size(); i++) {
+            Complex p = sq_points.get(i);
+            g2.fillRect((int) (p.getRe() * zoomY / scaleY) - 2, (int) (p.getIm() * zoomY / scaleY) - 2, 4, 4);
         }
 
     }

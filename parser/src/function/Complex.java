@@ -76,12 +76,12 @@ public class Complex {
      */
     public String toString() {
         if (im == 0)
-            return String.format("%.6f", re) + "";
+            return re + "";
         if (re == 0)
-            return String.format("%.6f", im) + "i";
+            return im + "i";
         if (im < 0)
-            return String.format("%.6f", re) + " - " + String.format("%.6f", -im) + "i";
-        return String.format("%.6f", re) + " + " + String.format("%.6f", im) + "i";
+            return re + " - " + (-im) + "i";
+        return re + " + " + im + "i";
     }
 
     // ! Made by: Piotr Machura for the purpouses of winding number algorithm
@@ -99,6 +99,8 @@ public class Complex {
         double y = Math.abs(z.im);
         double x = Math.abs(z.re);
         if (z.re > 0 && z.im == 0) {
+            return 0;
+        } else if (z.re > 0 && z.im == 0) {
             return 0;
         } else if (z.re > 0 && z.im > 0) {
             return Math.atan(y / x);
