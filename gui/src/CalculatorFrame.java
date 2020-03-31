@@ -32,7 +32,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
-    Boolean autoWarning; /* Whether to show warning about automatic range */
+    Boolean autoWarning; /* Show warning about automatic range */
     private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /* Arguments to pass further */

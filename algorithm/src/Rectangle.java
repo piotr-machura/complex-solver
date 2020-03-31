@@ -98,9 +98,9 @@ public class Rectangle {
      * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
      * (1.8PI - 2PI = -0.2PI, correct phase change)
      */
-    // ! tutaj wciąż sporo nie działa. Czasem jest błąd:
+    // ! Czasem jest błąd:
     // ! phase undefined for point NaN + NaN i
-    // ! Jakby coś było nie tak z czytaniem liczb
+    // ! Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
     public Boolean checkInside(String f) {
 
         /* Tick of "integration" - 1000 points checked per side length */
@@ -198,7 +198,6 @@ public class Rectangle {
         }
 
         /* Path D->A (going down) */
-        // System.out.println("DA");
         while (y > A.getIm()) {
             try {
                 if (this.area > 0.001 && space != null) {
