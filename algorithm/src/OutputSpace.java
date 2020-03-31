@@ -1,3 +1,6 @@
+/**
+ * Made by: Kacper Ledwosiński
+ */
 package algorithm.src;
 
 import parser.src.function.Complex;

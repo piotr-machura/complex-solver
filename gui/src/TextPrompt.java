@@ -1,5 +1,5 @@
 /**
- * ! This is an external class taken from https://tips4java.wordpress.com/2009/11/29/text-prompt/
+ * ! This is a standalone class taken from https://tips4java.wordpress.com/2009/11/29/text-prompt/
  */
 package gui.src;
 

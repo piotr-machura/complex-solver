@@ -1,3 +1,6 @@
+/**
+ * Made by: Kacper Ledwosiński
+ */
 package algorithm.src;
 
 import parser.src.function.*;
@@ -127,6 +130,7 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
             offY = originY - e.getY();
             this.repaint();
         }
+        this.repaint();
     }
 
     @Override

@@ -1,3 +1,6 @@
+/**
+ * Made by: Piotr Machura, Kacper Ledwosiński
+ */
 package algorithm.src;
 
 import java.util.ArrayList;
@@ -22,49 +25,31 @@ import parser.src.util.*;
 public class Rectangle {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
-    double area, accuracy;
+    double area;
+    int accuracyLevel;
     InputSpace space;
 
     /**
-     * Rectangle.
+     * Rectangle constructor.
      *
-     * Constructs a rectangle using points A, B, C, D (as shown above) bound to
-     * provided input space, with accuracy explicitely provided.
+     * Constructs a rectangle using points A, B, C, D (as shown above)
+     *
+     * @param a             the down-left point
+     * @param b             the down-right point
+     * @param c             the up-right point
+     * @param d             the up-left point
+     * @param space         the input space to draw in
+     * @param accuracyLevel the accuracy level
      */
-    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, int accuracy) {
+    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, int accuracyLevel) {
 
         A = a;
         B = b;
         C = c;
         D = d;
         this.space = space;
-        this.accuracy = Math.pow(10, -5 * accuracy);
+        this.accuracyLevel = accuracyLevel;
 
-        /** Calculating mid-points based on given points */
-        AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
-        BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
-        CD_mid = new Complex((C.getRe() + D.getRe()) / 2, C.getIm());
-        AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
-        MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
-
-        /** Calculating area of rectangle */
-        area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
-    }
-
-    /**
-     * Rectangle.
-     *
-     * Constructs a rectangle using points A, B, C, D (as shown above) bound to
-     * provided input space, with baseline accuracy
-     */
-    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space) {
-
-        A = a;
-        B = b;
-        C = c;
-        D = d;
-        this.space = space;
-        accuracy = 10e-5;
         /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
         BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
@@ -90,9 +75,7 @@ public class Rectangle {
     /**
      * checkInside.
      *
-     * Checks if winding number of a given rectangle is NOT close to zero.
-     *
-     * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
+     * * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
      * means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi (-1.8PI
      * +2PI = 0.2PI, correct phase change).
      *
@@ -103,6 +86,8 @@ public class Rectangle {
      * ! Czasem jest błąd: phase undefined for point NaN + NaN i.
      *
      * Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
+     *
+     * @return winding number close or greater than 1
      */
     public Boolean checkInside(String f) {
 
@@ -230,9 +215,9 @@ public class Rectangle {
         /** Total number of revolutions = (total phase change) / 2 PI */
         windingNumber = windingNumber / (2 * Math.PI);
 
-        /** Checks if winding number sufficiently bigger than zero */
-        final double epsilon = 0.1;
-        return Math.abs(windingNumber) > epsilon;
+        /** Checks if winding number is non-zero */
+        final double epsilon = 0.001;
+        return Math.abs(windingNumber) > 1 - epsilon;
     }
 
     /**
@@ -240,14 +225,16 @@ public class Rectangle {
      *
      * Splits the rectangle into 4 children, enumerated starting bottom left
      * clockwise
+     *
+     * @return chlidren the array with children
      */
     Rectangle[] getChildren() {
 
         Rectangle[] children = new Rectangle[4];
-        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space);
-        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space);
-        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space);
-        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space);
+        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space, accuracyLevel);
+        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space, accuracyLevel);
+        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space, accuracyLevel);
+        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space, accuracyLevel);
         return children;
     }
 
@@ -257,22 +244,25 @@ public class Rectangle {
      * Recursively checks rectangle's winding number, splitting it into 4 children
      * if it's big and viable and discarding it if it's not viable. If it's small
      * and viable, adds it's middle to f's solution list
+     *
+     * @param fz        the function
+     * @param solutions the list to put solutions in
      */
-    public void solveInside(String f, ArrayList<Complex> solutions) {
-        if (this.checkInside(f)) {
-            if (this.area <= accuracy) {
+    public void solveInside(String fz, ArrayList<Complex> solutions) {
+        if (this.checkInside(fz)) {
+            if (this.area <= Math.pow(10, -5 * this.accuracyLevel)) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
                 for (Rectangle child : children) {
-                    child.solveInside(f, solutions);
+                    child.solveInside(fz, solutions);
                 }
             }
         }
     }
 
     public static void main(String[] args) {
-        String f = "z^2-1";
+        String f = "cos(z)";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         // OutputSpace output = new OutputSpace(f);
@@ -289,15 +279,15 @@ public class Rectangle {
         // frame2.add(output);
         // frame2.setVisible(true);
 
-        // Complex A = new Complex(-5, -5);
-        // Complex B = new Complex(5, -5);
-        // Complex C = new Complex(5, 5);
-        // Complex D = new Complex(-5, 5);
-        // ArrayList<Complex> solutions = new ArrayList<Complex>();
-        // Rectangle s1 = new Rectangle(A, B, C, D, null);
-        // System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
-        // s1.solveInside(f, solutions);
-        // System.out.println(solutions);
+        Complex A = new Complex(-5, -5);
+        Complex B = new Complex(5, -5);
+        Complex C = new Complex(5, 5);
+        Complex D = new Complex(-5, 5);
+        ArrayList<Complex> solutions = new ArrayList<Complex>();
+        Rectangle s1 = new Rectangle(A, B, C, D, null, 4);
+        System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
+        s1.solveInside(f, solutions);
+        System.out.println(solutions);
     }
 
 }

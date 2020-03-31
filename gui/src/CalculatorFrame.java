@@ -1,3 +1,6 @@
+/**
+ * Made by: Piotr Machura
+ */
 package gui.src;
 
 import javax.swing.*;
@@ -8,7 +11,7 @@ import parser.src.exception.CalculatorException;
 import java.util.HashMap;
 
 /**
- * CalculatorFrame v0.5.1
+ * The class CalculatorFrame
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -34,16 +37,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     Font mathFont;
     Boolean autoWarning; /* Show warning about automatic range */
 
-    private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
+    private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /** Arguments to pass further */
     String fz;
     int accuracy;
     int range; /* Range of 0 indicates automatic range */
 
+    /**
+     * CalculatorFrame constructor.
+     */
     public CalculatorFrame() throws HeadlessException {
         /** Basic parameters */
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(600, 530);
         this.setResizable(false);
         this.setTitle("Complex solver");
@@ -62,7 +68,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyContainer = new JPanel();
         bottomPanel = new JPanel();
 
-        /** Setting up upper panel */
+        /** Set up upper panel */
         /** Menu bar */
         upMenu = new JMenuBar();
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
@@ -127,7 +133,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upperPanel.add(upMenu);
         upperPanel.add(funcInput);
 
-        /** Setting up calculator buttons */
+        /** Set up calculator buttons */
 
         /** Numbers 0-9 */
         nmbButtons = new JButton[10];
@@ -175,7 +181,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             fnButtons.get(fnKey).addActionListener(this);
         }
 
-        /** Arranging buttons in button container in respective order */
+        /** Arrange buttons in button container in respective order */
         calcButtonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             calcButtonsContainer.add(nmbButtons[i]);
@@ -207,12 +213,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         calcButtonsContainer.add(fnButtons.get("sinh"));
         calcButtonsContainer.add(fnButtons.get("cosh"));
 
-        /** Adding button container to center panel */
+        /** Add button container to center panel */
         calcButtonsContainer.setPreferredSize(new Dimension(430, 315));
         centerPanel.setLayout(new FlowLayout());
         centerPanel.add(calcButtonsContainer, BorderLayout.CENTER);
 
-        /** Setting up bottom panel */
+        /** Set up bottom panel */
 
         /** Solve button */
         solveButton = new JButton("Solve");
@@ -272,7 +278,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         bottomPanel.add(rangeContainer);
         bottomPanel.add(accuracyContainer);
 
-        /** Adding main panels to frame */
+        /** Add main panels to frame */
         this.setLayout(new BorderLayout());
         this.add(upperPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -316,7 +322,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         String afterCaret = currentText.substring(caretPosition, currentText.length());
 
         switch (buttonID) {
-
             case "en":
                 // TODO: localization
                 break;
