@@ -35,7 +35,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
-    Boolean autoWarning; /* Show warning about automatic range */
+    Boolean autoWarning; /* Only show warning about automatic range once */
 
     private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
@@ -52,7 +52,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(600, 530);
         this.setResizable(false);
-        this.setTitle("Complex solver");
+        this.setTitle("Complex Solver");
 
         this.setIconImage(ICON.getImage());
         this.range = 10;

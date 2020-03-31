@@ -35,9 +35,6 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Other components */
     JTextArea solutionsDisplay;
     JLabel saveGraph, saveSolutions;
-    JMenuBar upMenu;
-    JMenu lanMenu, helpMenu;
-    JMenuItem en, pl, help, credits;
     private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
@@ -83,34 +80,6 @@ class FunctionFrame extends JFrame implements ActionListener {
         bottomPanel = new JPanel();
         utilContainer = new JPanel();
 
-        /** Menu bar */
-        upMenu = new JMenuBar();
-        upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
-        upMenu.setPreferredSize(new Dimension(700, 30));
-        lanMenu = new JMenu("Language");
-        helpMenu = new JMenu("Help");
-        en = new JMenuItem("English");
-        pl = new JMenuItem("Polski");
-        help = new JMenuItem("Help");
-        credits = new JMenuItem("Credits");
-
-        en.setActionCommand("en");
-        pl.setActionCommand("pl");
-        help.setActionCommand("help");
-        credits.setActionCommand("credits");
-
-        en.addActionListener(this);
-        pl.addActionListener(this);
-        help.addActionListener(this);
-        credits.addActionListener(this);
-
-        lanMenu.add(en);
-        lanMenu.add(pl);
-        helpMenu.add(help);
-        helpMenu.add(credits);
-
-        upMenu.add(lanMenu);
-        upMenu.add(helpMenu);
 
         /** Output space frame */
         outFrame = new JFrame("Output space");
@@ -210,7 +179,6 @@ class FunctionFrame extends JFrame implements ActionListener {
 
         /** Add main panels to frame */
         this.setLayout(new BorderLayout());
-        this.add(upMenu, BorderLayout.NORTH);
         this.add(space, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -244,23 +212,6 @@ class FunctionFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         final String buttonID = e.getActionCommand();
         switch (buttonID) {
-            case "en":
-                // TODO: localization
-                break;
-
-            case "pl":
-                // TODO: localization
-                break;
-
-            case "credits":
-                JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński", "Credits",
-                        JOptionPane.INFORMATION_MESSAGE);
-                break;
-
-            case "help":
-                // TODO: help window
-                break;
-
             case "output":
                 if (!outFrame.isVisible()) {
                     outFrame.setVisible(true);
