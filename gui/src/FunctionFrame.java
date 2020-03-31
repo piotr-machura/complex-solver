@@ -1,3 +1,6 @@
+/**
+ * Made by: Piotr Machura
+ */
 package gui.src;
 
 import javax.swing.*;
@@ -35,7 +38,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     JMenuBar upMenu;
     JMenu lanMenu, helpMenu;
     JMenuItem en, pl, help, credits;
-    private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
+    private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
     Rectangle rect, animRect;
@@ -49,7 +52,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      *
      * @param fz       the function
      * @param accuracy the accuracy level
-     * @param range    the size of rectange
+     * @param range    the size of rectangle
      */
     FunctionFrame(String fz, int accuracy, int range) {
         /** Basic parameters */
@@ -266,6 +269,9 @@ class FunctionFrame extends JFrame implements ActionListener {
                     outFrame.toFront();
                     outFrame.requestFocus();
                 }
+                break;
+            case "animation":
+                // TODO: implement animation
                 break;
 
             default:

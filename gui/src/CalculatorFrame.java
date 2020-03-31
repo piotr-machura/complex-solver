@@ -1,3 +1,6 @@
+/**
+ * Made by: Piotr Machura
+ */
 package gui.src;
 
 import javax.swing.*;
@@ -34,7 +37,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     Font mathFont;
     Boolean autoWarning; /* Show warning about automatic range */
 
-    private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
+    private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /** Arguments to pass further */
     String fz;

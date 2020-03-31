@@ -1,3 +1,6 @@
+/**
+ * Made by: Piotr Machura, Kacper Ledwosiński
+ */
 package algorithm.src;
 
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ import parser.src.util.*;
 public class Rectangle {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
-    double area, accuracy;
+    double area;
     int accuracyLevel;
     InputSpace space;
 
@@ -46,7 +49,6 @@ public class Rectangle {
         D = d;
         this.space = space;
         this.accuracyLevel = accuracyLevel;
-        this.accuracy = Math.pow(10, -5 * this.accuracyLevel);
 
         /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
@@ -248,7 +250,7 @@ public class Rectangle {
      */
     public void solveInside(String fz, ArrayList<Complex> solutions) {
         if (this.checkInside(fz)) {
-            if (this.area <= accuracy) {
+            if (this.area <= Math.pow(10, -5 * this.accuracyLevel)) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
