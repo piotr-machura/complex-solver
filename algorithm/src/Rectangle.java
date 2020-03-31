@@ -27,10 +27,16 @@ public class Rectangle {
     InputSpace space;
 
     /**
-     * Rectangle.
+     * Rectangle constructor.
      *
-     * Constructs a rectangle using points A, B, C, D (as shown above) bound to
-     * provided input space, with accuracy explicitely provided.
+     * Constructs a rectangle using points A, B, C, D (as shown above)
+     *
+     * @param a             the down-left point
+     * @param b             the down-right point
+     * @param c             the up-right point
+     * @param d             the up-left point
+     * @param space         the input space to draw in
+     * @param accuracyLevel the accuracy level
      */
     public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, int accuracyLevel) {
 
@@ -67,9 +73,7 @@ public class Rectangle {
     /**
      * checkInside.
      *
-     * Checks if winding number of a given rectangle is NOT close to zero.
-     *
-     * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
+     * * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
      * means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi (-1.8PI
      * +2PI = 0.2PI, correct phase change).
      *
@@ -80,6 +84,8 @@ public class Rectangle {
      * ! Czasem jest błąd: phase undefined for point NaN + NaN i.
      *
      * Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
+     *
+     * @return winding number close or greater than 1
      */
     public Boolean checkInside(String f) {
 
@@ -217,6 +223,8 @@ public class Rectangle {
      *
      * Splits the rectangle into 4 children, enumerated starting bottom left
      * clockwise
+     *
+     * @return chlidren the array with children
      */
     Rectangle[] getChildren() {
 
@@ -234,15 +242,18 @@ public class Rectangle {
      * Recursively checks rectangle's winding number, splitting it into 4 children
      * if it's big and viable and discarding it if it's not viable. If it's small
      * and viable, adds it's middle to f's solution list
+     *
+     * @param fz        the function
+     * @param solutions the list to put solutions in
      */
-    public void solveInside(String f, ArrayList<Complex> solutions) {
-        if (this.checkInside(f)) {
+    public void solveInside(String fz, ArrayList<Complex> solutions) {
+        if (this.checkInside(fz)) {
             if (this.area <= accuracy) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
                 for (Rectangle child : children) {
-                    child.solveInside(f, solutions);
+                    child.solveInside(fz, solutions);
                 }
             }
         }

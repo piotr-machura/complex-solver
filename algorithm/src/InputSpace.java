@@ -113,6 +113,7 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
             offX = originX - e.getX();
             offY = originY - e.getY();
         }
+        this.repaint();
     }
 
     @Override
