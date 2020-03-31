@@ -1,3 +1,8 @@
+/**
+ * This is a library forked from https://github.com/sbesada/java.math.expression.parser
+ * and slightly adapted to suit our needs. There is an appropriate comment  with "!"
+ * wherever things were changed.
+ */
 package parser.src.function;
 
 import parser.src.exception.CalculatorException;
@@ -70,9 +75,10 @@ public class Complex {
         this.im = im;
     }
 
-    // ! Made by: Piotr Machura for the purpouses of winding number algorithm
     /**
      * toString.
+     *
+     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
      */
     public String toString() {
         if (im == 0)
@@ -84,8 +90,11 @@ public class Complex {
         return re + " + " + im + "i";
     }
 
-    // ! Made by: Piotr Machura for the purpouses of winding number algorithm
     /**
+     * phase.
+     *
+     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
+     *
      * Returns phase as phi +2kPI, where phi = [0, 2pi], throws CalculatorException
      * for point 0+0i
      *
@@ -141,7 +150,7 @@ public class Complex {
      *
      * @param real the real
      *
-     * @param c the c
+     * @param c    the c
      *
      * @return the complex
      */
@@ -169,7 +178,7 @@ public class Complex {
      *
      * @param real the real
      *
-     * @param c the c
+     * @param c    the c
      *
      * @return the complex
      */
@@ -356,7 +365,7 @@ public class Complex {
     /**
      * pow.
      *
-     * @param c the c
+     * @param c   the c
      *
      * @param exp the exp
      *
@@ -388,7 +397,7 @@ public class Complex {
     /**
      * power.
      *
-     * @param c the c
+     * @param c   the c
      *
      * @param exp the exp
      *

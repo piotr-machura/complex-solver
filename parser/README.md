@@ -1,6 +1,6 @@
 # java.math.expression.parser
 
-# This is a library forked from https://github.com/sbesada/java.math.expression.parser and slightly adapted to suit our needs. There is an appropriate comment wherever things were changed.
+### This is a library forked from https://github.com/sbesada/java.math.expression.parser and slightly adapted to suit our needs. There is an appropriate comment  with "!" wherever things were changed.
 
 java math expression parser is a maven project that lets you parse or evaluate math expressions.
 

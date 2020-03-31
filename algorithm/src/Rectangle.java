@@ -100,8 +100,9 @@ public class Rectangle {
      * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
      * (1.8PI - 2PI = -0.2PI, correct phase change)
      *
-     * ! Czasem jest błąd: phase undefined for point NaN + NaN i. Możliwe, że to !
-     * dlatego że czasem ma 0^0 i to jest NaN
+     * ! Czasem jest błąd: phase undefined for point NaN + NaN i.
+     *
+     * Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
      */
     public Boolean checkInside(String f) {
 
@@ -271,7 +272,7 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-        String f = "sin(z^2)";
+        String f = "z^3+2*z^2";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         OutputSpace output = new OutputSpace(f);
@@ -293,7 +294,7 @@ public class Rectangle {
         Complex C = new Complex(5, 5);
         Complex D = new Complex(-5, 5);
         ArrayList<Complex> solutions = new ArrayList<Complex>();
-        Rectangle s1 = new Rectangle(A, B, C, D, null);
+        Rectangle s1 = new Rectangle(A, B, C, D, space);
         System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
         s1.solveInside(f, solutions);
         System.out.println(solutions);

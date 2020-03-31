@@ -1,16 +1,17 @@
+/**
+ * This is a library forked from https://github.com/sbesada/java.math.expression.parser
+ * and slightly adapted to suit our needs. There is an appropriate comment  with "!"
+ * wherever things were changed.
+ */
 package parser.src.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import parser.src.exception.CalculatorException;
-import parser.src.function.Complex;
-import parser.src.function.ComplexFunction;
-import parser.src.function.FunctionX;
-import parser.src.function.FunctionXs;
-import parser.src.util.ParserResult;
-import parser.src.util.Variable;
+import parser.src.exception.*;
+import parser.src.function.*;
+import parser.src.util.*;
 
 /**
  * The Class Parser.
