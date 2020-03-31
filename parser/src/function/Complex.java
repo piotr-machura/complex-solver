@@ -2,18 +2,18 @@ package parser.src.function;
 
 import parser.src.exception.CalculatorException;
 
-/*
+/**
  * Complex.
  */
 public class Complex {
 
-    /* real. */
+    /** real. */
     private double re;
 
-    /* imaginary. */
+    /** imaginary. */
     private double im;
 
-    /*
+    /**
      * Complex.
      *
      * @param re the re
@@ -25,7 +25,7 @@ public class Complex {
         this.im = im;
     }
 
-    /*
+    /**
      * Complex.
      */
     public Complex() {
@@ -33,7 +33,7 @@ public class Complex {
         im = 0.0;
     }
 
-    /*
+    /**
      * Gets the r.
      *
      * @return the r
@@ -42,7 +42,7 @@ public class Complex {
         return re;
     }
 
-    /*
+    /**
      * Sets the re.
      *
      * @param re the new re
@@ -51,7 +51,7 @@ public class Complex {
         this.re = re;
     }
 
-    /*
+    /**
      * Gets the im.
      *
      * @return the im
@@ -61,7 +61,7 @@ public class Complex {
         return im;
     }
 
-    /*
+    /**
      * Sets the im.
      *
      * @param im the new im
@@ -71,7 +71,7 @@ public class Complex {
     }
 
     // ! Made by: Piotr Machura for the purpouses of winding number algorithm
-    /*
+    /**
      * toString.
      */
     public String toString() {
@@ -85,7 +85,7 @@ public class Complex {
     }
 
     // ! Made by: Piotr Machura for the purpouses of winding number algorithm
-    /*
+    /**
      * Returns phase as phi +2kPI, where phi = [0, 2pi], throws CalculatorException
      * for point 0+0i
      *
@@ -121,7 +121,7 @@ public class Complex {
         }
     }
 
-    /*
+    /**
      * add.
      *
      * @param a the a
@@ -136,7 +136,7 @@ public class Complex {
         return new Complex(real, imag);
     }
 
-    /*
+    /**
      * add.
      *
      * @param real the real
@@ -149,7 +149,7 @@ public class Complex {
         return new Complex(c.re + real, c.im);
     }
 
-    /*
+    /**
      * sub.
      *
      * @param a the a
@@ -164,7 +164,7 @@ public class Complex {
         return new Complex(real, imag);
     }
 
-    /*
+    /**
      * Sub.
      *
      * @param real the real
@@ -177,7 +177,7 @@ public class Complex {
         return new Complex(c.re - real, c.im);
     }
 
-    /*
+    /**
      * multiply.
      *
      * @param a the a
@@ -192,7 +192,7 @@ public class Complex {
         return new Complex(real, imag);
     }
 
-    /*
+    /**
      * conjugate.
      *
      * @param c the c
@@ -203,7 +203,7 @@ public class Complex {
         return new Complex(c.re, -c.im);
     }
 
-    /*
+    /**
      * div.
      *
      * @param a the a
@@ -233,7 +233,7 @@ public class Complex {
         return new Complex(real, imag);
     }
 
-    /*
+    /**
      * abs.
      *
      * @param z the z
@@ -258,7 +258,7 @@ public class Complex {
         return ans;
     }
 
-    /*
+    /**
      * sqrt.
      *
      * @param c the c
@@ -296,7 +296,7 @@ public class Complex {
         return result;
     }
 
-    /*
+    /**
      * Complex.
      *
      * @param x the x
@@ -312,7 +312,7 @@ public class Complex {
         return result;
     }
 
-    /*
+    /**
      * div.
      *
      * @param x the x
@@ -333,7 +333,7 @@ public class Complex {
         return result;
     }
 
-    /*
+    /**
      * inverse.
      *
      * @return the complex
@@ -353,7 +353,7 @@ public class Complex {
 
     }
 
-    /*
+    /**
      * pow.
      *
      * @param c the c
@@ -362,7 +362,7 @@ public class Complex {
      *
      * @return the complex
      */
-    /*
+    /**
      * public static Complex pow(final Complex c, final int exp) throws
      * CalculatorException { double x = 0.0, y = 0.0; int sign; for (int i = 0; i <=
      * exp; i++) { sign = ((i % 2) == 0) ? 1 : -1; // real x +=
@@ -371,7 +371,7 @@ public class Complex {
      * Combination.calc(exp, (2 * i) + 1) * Math.pow(c.r, exp - ((2 * i) + 1)) *
      * Math.pow(c.i, (2 * i) + 1) sign; } return new Complex(x, y); }
      */
-    /*
+    /**
      *
      * pow
      *
@@ -385,7 +385,7 @@ public class Complex {
         return c.pow(exp);
     }
 
-    /*
+    /**
      * power.
      *
      * @param c the c
@@ -398,7 +398,7 @@ public class Complex {
         return c.pow(exp);
     }
 
-    /*
+    /**
      * module.
      *
      * @return the double
@@ -407,7 +407,7 @@ public class Complex {
         return Math.sqrt((re * re) + (im * im));
     }
 
-    /*
+    /**
      * arg.
      *
      * @return the double
@@ -422,7 +422,7 @@ public class Complex {
 
     }
 
-    /*
+    /**
      * negate.
      *
      * @return the complex
@@ -431,7 +431,7 @@ public class Complex {
         return new Complex(-re, -im);
     }
 
-    /*
+    /**
      * exp.
      *
      * @return the complex
@@ -442,7 +442,7 @@ public class Complex {
         return new Complex(exp_x * Math.cos(im), exp_x * Math.sin(im));
     }
 
-    /*
+    /**
      * log10().
      *
      * @return the complex
@@ -458,7 +458,7 @@ public class Complex {
 
     }
 
-    /*
+    /**
      * log natural log.
      *
      * @return the complex
@@ -468,7 +468,7 @@ public class Complex {
 
     }
 
-    /*
+    /**
      * sqrt.
      *
      * @return the complex
@@ -483,7 +483,7 @@ public class Complex {
         return new Complex(rpart, ipart);
     }
 
-    /*
+    /**
      * Cbrt.
      *
      * @param a the a
@@ -501,7 +501,7 @@ public class Complex {
         return z;
     }
 
-    /*
+    /**
      * pow.
      *
      * @param exp the exp
@@ -514,7 +514,7 @@ public class Complex {
         return a.exp();
     }
 
-    /*
+    /**
      * pow.
      *
      * @param exp the exp
@@ -527,7 +527,7 @@ public class Complex {
         return a.exp();
     }
 
-    /*
+    /**
      * sin.
      *
      * @return the complex
@@ -536,7 +536,7 @@ public class Complex {
         return new Complex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
     }
 
-    /*
+    /**
      * cos.
      *
      * @return the complex
@@ -545,7 +545,7 @@ public class Complex {
         return new Complex(Math.cos(re) * Math.cosh(im), -StrictMath.sin(re) * Math.sinh(im));
     }
 
-    /*
+    /**
      * tan.
      *
      * @return the complex
@@ -556,7 +556,7 @@ public class Complex {
         return div(this.sin(), this.cos());
     }
 
-    /*
+    /**
      * asin.
      *
      * @return the complex
@@ -568,7 +568,7 @@ public class Complex {
         return mul(ZM.log(), new Complex(0.0, 1.0));
     }
 
-    /*
+    /**
      * acos.
      *
      * @return the complex
@@ -579,7 +579,7 @@ public class Complex {
         return mul(ZM.log(), new Complex(0.0, 1.0));
     }
 
-    /*
+    /**
      * atan.
      *
      * @return the complex
@@ -593,7 +593,7 @@ public class Complex {
         return div(2.0, mul(IM, (div(ZP, ZM).log())));
     }
 
-    /*
+    /**
      * sinh.
      *
      * @return the complex
@@ -602,7 +602,7 @@ public class Complex {
         return new Complex(Math.sinh(re) * Math.cos(im), Math.cosh(re) * Math.sin(im));
     }
 
-    /*
+    /**
      * cosh.
      *
      * @return the complex
@@ -611,7 +611,7 @@ public class Complex {
         return new Complex(Math.cosh(re) * Math.cos(im), Math.sinh(re) * Math.sin(im));
     }
 
-    /*
+    /**
      * tanh.
      *
      * @return the complex
@@ -622,7 +622,7 @@ public class Complex {
         return div(this.sinh(), this.cosh());
     }
 
-    /*
+    /**
      * atanh.
      *
      * @return the complex

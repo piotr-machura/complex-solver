@@ -3,63 +3,63 @@ package parser.src.function;
 import parser.src.main.ParserManager;
 import parser.src.exception.CalculatorException;
 
-/*
+/**
  * The Class FunctionX.
  */
 public class FunctionX {
 
-	/* The Constant SIN. */
+	/** The Constant SIN. */
 	public static final String SIN = "sin";
 
-	/* The Constant COS. */
+	/** The Constant COS. */
 	public static final String COS = "cos";
 
-	/* The Constant SINH. */
+	/** The Constant SINH. */
 	public static final String SINH = "sinh";
 
-	/* The Constant COSH. */
+	/** The Constant COSH. */
 	public static final String COSH = "cosh";
 
-	/* The Constant TAN. */
+	/** The Constant TAN. */
 	public static final String TAN = "tan";
 
-	/* The Constant TANH. */
+	/** The Constant TANH. */
 	public static final String TANH = "tanh";
 
-	/* The Constant ASIN. */
+	/** The Constant ASIN. */
 	public static final String ASIN = "asin";
 
-	/* The Constant ACOS. */
+	/** The Constant ACOS. */
 	public static final String ACOS = "acos";
 
-	/* The Constant ATAN. */
+	/** The Constant ATAN. */
 	public static final String ATAN = "atan";
 
-	/* The Constant E. */
+	/** The Constant E. */
 	public static final String E = "e";
 
-	/* The Constant PI. */
+	/** The Constant PI. */
 	public static final String PI = "pi";
 
-	/* The Constant LN. */
+	/** The Constant LN. */
 	public static final String LN = "ln";
 
-	/* The Constant LOG. */
+	/** The Constant LOG. */
 	public static final String LOG = "log";
 
-	/* The Constant SQRT. */
+	/** The Constant SQRT. */
 	public static final String SQRT = "sqrt";
 
-	/* The Constant CBRT. */
+	/** The Constant CBRT. */
 	public static final String CBRT = "cbrt";
 
-	/* setup. */
+	/** setup. */
 	private boolean degree = false;
 
-	/* f(x). */
+	/** f(x). */
 	private String f_x;
 
-	/*
+	/**
 	 * FunctionX.
 	 *
 	 * @param f_x f(x)
@@ -69,7 +69,7 @@ public class FunctionX {
 		degree = ParserManager.getInstance().isDeegre();
 	}
 
-	/*
+	/**
 	 * getter f(x).
 	 *
 	 * @return the f x
@@ -78,7 +78,7 @@ public class FunctionX {
 		return f_x;
 	}
 
-	/*
+	/**
 	 * setter f(x).
 	 *
 	 * @param f_x the new f x
@@ -87,7 +87,7 @@ public class FunctionX {
 		this.f_x = f_x;
 	}
 
-	/*
+	/**
 	 * get f(x0).
 	 *
 	 * @param xo point
@@ -99,7 +99,7 @@ public class FunctionX {
 		return eval(f_x, xo);
 	}
 
-	/*
+	/**
 	 * eval.
 	 *
 	 * @param f_x the f x
@@ -443,7 +443,7 @@ public class FunctionX {
 		return value;
 	}
 
-	/*
+	/**
 	 * Next function.
 	 *
 	 * @param f_x the f x
@@ -502,7 +502,7 @@ public class FunctionX {
 		return result;
 	}
 
-	/*
+	/**
 	 * Next minus function.
 	 *
 	 * @param f_x the f x
@@ -561,7 +561,7 @@ public class FunctionX {
 		return result;
 	}
 
-	/*
+	/**
 	 * isValidCharacter.
 	 *
 	 * @param character the character
@@ -657,7 +657,7 @@ public class FunctionX {
 		return result;
 	}
 
-	/*
+	/**
 	 * isValidNumericAndCharacter.
 	 *
 	 * @param character the character
@@ -783,7 +783,7 @@ public class FunctionX {
 		return result;
 	}
 
-	/*
+	/**
 	 * nextBracket.
 	 *
 	 * @param f_x f(x)

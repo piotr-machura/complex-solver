@@ -34,7 +34,7 @@ public class InputSpace extends JPanel {
         double tickX = scaleX / zoomX;
         double tickY = scaleY / zoomY;
 
-        /*
+        /**
          * Paints output space with small 1x1 pixel rectangles, color chosen as follows:
          * hue = phase f(z) , saturation = 1, brightness = raidus f(z)
          */

@@ -7,17 +7,17 @@ import java.awt.event.*;
 import parser.src.exception.CalculatorException;
 import java.util.HashMap;
 
-/*
+/**
  * CalculatorFrame v0.5.1
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
 
-    /* Panels */
+    /** Panels */
     JPanel upperPanel, centerPanel, bottomPanel;
     JPanel calcButtonsContainer, rangeContainer, accuracyContainer, solveContainer;
 
-    /* Buttons */
+    /** Buttons */
     JButton[] nmbButtons;
     HashMap<String, JButton> fnButtons, opButtons;
     JButton solveButton;
@@ -27,21 +27,22 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JRadioButton rangeAuto;
     JComboBox<Integer> accuracyMenu;
 
-    /* Other elements */
+    /** Other elements */
     JTextField funcInput, rangeInput;
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
     Boolean autoWarning; /* Show warning about automatic range */
+
     private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
-    /* Arguments to pass further */
+    /** Arguments to pass further */
     String fz;
     int accuracy;
     int range; /* Range of 0 indicates automatic range */
 
     public CalculatorFrame() throws HeadlessException {
-        /* Basic parameters */
+        /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 530);
         this.setResizable(false);
@@ -52,7 +53,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.accuracy = 1;
         this.autoWarning = true;
 
-        /* Initializing panels */
+        /** Initializing panels */
         centerPanel = new JPanel();
         calcButtonsContainer = new JPanel();
         upperPanel = new JPanel();
@@ -61,8 +62,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyContainer = new JPanel();
         bottomPanel = new JPanel();
 
-        /* Setting up upper panel */
-        /* Menu bar */
+        /** Setting up upper panel */
+        /** Menu bar */
         upMenu = new JMenuBar();
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
         upMenu.setPreferredSize(new Dimension(600, 30));
@@ -91,7 +92,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upMenu.add(lanMenu);
         upMenu.add(helpMenu);
 
-        /* Input text field */
+        /** Input text field */
         funcInput = new JTextField();
         funcInput.setPreferredSize(new Dimension(600, 50));
         funcInput.setMaximumSize(new Dimension(600, 50));
@@ -103,11 +104,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         inputPrompt.changeAlpha((float) 0.6);
         inputPrompt.setHorizontalAlignment(SwingConstants.CENTER);
 
-        /* Press enter to solve */
+        /** Press enter to solve */
         funcInput.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(final KeyEvent e) {
-                if (e.getKeyCode() == 10) { /* <- keycode for "Enter" key */
+                if (e.getKeyCode() == 10) { /** <- keycode for "Enter" key */
                     actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "solve"));
                 }
             }
@@ -126,18 +127,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upperPanel.add(upMenu);
         upperPanel.add(funcInput);
 
-        /* Setting up calculator buttons */
+        /** Setting up calculator buttons */
 
-        /* Numbers 0-9 */
+        /** Numbers 0-9 */
         nmbButtons = new JButton[10];
         for (int i = 0; i < nmbButtons.length; i++) {
             nmbButtons[i] = new JButton("" + i);
-            /* Add action commands and wire up action listener */
+            /** Add action commands and wire up action listener */
             nmbButtons[i].setActionCommand("" + i);
             nmbButtons[i].addActionListener(this);
         }
 
-        /* Operator buttons. Each buttons' function is its hash key */
+        /** Operator buttons. Each buttons' function is its hash key */
         opButtons = new HashMap<String, JButton>();
         opButtons.put("z", new JButton("z"));
         opButtons.put("i", new JButton("i"));
@@ -153,13 +154,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         opButtons.put("CE", new JButton("CE"));
         opButtons.put("back", new JButton("<-"));
 
-        /* Add action commands and wire up action listener */
+        /** Add action commands and wire up action listener */
         for (final String opKey : opButtons.keySet()) {
             opButtons.get(opKey).setActionCommand(opKey);
             opButtons.get(opKey).addActionListener(this);
         }
 
-        /* Function buttons. Each buttons "name" and function is its hash key */
+        /** Function buttons. Each buttons "name" and function is its hash key */
         fnButtons = new HashMap<String, JButton>();
         fnButtons.put("ln", new JButton("ln"));
         fnButtons.put("sin", new JButton("sin"));
@@ -168,13 +169,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         fnButtons.put("sinh", new JButton("sinh"));
         fnButtons.put("cosh", new JButton("cosh"));
 
-        /* Add action commands and wire up action listener */
+        /** Add action commands and wire up action listener */
         for (final String fnKey : fnButtons.keySet()) {
             fnButtons.get(fnKey).setActionCommand(fnKey);
             fnButtons.get(fnKey).addActionListener(this);
         }
 
-        /* Arranging buttons in button container in respective order */
+        /** Arranging buttons in button container in respective order */
         calcButtonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             calcButtonsContainer.add(nmbButtons[i]);
@@ -206,14 +207,14 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         calcButtonsContainer.add(fnButtons.get("sinh"));
         calcButtonsContainer.add(fnButtons.get("cosh"));
 
-        /* Adding button container to center panel */
+        /** Adding button container to center panel */
         calcButtonsContainer.setPreferredSize(new Dimension(430, 315));
         centerPanel.setLayout(new FlowLayout());
         centerPanel.add(calcButtonsContainer, BorderLayout.CENTER);
 
-        /* Setting up bottom panel */
+        /** Setting up bottom panel */
 
-        /* Solve button */
+        /** Solve button */
         solveButton = new JButton("Solve");
         solveButton.setFont(new Font("SansSerif", Font.BOLD, 16));
         solveButton.setActionCommand("solve");
@@ -224,13 +225,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         solveContainer.setPreferredSize(new Dimension(400, 80));
         solveContainer.add(solveButton);
 
-        /* Range */
+        /** Range */
 
         rangeLabel = new JLabel("Range");
         rangeInput = new JTextField("10") {
             private static final long serialVersionUID = 1L;
 
-            /* If keypress is not digit/backspace/delete -> do nothing */
+            /** If keypress is not digit/backspace/delete -> do nothing */
             @Override
             public void processKeyEvent(KeyEvent ev) {
                 Character c = ev.getKeyChar();
@@ -254,7 +255,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         rangeContainer.add(rangeInput);
         rangeContainer.add(rangeAuto);
 
-        /* Accuracy */
+        /** Accuracy */
         accMenuLabel = new JLabel("Accuracy");
         Integer[] accuracyMenuContents = { 1, 2, 3, 4 };
         accuracyMenu = new JComboBox<Integer>(accuracyMenuContents);
@@ -265,13 +266,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyContainer.add(accuracyMenu);
         accuracyContainer.setPreferredSize(new Dimension(60, 80));
 
-        /* Add containers to bottom panel */
+        /** Add containers to bottom panel */
         bottomPanel.setLayout(new FlowLayout());
         bottomPanel.add(solveContainer);
         bottomPanel.add(rangeContainer);
         bottomPanel.add(accuracyContainer);
 
-        /* Adding main panels to frame */
+        /** Adding main panels to frame */
         this.setLayout(new BorderLayout());
         this.add(upperPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
@@ -279,12 +280,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     }
 
-    /*
+    /**
      * attemptFix.
      *
      * Attempts to fix missing brackets, missing "*" etc.
      *
-     * // TODO: This need to do a lot more than it's doing now.
+     * TODO: This need to do a lot more than it's doing now.
      */
     void attemptFix() throws CalculatorException {
         if (this.fz.equals("")) {
@@ -334,19 +335,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "solve":
-                /* Set fz equal to input field and attempt to fix it to meet the standards */
+                /** Set fz equal to input field and attempt to fix it to meet the standards */
                 this.fz = funcInput.getText();
                 try {
                     this.attemptFix();
                     this.accuracy = Integer.parseInt(String.valueOf(accuracyMenu.getSelectedItem()));
                     if (!rangeAuto.isSelected()) {
-                        /* Throw exception if range is not valid */
+                        /** Throw exception if range is not valid */
                         if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
                             throw new CalculatorException("Incorrect range");
                         }
                         this.range = Integer.parseInt(rangeInput.getText());
                     } else {
-                        this.range = 0; /* Range of 0 indicates automatic range */
+                        this.range = 0; /** Range of 0 indicates automatic range */
                     }
                     FunctionFrame fFrame = new FunctionFrame(fz, accuracy, range);
                     fFrame.setVisible(true);
@@ -357,17 +358,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "CE":
-                /* Clear text field and refocus */
+                /** Clear text field and refocus */
                 funcInput.setText("");
                 funcInput.requestFocus();
                 break;
 
             case "back":
-                /*
+                /**
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing
+                 *
+                 * TODO: delete entire functions (ex. sin(z))
                  */
-                // TODO: if in front of a function (ex. sin()) make it delete the whole function
+                //
                 if (caretPosition == 0) {
                     funcInput.requestFocus();
                     break;
@@ -375,7 +378,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
                 funcInput.setText(beforeCaret.substring(0, beforeCaret.length() - 1) + afterCaret);
 
-                /* Refocus on text field and move caret to the left */
+                /** Refocus on text field and move caret to the left */
                 funcInput.requestFocus();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -385,7 +388,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 });
                 break;
             case "auto":
-                /* Prepare range to be set to 0 and disable input box */
+                /** Prepare range to be set to 0 and disable input box */
                 if (rangeAuto.isSelected()) {
                     rangeInput.setEditable(false);
                     if (autoWarning) {
@@ -400,7 +403,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             default:
-                /* Puts buttonID at caret. Adds an opening bracket for functions. */
+                /** Puts buttonID at caret. Adds an opening bracket for functions. */
                 String putAtCaret = buttonID;
                 if (fnButtons.keySet().contains(buttonID)) {
                     putAtCaret += "(";
@@ -408,7 +411,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 String newText = beforeCaret + putAtCaret + afterCaret;
                 funcInput.setText(newText);
 
-                /* Refocus on text field and move caret to the right */
+                /** Refocus on text field and move caret to the right */
                 funcInput.requestFocus();
                 final int moveCaretBy = putAtCaret.length();
                 SwingUtilities.invokeLater(new Runnable() {
@@ -421,7 +424,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         }
     }
 
-    /* Test */
+    /** Test */
     public static void main(final String[] args) {
         final CalculatorFrame frame = new CalculatorFrame();
         frame.setLocationRelativeTo(null);

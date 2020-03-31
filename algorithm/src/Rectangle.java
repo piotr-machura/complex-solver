@@ -9,13 +9,15 @@ import parser.src.main.*;
 import parser.src.util.*;
 
 /*
-        Rectangle
-    D-----CD_mid-----C
-    |                |
-  AD_mid   MIDDLE   BC_mid
-    |                |
-    A-----AB_mid-----B
-*/
+ * The class Rectangle
+ *
+ * D-----CD_mid-----C
+ * |                |
+ * AD_mid MIDDLE BC_mid
+ * |                |
+ * A-----AB_mid-----B
+ *
+ */
 
 public class Rectangle {
     Complex A, B, C, D;
@@ -23,7 +25,7 @@ public class Rectangle {
     double area, accuracy;
     InputSpace space;
 
-    /*
+    /**
      * Rectangle.
      *
      * Constructs a rectangle using points A, B, C, D (as shown above) bound to
@@ -38,18 +40,18 @@ public class Rectangle {
         this.space = space;
         this.accuracy = Math.pow(10, -5 * accuracy);
 
-        /* Calculating mid-points based on given points */
+        /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
         BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
         CD_mid = new Complex((C.getRe() + D.getRe()) / 2, C.getIm());
         AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
         MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
 
-        /* Calculating area of rectangle */
+        /** Calculating area of rectangle */
         area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
     }
 
-    /*
+    /**
      * Rectangle.
      *
      * Constructs a rectangle using points A, B, C, D (as shown above) bound to
@@ -63,18 +65,18 @@ public class Rectangle {
         D = d;
         this.space = space;
         accuracy = 10e-5;
-        /* Calculating mid-points based on given points */
+        /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
         BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
         CD_mid = new Complex((C.getRe() + D.getRe()) / 2, C.getIm());
         AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
         MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
 
-        /* Calculating area of rectangle */
+        /** Calculating area of rectangle */
         area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
     }
 
-    /* toString() */
+    /** toString() */
     public String toString() {
         String rectString = "";
         rectString += "D: " + D.toString() + "   ";
@@ -85,7 +87,7 @@ public class Rectangle {
         return rectString;
     }
 
-    /*
+    /**
      * checkInside.
      *
      * Checks if winding number of a given rectangle is NOT close to zero.
@@ -97,24 +99,24 @@ public class Rectangle {
      * If the phase went small -> big (ex. 0.1PI -> 1.9 PI, deltaPhi == 1.8PI) this
      * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
      * (1.8PI - 2PI = -0.2PI, correct phase change)
+     *
+     * ! Czasem jest błąd: phase undefined for point NaN + NaN i. Możliwe, że to !
+     * dlatego że czasem ma 0^0 i to jest NaN
      */
-    // ! Czasem jest błąd:
-    // ! phase undefined for point NaN + NaN i
-    // ! Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
     public Boolean checkInside(String f) {
 
-        /* Tick of "integration" - 1000 points checked per side length */
+        /** Tick of "integration" - 1000 points checked per side length */
         double d = 0.001 * Math.sqrt(this.area);
         double windingNumber = 0;
 
-        /* Starting number: A */
+        /** Starting number: A */
         double x = A.getRe();
         double y = A.getIm();
 
-        /* Path A->B (going right) */
+        /** Path A->B (going right) */
         while (x < B.getRe()) {
             try {
-                /* For small rectangles there is no need to draw them */
+                /** For small rectangles there is no need to draw them */
                 if (this.area > 0.001 && space != null) {
                     space.addPoint(new Complex(x, y));
                 }
@@ -141,7 +143,7 @@ public class Rectangle {
 
         }
 
-        /* Path B->C (going up) */
+        /** Path B->C (going up) */
         while (y < C.getIm()) {
             try {
                 if (this.area > 0.001 && space != null) {
@@ -169,7 +171,7 @@ public class Rectangle {
             }
         }
 
-        /* Path C->D (going left) */
+        /** Path C->D (going left) */
         while (x > D.getRe()) {
             try {
                 if (this.area > 0.001 && space != null) {
@@ -197,7 +199,7 @@ public class Rectangle {
             }
         }
 
-        /* Path D->A (going down) */
+        /** Path D->A (going down) */
         while (y > A.getIm()) {
             try {
                 if (this.area > 0.001 && space != null) {
@@ -224,15 +226,15 @@ public class Rectangle {
                 }
             }
         }
-        /* Total number of revolutions = (total phase change) / 2 PI */
+        /** Total number of revolutions = (total phase change) / 2 PI */
         windingNumber = windingNumber / (2 * Math.PI);
 
-        /* Checks if winding number sufficiently bigger than zero */
+        /** Checks if winding number sufficiently bigger than zero */
         final double epsilon = 0.1;
         return Math.abs(windingNumber) > epsilon;
     }
 
-    /*
+    /**
      * getChildren.
      *
      * Splits the rectangle into 4 children, enumerated starting bottom left
@@ -248,7 +250,7 @@ public class Rectangle {
         return children;
     }
 
-    /*
+    /**
      * solveInside.
      *
      * Recursively checks rectangle's winding number, splitting it into 4 children
