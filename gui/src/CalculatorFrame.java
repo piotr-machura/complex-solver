@@ -21,12 +21,16 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JButton[] nmbButtons;
     HashMap<String, JButton> fnButtons, opButtons;
     JButton solveButton;
+    JMenuBar upMenu;
+    JMenu lanMenu, helpMenu;
+    JMenuItem en, pl, help, credits;
     JRadioButton rangeAuto;
     JComboBox<Integer> accuracyMenu;
 
     /* Other elements */
     JTextField funcInput, rangeInput;
-    JLabel inputLabel, rangeLabel, accMenuLabel;
+    JLabel rangeLabel, accMenuLabel;
+    TextPrompt inputPrompt;
     Font mathFont;
     Boolean autoWarning; /* Whether to show warning about automatic range */
     private static ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
@@ -39,7 +43,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     public CalculatorFrame() throws HeadlessException {
         /* Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setSize(600, 500);
+        this.setSize(600, 530);
         this.setResizable(false);
         this.setTitle("Complex solver");
 
@@ -58,11 +62,46 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         bottomPanel = new JPanel();
 
         /* Setting up upper panel */
+        /* Menu bar */
+        upMenu = new JMenuBar();
+        upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        upMenu.setPreferredSize(new Dimension(600, 30));
+        lanMenu = new JMenu("Language");
+        helpMenu = new JMenu("Help");
+        en = new JMenuItem("English");
+        pl = new JMenuItem("Polski");
+        help = new JMenuItem("Help");
+        credits = new JMenuItem("Credits");
+
+        en.setActionCommand("en");
+        pl.setActionCommand("pl");
+        help.setActionCommand("help");
+        credits.setActionCommand("credits");
+
+        en.addActionListener(this);
+        pl.addActionListener(this);
+        help.addActionListener(this);
+        credits.addActionListener(this);
+
+        lanMenu.add(en);
+        lanMenu.add(pl);
+        helpMenu.add(help);
+        helpMenu.add(credits);
+
+        upMenu.add(lanMenu);
+        upMenu.add(helpMenu);
+
         /* Input text field */
         funcInput = new JTextField();
-        funcInput.setMaximumSize(new Dimension(520, 100));
-        mathFont = new Font("SansSerif", Font.PLAIN, 24);
+        funcInput.setPreferredSize(new Dimension(600, 50));
+        funcInput.setMaximumSize(new Dimension(600, 50));
+        mathFont = new Font("SansSerif", Font.PLAIN, 28);
         funcInput.setFont(mathFont);
+
+        inputPrompt = new TextPrompt("f(z) = 0", funcInput);
+        inputPrompt.changeStyle(Font.ITALIC);
+        inputPrompt.changeAlpha((float) 0.6);
+        inputPrompt.setHorizontalAlignment(SwingConstants.CENTER);
 
         /* Press enter to solve */
         funcInput.addKeyListener(new KeyListener() {
@@ -84,10 +123,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         });
         upperPanel.setLayout(new BoxLayout(upperPanel, 1));
 
-        /* Label */
-        inputLabel = new JLabel("Input your function here");
-        inputLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        upperPanel.add(inputLabel);
+        upperPanel.add(upMenu);
         upperPanel.add(funcInput);
 
         /* Setting up calculator buttons */
@@ -280,8 +316,25 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         switch (buttonID) {
 
+            case "en":
+                // TODO: localization
+                break;
+
+            case "pl":
+                // TODO: localization
+                break;
+
+            case "credits":
+                JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński", "Credits",
+                        JOptionPane.INFORMATION_MESSAGE);
+                break;
+
+            case "help":
+                // TODO: help window
+                break;
+
             case "solve":
-                /* Set fn equal to input field and attempt to fix it to meet the standards */
+                /* Set fz equal to input field and attempt to fix it to meet the standards */
                 this.fz = funcInput.getText();
                 try {
                     this.attemptFix();
@@ -293,7 +346,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                         }
                         this.range = Integer.parseInt(rangeInput.getText());
                     } else {
-                        this.range = 0;
+                        this.range = 0; /* Range of 0 indicates automatic range */
                     }
                     FunctionFrame fFrame = new FunctionFrame(fz, accuracy, range);
                     fFrame.setVisible(true);
