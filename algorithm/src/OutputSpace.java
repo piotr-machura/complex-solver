@@ -32,7 +32,7 @@ public class OutputSpace extends JPanel {
         double tickX = scaleX / zoomX;
         double tickY = scaleY / zoomY;
 
-        /*
+        /**
          * Paints output space with 1x1 pixel rectangles, color chosen as follows: hue =
          * phase, saturation = 1, brightness = radius
          */

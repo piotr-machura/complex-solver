@@ -1,23 +1,24 @@
+/**
+ * This is a library forked from https://github.com/sbesada/java.math.expression.parser
+ * and slightly adapted to suit our needs. There is an appropriate comment  with "!"
+ * wherever things were changed.
+ */
 package parser.src.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import parser.src.exception.CalculatorException;
-import parser.src.function.Complex;
-import parser.src.function.ComplexFunction;
-import parser.src.function.FunctionX;
-import parser.src.function.FunctionXs;
-import parser.src.util.ParserResult;
-import parser.src.util.Variable;
+import parser.src.exception.*;
+import parser.src.function.*;
+import parser.src.util.*;
 
-/*
+/**
  * The Class Parser.
  */
 public class Parser {
 
-    /*
+    /**
      * Eval
      *
      * This is a parser eval. The real parser of a function is within the Fuction
@@ -30,7 +31,7 @@ public class Parser {
      * Example: 1+x+y +j
      *
      * @param function the function: 1+2*x+j...
-     * 
+     *
      * @param values the values x=10, y=20
      *
      * @return the parser result: complex or real value
@@ -93,15 +94,15 @@ public class Parser {
         return result;
     }
 
-    /*
+    /**
      * Eval.
      *
      * @param function the function
-     * 
+     *
      * @param vars the vars
-     * 
+     *
      * @param values the values
-     * 
+     *
      * @return the double
      */
     public static double eval(final String function, final String[] vars, final Double[] values) {
@@ -133,11 +134,11 @@ public class Parser {
 
     }
 
-    /*
+    /**
      * Eval.
      *
      * @param function the function
-     * 
+     *
      * @return the parser result
      */
     public static ParserResult eval(final String function) {
@@ -169,11 +170,11 @@ public class Parser {
 
     }
 
-    /*
+    /**
      * PointToValue.
      *
      * @param values the values
-     * 
+     *
      * @return the list
      */
     private static List<Double> pointToValue(final Variable... values) {
@@ -189,11 +190,11 @@ public class Parser {
         return result;
     }
 
-    /*
+    /**
      * PointToComplexValue.
      *
      * @param values the values
-     * 
+     *
      * @return the list
      */
     private static List<Complex> pointToComplexValue(final Variable... values) {
@@ -216,11 +217,11 @@ public class Parser {
         return result;
     }
 
-    /*
+    /**
      * pointIsComplex.
      *
      * @param values the values
-     * 
+     *
      * @return true, if successful
      */
     private static boolean pointIsComplex(final Variable... values) {
@@ -246,11 +247,11 @@ public class Parser {
         return result;
     }
 
-    /*
+    /**
      * PointToVar.
      *
      * @param values the values
-     * 
+     *
      * @return the list
      */
     private static List<String> pointToVar(final Variable... values) {

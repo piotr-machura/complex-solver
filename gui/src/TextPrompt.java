@@ -1,4 +1,6 @@
-//! This is an external class taken from https://tips4java.wordpress.com/2009/11/29/text-prompt/
+/**
+ * ! This is an external class taken from https://tips4java.wordpress.com/2009/11/29/text-prompt/
+ */
 package gui.src;
 
 import java.awt.*;
@@ -55,7 +57,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         checkForPrompt();
     }
 
-    /**
+    /***
      * Convenience method to change the alpha value of the current foreground Color
      * to the specifice value.
      *
@@ -65,7 +67,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         changeAlpha((int) (alpha * 255));
     }
 
-    /**
+    /***
      * Convenience method to change the alpha value of the current foreground Color
      * to the specifice value.
      *
@@ -83,7 +85,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         super.setForeground(withAlpha);
     }
 
-    /**
+    /***
      * Convenience method to change the style of the current Font. The style values
      * are found in the Font class. Common values might be: Font.BOLD, Font.ITALIC
      * and Font.BOLD + Font.ITALIC.
@@ -94,7 +96,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         setFont(getFont().deriveFont(style));
     }
 
-    /**
+    /***
      * Get the Show property
      *
      * @return the Show property.
@@ -103,7 +105,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         return show;
     }
 
-    /**
+    /***
      * Set the prompt Show property to control when the promt is shown. Valid values
      * are:
      *
@@ -118,7 +120,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         this.show = show;
     }
 
-    /**
+    /***
      * Get the showPromptOnce property
      *
      * @return the showPromptOnce property.
@@ -127,7 +129,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         return showPromptOnce;
     }
 
-    /**
+    /***
      * Show the prompt once. Once the component has gained/lost focus once, the
      * prompt will not be shown again.
      *
@@ -138,7 +140,7 @@ public class TextPrompt extends JLabel implements FocusListener, DocumentListene
         this.showPromptOnce = showPromptOnce;
     }
 
-    /**
+    /***
      * Check whether the prompt should be visible or not. The visibility will change
      * on updates to the Document and on focus changes.
      */
