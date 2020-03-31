@@ -27,7 +27,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     JScrollPane solutionsWrapper;
 
     /** Buttons */
-    JButton outSpaceButton, animButton, outCloseButton;
+    JButton outSpaceButton, animButton;
 
     /** Other components */
     JTextArea solutionsDisplay;
@@ -115,15 +115,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         outFrame.setSize(200, 250);
         outFrame.setResizable(false);
         outFrame.setLocationRelativeTo(null);
-
-        outCloseButton = new JButton("Close");
-        outCloseButton.setPreferredSize(new Dimension(80, 30));
-        outCloseButton.setActionCommand("close_out");
-        outCloseButton.addActionListener(this);
-
-        outFrame.setLayout(new BorderLayout());
-        outFrame.add(outSpace, BorderLayout.CENTER);
-        outFrame.add(outCloseButton, BorderLayout.SOUTH);
+        outFrame.add(outSpace);
 
         /** Close output space window when closing main window */
         this.addWindowListener(new WindowAdapter() {
@@ -165,11 +157,10 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveSolutions.setHorizontalAlignment(JLabel.CENTER);
         /** Add listeners to hyperlinks */
         saveSolutions.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 // TODO: saving implementation
-                System.out.println("Saving not implemented");
+                System.out.println("Saving solutions not implemented");
             }
 
             @Override
@@ -181,11 +172,10 @@ class FunctionFrame extends JFrame implements ActionListener {
             }
         });
         saveGraph.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 // TODO: saving implementation
-                System.out.println("Saving not implemented");
+                System.out.println("Saving the graph not implemented");
             }
 
             @Override
@@ -277,10 +267,6 @@ class FunctionFrame extends JFrame implements ActionListener {
                     outFrame.requestFocus();
                 }
                 break;
-
-            case "close_out":
-                outFrame.setVisible(false);
-                this.requestFocus();
 
             default:
                 System.out.println("Unsupported operation: " + buttonID);
