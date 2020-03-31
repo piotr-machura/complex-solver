@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import parser.src.exception.CalculatorException;
 import java.util.HashMap;
 
 /*
- * CalculatorFrame v0.1.2
+ * CalculatorFrame v0.5.1
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -34,9 +35,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     String fz;
     int accuracy;
     int range; /* Range of 0 indicates automatic range */
-
-    final static int DEF_ACCURACY = 1;
-    final static int DEF_RANGE = 10;
 
     public CalculatorFrame() throws HeadlessException {
         /* Basic parameters */
@@ -245,6 +243,32 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     }
 
+    /*
+     * attemptFix.
+     *
+     * Attempts to fix missing brackets, missing "*" etc.
+     *
+     * // TODO: This need to do a lot more than it's doing now.
+     */
+    void attemptFix() throws CalculatorException {
+        if (this.fz.equals("")) {
+            throw new CalculatorException("Empty input");
+        } else if (!fz.contains("z")) {
+            throw new CalculatorException("No variable found");
+        }
+        long countOBr = fz.chars().filter(ch -> ch == '(').count();
+        long countCBr = fz.chars().filter(ch -> ch == ')').count();
+        if (countOBr > countCBr) {
+            while (countOBr > countCBr) {
+                this.fz += ")";
+                countCBr += 1;
+            }
+            funcInput.setText(this.fz);
+            JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     @Override
     public void actionPerformed(final ActionEvent e) {
         final String buttonID = e.getActionCommand();
@@ -259,25 +283,24 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             case "solve":
                 /* Set fn equal to input field and attempt to fix it to meet the standards */
                 this.fz = funcInput.getText();
-
-                // TODO: attemptFix()
-                /*
-                 * Create a seperate function attemptFix() to fix missing brackets, missing "*",
-                 * notify about inputs which are not fuctions, notify about invalid inputs etc.
-                 */
-                long countOBr = fz.chars().filter(ch -> ch == '(').count();
-                long countCBr = fz.chars().filter(ch -> ch == ')').count();
-                if (countOBr > countCBr) {
-                    while (countOBr > countCBr) {
-                        this.fz += ")";
-                        countCBr += 1;
+                try {
+                    this.attemptFix();
+                    this.accuracy = Integer.parseInt(String.valueOf(accuracyMenu.getSelectedItem()));
+                    if (!rangeAuto.isSelected()) {
+                        /* Throw exception if range is not valid */
+                        if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
+                            throw new CalculatorException("Incorrect range");
+                        }
+                        this.range = Integer.parseInt(rangeInput.getText());
+                    } else {
+                        this.range = 0;
                     }
-                    funcInput.setText(this.fz);
-                    JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
-                            JOptionPane.WARNING_MESSAGE);
+                    FunctionFrame fFrame = new FunctionFrame(fz, accuracy, range);
+                    fFrame.setVisible(true);
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-                FunctionFrame fFrame = new FunctionFrame(fz, DEF_ACCURACY, DEF_RANGE);
-                fFrame.setVisible(true);
                 break;
 
             case "CE":

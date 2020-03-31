@@ -131,7 +131,6 @@ public class Rectangle {
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                // TODO: This means zero was encountered, needs to move rectangle slightly
                 // e.printStackTrace();
                 if (x + d < B.getRe()) {
                     x += d;
@@ -161,7 +160,6 @@ public class Rectangle {
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                // TODO: This means zero was encountered, needs to move rectangle slightly
                 // e.printStackTrace();
                 if (y + d < C.getIm()) {
                     y += d;
@@ -190,7 +188,6 @@ public class Rectangle {
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
-                // TODO: This means zero was encountered, needs to move rectangle slightly
                 // e.printStackTrace();
                 if (x - d > D.getRe()) {
                     x -= d;
@@ -220,7 +217,6 @@ public class Rectangle {
                 }
                 windingNumber += deltaPhi;
             } catch (Exception e) {
-                // TODO: This means zero was encountered, needs to move rectangle slightly
                 // e.printStackTrace();
                 if (y - d > A.getIm()) {
                     y -= d;
