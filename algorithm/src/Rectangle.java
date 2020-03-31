@@ -272,11 +272,7 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-<<<<<<< HEAD
         String f = "z^2-1";
-=======
-        String f = "z^3+2*z^2";
->>>>>>> 7d9e3ebc8b20debe71d74a6795cefdc6308a4fa5
         System.out.println(f);
         InputSpace space = new InputSpace(f);
         // OutputSpace output = new OutputSpace(f);
@@ -293,7 +289,6 @@ public class Rectangle {
         // frame2.add(output);
         // frame2.setVisible(true);
 
-<<<<<<< HEAD
         // Complex A = new Complex(-5, -5);
         // Complex B = new Complex(5, -5);
         // Complex C = new Complex(5, 5);
@@ -303,17 +298,6 @@ public class Rectangle {
         // System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
         // s1.solveInside(f, solutions);
         // System.out.println(solutions);
-=======
-        Complex A = new Complex(-5, -5);
-        Complex B = new Complex(5, -5);
-        Complex C = new Complex(5, 5);
-        Complex D = new Complex(-5, 5);
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        Rectangle s1 = new Rectangle(A, B, C, D, space);
-        System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
-        s1.solveInside(f, solutions);
-        System.out.println(solutions);
->>>>>>> 7d9e3ebc8b20debe71d74a6795cefdc6308a4fa5
     }
 
 }

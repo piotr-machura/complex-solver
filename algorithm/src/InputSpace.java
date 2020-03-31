@@ -25,7 +25,8 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
     float scaleX = 4, scaleY = 4;
     String f;
     ArrayList<Complex> sq_points = new ArrayList<Complex>();
-    Graphics2D g2test;
+    boolean panning = false;
+    Graphics2D previous;
 
     public InputSpace(String f) {
         this.f = f;
@@ -43,8 +44,16 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2test = g2;
         g2.translate(getWidth() / 2, getHeight() / 2);
+
+        if (panning) {
+            g2.setColor(Color.black);
+            g2.drawLine(-getWidth() / 2 + originX, -getHeight() / 2 + originY, -getWidth() / 2 + originX - offX,
+                    -getHeight() / 2 + originY - offY);
+            g2.drawLine(-getWidth() / 2, -centerY - offY, getWidth() / 2, -centerY - offY);
+            g2.drawLine(centerX - offX, -getHeight() / 2, centerX - offX, getHeight() / 2);
+            return;
+        }
 
         double tickX = scaleX / zoomX;
         double tickY = scaleY / zoomY;
@@ -78,12 +87,12 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
             }
         }
 
-        // ? Co się tutaj dzieje
-
+        // draw axes
         g2.setColor(Color.gray);
         g2.drawLine(-getWidth() / 2, -centerY, getWidth() / 2, -centerY);
         g2.drawLine(centerX, -getHeight() / 2, centerX, getHeight() / 2);
 
+        // draw ticks
         g2.setColor(Color.gray);
         for (int i = -(int) ((getWidth() + 2 * centerX) / (2 * zoomX / scaleX))
                 - 1; i < (int) ((getWidth() - 2 * centerX) / (2 * zoomX / scaleX)) + 1; i++) {
@@ -94,17 +103,21 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
             g2.fillRect(-5 + centerX, (int) (i * zoomY / scaleY) - 1 - centerY, 10, 2);
         }
 
+        // draw rectangle points
         // g2.setColor(Color.black);
         // for (Complex p : sq_points) {
         // g2.fillRect((int) (p.getRe() * zoomY / scaleY) - 2, (int) (p.getIm() * zoomY
         // / scaleY) - 2, 4, 4);
         // }
+
+        previous = g2;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         originX = e.getX();
         originY = e.getY();
+        panning = true;
     }
 
     @Override
@@ -112,6 +125,7 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
         if (originX != -1 && originY != -1) {
             offX = originX - e.getX();
             offY = originY - e.getY();
+            this.repaint();
         }
     }
 
@@ -119,6 +133,7 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
     public void mouseReleased(MouseEvent e) {
         centerX -= offX;
         centerY += offY;
+        panning = false;
         this.repaint();
         originX = -1;
         originY = -1;
