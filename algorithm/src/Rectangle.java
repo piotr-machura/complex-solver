@@ -269,32 +269,32 @@ public class Rectangle {
     }
 
     public static void main(String[] args) {
-        String f = "sin(z^2)";
+        String f = "z^2-1";
         System.out.println(f);
         InputSpace space = new InputSpace(f);
-        OutputSpace output = new OutputSpace(f);
+        // OutputSpace output = new OutputSpace(f);
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 800);
+        frame.setSize(400, 400);
         frame.add(space);
         frame.setVisible(true);
 
-        JFrame frame2 = new JFrame();
-        frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame2.setSize(300, 300);
-        frame2.add(output);
-        frame2.setVisible(true);
+        // JFrame frame2 = new JFrame();
+        // frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        // frame2.setSize(300, 300);
+        // frame2.add(output);
+        // frame2.setVisible(true);
 
-        Complex A = new Complex(-5, -5);
-        Complex B = new Complex(5, -5);
-        Complex C = new Complex(5, 5);
-        Complex D = new Complex(-5, 5);
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        Rectangle s1 = new Rectangle(A, B, C, D, null);
-        System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
-        s1.solveInside(f, solutions);
-        System.out.println(solutions);
+        // Complex A = new Complex(-5, -5);
+        // Complex B = new Complex(5, -5);
+        // Complex C = new Complex(5, 5);
+        // Complex D = new Complex(-5, 5);
+        // ArrayList<Complex> solutions = new ArrayList<Complex>();
+        // Rectangle s1 = new Rectangle(A, B, C, D, null);
+        // System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
+        // s1.solveInside(f, solutions);
+        // System.out.println(solutions);
     }
 
 }
