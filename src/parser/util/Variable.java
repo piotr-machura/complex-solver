@@ -9,6 +9,8 @@ import parser.function.Complex;
 
 /**
  * The Class Variable.
+ *
+ * ! Name of this class was changed from "Point" -> "Variable"
  */
 public class Variable {
 
