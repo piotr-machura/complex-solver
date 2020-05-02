@@ -7,9 +7,8 @@ package parser.util;
 
 import parser.function.Complex;
 
-
 /**
- * The Class Point.
+ * The Class Variable.
  */
 public class Variable {
 
