@@ -4,12 +4,14 @@
 package algorithm;
 
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 import parser.exception.CalculatorException;
-import parser.function.*;
-import parser.main.*;
-import parser.util.*;
+import parser.function.Complex;
+import parser.main.Parser;
+import parser.util.Variable;
 
 /*
  * The class Rectangle
@@ -83,11 +85,7 @@ public class Rectangle {
      * means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from deltaPhi
      * (1.8PI - 2PI = -0.2PI, correct phase change)
      *
-     * ! Czasem jest błąd: phase undefined for point NaN + NaN i.
-     *
-     * Możliwe, że to dlatego że czasem ma 0^0 i to jest NaN
-     *
-     * @return winding number close or greater than 1
+     * @return Bool: winding number close or greater than 1
      */
     public Boolean checkInside(String f) {
 
@@ -106,20 +104,37 @@ public class Rectangle {
                 if (this.area > 0.001 && space != null) {
                     space.addPoint(new Complex(x, y));
                 }
+                /** Calculate phase prior to step */
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
+                /** Go a step forward */
                 x += d;
+                /** Calculate phase after taking a step */
                 Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nowPhi = Complex.phase(now);
+                /** Calculate phase change */
                 double deltaPhi = nowPhi - prevPhi;
+                /**
+                 * If phsase change is close to 2PI assume that positive x axis was crossed
+                 * negtively
+                 */
                 if (deltaPhi > 1.9 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -1.9 * Math.PI) {
+                }
+                /**
+                 * If phsase change is close to -2PI assume that positive x axis was crossed
+                 * positively
+                 */
+                else if (deltaPhi < -1.9 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
+                /**
+                 * This means a zero was encountered, if moving a step forward won't go outisde
+                 * boundary then move, if not then proceed to checking next side.
+                 */
                 if (x + d < B.getRe()) {
                     x += d;
                 } else {

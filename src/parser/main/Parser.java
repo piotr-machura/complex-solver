@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import parser.exception.*;
-import parser.function.*;
-import parser.util.*;
+import parser.exception.CalculatorException;
+import parser.function.Complex;
+import parser.function.ComplexFunction;
+import parser.function.FunctionX;
+import parser.function.FunctionXs;
+import parser.util.ParserResult;
+import parser.util.Variable;
 
 /**
  * The Class Parser.

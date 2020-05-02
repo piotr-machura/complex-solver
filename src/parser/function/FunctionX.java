@@ -5,8 +5,8 @@
  */
 package parser.function;
 
-import parser.main.ParserManager;
 import parser.exception.CalculatorException;
+import parser.main.ParserManager;
 
 /**
  * The Class FunctionX.

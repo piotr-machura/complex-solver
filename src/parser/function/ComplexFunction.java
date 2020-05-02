@@ -8,8 +8,8 @@ package parser.function;
 import java.util.ArrayList;
 import java.util.List;
 
-import parser.main.ParserManager;
 import parser.exception.CalculatorException;
+import parser.main.ParserManager;
 
 /**
  * The Class ComplexFunction.

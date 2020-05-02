@@ -3,19 +3,21 @@
  */
 package algorithm;
 
-import parser.function.*;
-import parser.main.*;
-import parser.util.*;
-
-import javax.swing.*;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
+import parser.function.Complex;
+import parser.main.Parser;
+import parser.util.Variable;
 
 public class InputSpace extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
     private static final long serialVersionUID = 1L;

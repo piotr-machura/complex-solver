@@ -3,12 +3,36 @@
  */
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashMap;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import parser.exception.CalculatorException;
-import java.util.HashMap;
 
 /**
  * The class CalculatorFrame
@@ -21,8 +45,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JPanel calcButtonsContainer, rangeContainer, accuracyContainer, solveContainer;
 
     /** Buttons */
-    JButton[] nmbButtons;
-    HashMap<String, JButton> fnButtons, opButtons;
+    CalcButton[] nmbButtons;
+    HashMap<String, CalcButton> fnButtons, opButtons;
     JButton solveButton;
     JMenuBar upMenu;
     JMenu lanMenu, helpMenu;
@@ -35,7 +59,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
-    Boolean autoWarning; /* Only show warning about automatic range once */
 
     private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
@@ -57,7 +80,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setIconImage(ICON.getImage());
         this.range = 10;
         this.accuracy = 1;
-        this.autoWarning = true;
 
         /** Initializing panels */
         centerPanel = new JPanel();
@@ -136,50 +158,35 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         /** Set up calculator buttons */
 
         /** Numbers 0-9 */
-        nmbButtons = new JButton[10];
+        nmbButtons = new CalcButton[10];
         for (int i = 0; i < nmbButtons.length; i++) {
-            nmbButtons[i] = new JButton("" + i);
-            /** Add action commands and wire up action listener */
-            nmbButtons[i].setActionCommand("" + i);
-            nmbButtons[i].addActionListener(this);
+            nmbButtons[i] = new CalcButton("" + i, this);
         }
 
-        /** Operator buttons. Each buttons' function is its hash key */
-        opButtons = new HashMap<String, JButton>();
-        opButtons.put("z", new JButton("z"));
-        opButtons.put("i", new JButton("i"));
-        opButtons.put("e", new JButton("e"));
-        opButtons.put(".", new JButton("."));
-        opButtons.put("+", new JButton("+"));
-        opButtons.put("-", new JButton("-"));
-        opButtons.put("*", new JButton("*"));
-        opButtons.put("/", new JButton("/"));
-        opButtons.put("^", new JButton("^"));
-        opButtons.put("(", new JButton("("));
-        opButtons.put(")", new JButton(")"));
-        opButtons.put("CE", new JButton("CE"));
-        opButtons.put("back", new JButton("<-"));
-
-        /** Add action commands and wire up action listener */
-        for (final String opKey : opButtons.keySet()) {
-            opButtons.get(opKey).setActionCommand(opKey);
-            opButtons.get(opKey).addActionListener(this);
-        }
+        /** Operator buttons */
+        opButtons = new HashMap<String, CalcButton>();
+        opButtons.put("z", new CalcButton("z", this));
+        opButtons.put("i", new CalcButton("i", this));
+        opButtons.put("e", new CalcButton("e", this));
+        opButtons.put(".", new CalcButton(".", this));
+        opButtons.put("+", new CalcButton("+", this));
+        opButtons.put("-", new CalcButton("-", this));
+        opButtons.put("*", new CalcButton("*", this));
+        opButtons.put("/", new CalcButton("/", this));
+        opButtons.put("^", new CalcButton("^", this));
+        opButtons.put("(", new CalcButton("(", this));
+        opButtons.put(")", new CalcButton(")", this));
+        opButtons.put("CE", new CalcButton("CE", this));
+        opButtons.put("back", new CalcButton("back", this));
 
         /** Function buttons. Each buttons "name" and function is its hash key */
-        fnButtons = new HashMap<String, JButton>();
-        fnButtons.put("ln", new JButton("ln"));
-        fnButtons.put("sin", new JButton("sin"));
-        fnButtons.put("cos", new JButton("cos"));
-        fnButtons.put("tan", new JButton("tan"));
-        fnButtons.put("sinh", new JButton("sinh"));
-        fnButtons.put("cosh", new JButton("cosh"));
-
-        /** Add action commands and wire up action listener */
-        for (final String fnKey : fnButtons.keySet()) {
-            fnButtons.get(fnKey).setActionCommand(fnKey);
-            fnButtons.get(fnKey).addActionListener(this);
-        }
+        fnButtons = new HashMap<String, CalcButton>();
+        fnButtons.put("ln", new CalcButton("ln", this));
+        fnButtons.put("sin", new CalcButton("sin", this));
+        fnButtons.put("cos", new CalcButton("cos", this));
+        fnButtons.put("tan", new CalcButton("tan", this));
+        fnButtons.put("sinh", new CalcButton("sinh", this));
+        fnButtons.put("cosh", new CalcButton("cosh", this));
 
         /** Arrange buttons in button container in respective order */
         calcButtonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
@@ -396,12 +403,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /** Prepare range to be set to 0 and disable input box */
                 if (rangeAuto.isSelected()) {
                     rangeInput.setEditable(false);
-                    if (autoWarning) {
-                        JOptionPane.showMessageDialog(null,
-                                "This looks for a rectangle so big it has at least one root inside.\nMight result in extended processing time.",
-                                "Warning", JOptionPane.WARNING_MESSAGE);
-                        autoWarning = false;
-                    }
+                    JOptionPane.showMessageDialog(null,
+                            "This looks for a rectangle so big it has at least one root inside.\nMight result in extended processing time.",
+                            "Warning", JOptionPane.WARNING_MESSAGE);
                 } else {
                     rangeInput.setEditable(true);
                 }

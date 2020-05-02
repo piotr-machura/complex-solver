@@ -3,11 +3,14 @@
  */
 package algorithm;
 
-import parser.function.Complex;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
+import parser.function.Complex;
 
 public class OutputSpace extends JPanel {
     private static final long serialVersionUID = 1L;

@@ -3,18 +3,36 @@
  */
 package gui;
 
-import javax.swing.*;
-
-import algorithm.*;
-import algorithm.Rectangle;
-import parser.function.Complex;
-
-import java.awt.*;
-import java.awt.font.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import algorithm.InputSpace;
+import algorithm.OutputSpace;
+import algorithm.Rectangle;
+import parser.function.Complex;
 
 /**
  * The class FunctionFrame
@@ -55,7 +73,6 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);
-        this.setResizable(false);
         this.fz = fz;
         this.setTitle("f(z) = " + this.fz);
         this.setLocationRelativeTo(null);
@@ -79,7 +96,6 @@ class FunctionFrame extends JFrame implements ActionListener {
         centerPanel = new JPanel();
         bottomPanel = new JPanel();
         utilContainer = new JPanel();
-
 
         /** Output space frame */
         outFrame = new JFrame("Output space");
