@@ -15,9 +15,9 @@ import parser.function.Complex;
 
 /**
  * Test solver class for simple functions. Note that "expected" arrays are
- * sorted as described in Complex.compareTo() function. Test for each function
- * is conducted 3 times at each accuracy value to ensure sufficient sigificant
- * digits accuracy.
+ * sorted in ascending order according to method described in
+ * Complex.compareTo() function. Test for each function is conducted 3 times at
+ * each accuracy level to ensure the right amount of significant digits.
  *
  * Results were checked using Wolfram Mathematica v12.1
  */
@@ -69,7 +69,6 @@ public class TestSolver {
         ArrayList<Complex> solutions = new ArrayList<Complex>();
         new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
         Solver.cleanUpSolutions(solutions, acc);
-        System.out.println(solutions);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -409,7 +408,6 @@ public class TestSolver {
         ArrayList<Complex> solutions = new ArrayList<Complex>();
         new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
         Solver.cleanUpSolutions(solutions, acc);
-        System.out.println(solutions);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -458,7 +456,6 @@ public class TestSolver {
         ArrayList<Complex> solutions = new ArrayList<Complex>();
         new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
         Solver.cleanUpSolutions(solutions, acc);
-        System.out.println(solutions);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
