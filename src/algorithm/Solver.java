@@ -43,7 +43,7 @@ public class Solver {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
-    Accuracy accuracyLevel;
+    final Accuracy accuracyLevel;
 
     /**
      * solve.
@@ -60,7 +60,7 @@ public class Solver {
      *
      * @return solutions the formatted and sorted ArrayList of solutions
      */
-    public static ArrayList<Complex> solve(double range, String f_z, Accuracy accuracyLevel) {
+    public static ArrayList<Complex> solve(final double range, final String f_z, final Accuracy accuracyLevel) {
         /**
          * Get solutions inside rectangle of side length 2*range using recursive
          * solveInside function.
@@ -121,7 +121,7 @@ public class Solver {
      * @param d        the top-left point D
      * @param Accuracy the desired accuracy level
      */
-    protected Solver(Complex a, Complex b, Complex c, Complex d, Accuracy accuracyLevel) {
+    protected Solver(Complex a, Complex b, Complex c, Complex d, final Accuracy accuracyLevel) {
 
         A = a;
         B = b;
@@ -147,7 +147,7 @@ public class Solver {
      *
      * @return Bool: winding number close or greater than 1
      */
-    private Boolean checkWindingNumber(String f_z) {
+    private Boolean checkWindingNumber(final String f_z) {
 
         /** Step of "integration" - 200 steps per side length */
         final double step = 0.005 * Math.sqrt(this.area);
@@ -296,7 +296,7 @@ public class Solver {
      * @param f_z       the function to solve for
      * @param solutions the arraylist to put solutions in
      */
-    private void solveInside(String f_z, ArrayList<Complex> solutions) {
+    private void solveInside(final String f_z, ArrayList<Complex> solutions) {
         if (this.checkWindingNumber(f_z)) {
             if (this.area <= Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3))) {
                 solutions.add(this.MIDDLE);
