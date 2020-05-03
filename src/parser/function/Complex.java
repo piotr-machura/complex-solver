@@ -10,7 +10,7 @@ import parser.exception.CalculatorException;
 /**
  * Complex.
  */
-public class Complex {
+public class Complex implements Comparable<Complex> {
 
     /** real. */
     private double re;
@@ -640,6 +640,22 @@ public class Complex {
      */
     public Complex atanh() throws CalculatorException {
         return sub((add(1.0, this)).log(), div(2.0, ((sub(1.0, this)).negate()).log()));
+    }
+
+    @Override
+    public int compareTo(Complex comp) {
+        if (this.re > comp.re) {
+            return 1;
+        } else if (this.re < comp.re) {
+            return -1;
+        } else if (this.re == comp.re && this.im < comp.im) {
+            return -1;
+        } else if (this.re == comp.re && this.im > comp.im) {
+            return 1;
+        } else {
+            /** this.re == comp.re && this.im == comp.im */
+            return 0;
+        }
     }
 
 }

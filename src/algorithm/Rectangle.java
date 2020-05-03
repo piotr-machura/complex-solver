@@ -4,6 +4,7 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import parser.exception.CalculatorException;
 import parser.function.Complex;
@@ -88,26 +89,31 @@ public class Rectangle {
     public Boolean checkInside(String f) {
 
         /** Tick of "integration" */
-        double d = 0.005 * Math.sqrt(this.area) / (this.acc.ordinal() + 1);
+        double d = 0.001 * Math.sqrt(this.area);
         double windingNumber = 0;
 
         /** Starting point: A */
         double x = A.getRe();
         double y = A.getIm();
+        Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+        /* Phase prior to step (to be remembered) */
+        double prevPhi = 0;
+        try {
+            prevPhi = Complex.phase(prev);
+        } catch (Exception e) {
+            /** Strating in zero - might as well consider phase to be zero. */
+        }
 
         /** Path A->B (going right) */
         while (x < B.getRe()) {
             try {
-                /** Calculate phase prior to step */
-                Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.phase(prev);
                 /** Go a step forward */
                 x += d;
                 /** Calculate phase after taking a step */
-                Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.phase(now);
+                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                double nextPhi = Complex.phase(next);
                 /** Calculate phase change */
-                double deltaPhi = nowPhi - prevPhi;
+                double deltaPhi = nextPhi - prevPhi;
                 /**
                  * If phsase change is close to 2PI assume that positive x axis was crossed
                  * negtively
@@ -123,6 +129,8 @@ public class Rectangle {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
+                prev = next;
+                prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
                 /**
@@ -141,18 +149,18 @@ public class Rectangle {
         /** Path B->C (going up) */
         while (y < C.getIm()) {
             try {
-                Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.phase(prev);
                 y += d;
-                Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.phase(now);
-                double deltaPhi = nowPhi - prevPhi;
+                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                double nextPhi = Complex.phase(next);
+                double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
                 } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
+                prev = next;
+                prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
                 if (y + d < C.getIm()) {
@@ -166,18 +174,18 @@ public class Rectangle {
         /** Path C->D (going left) */
         while (x > D.getRe()) {
             try {
-                Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.phase(prev);
                 x -= d;
-                Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.phase(now);
-                double deltaPhi = nowPhi - prevPhi;
+                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                double nextPhi = Complex.phase(next);
+                double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
                 } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
+                prev = next;
+                prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
                 if (x - d > D.getRe()) {
@@ -191,18 +199,18 @@ public class Rectangle {
         /** Path D->A (going down) */
         while (y > A.getIm()) {
             try {
-                Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double prevPhi = Complex.phase(prev);
                 y -= d;
-                Complex now = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nowPhi = Complex.phase(now);
-                double deltaPhi = nowPhi - prevPhi;
+                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                double nextPhi = Complex.phase(next);
+                double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
                 } else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
+                prev = next;
+                prevPhi = nextPhi;
             } catch (Exception e) {
                 // e.printStackTrace();
                 if (y - d > A.getIm()) {
@@ -250,7 +258,7 @@ public class Rectangle {
      */
     public void solveInside(String f_z, ArrayList<Complex> solutions) {
         if (this.checkInside(f_z)) {
-            if (this.area <= Math.pow(10, -5 * (this.acc.ordinal() + 1))) {
+            if (this.area <= Math.pow(10, -2 * (this.acc.ordinal() + 3))) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
@@ -304,5 +312,6 @@ public class Rectangle {
 
             }
         }
+        Collections.sort(solutions);
     }
 }
