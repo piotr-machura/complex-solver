@@ -22,29 +22,32 @@ import parser.util.Variable;
 
 /**
  * The class Solver
+ *
+ * Use static method solve(Solver s, String f_z) to solve for roots of f_z
+ * inside of s.
  */
 public class Solver {
 
+    /**
+     * Accuracy enum
+     *
+     * @param LOW  ~4 significant digits
+     * @param MED  ~5 significant digits
+     * @param HIGH ~6 significant digits
+     */
     public enum Accuracy {
-        /**
-         * Accuracy enum
-         *
-         * @param LOW  ~4 significant digits
-         * @param MED  ~5 significant digits
-         * @param HIGH ~6 significant digits
-         */
         LOW, MED, HIGH
     }
 
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
-    Accuracy acc;
+    Accuracy accuracyLevel;
 
     /**
      * Rectangle constructor.
      *
-     * Constructs a square using points A, B, C, D (as shown above)
+     * Constructs a square using points A, B, C, D (as shown in Solver.class header)
      *
      * ! This is always a square, NOT a rectangle
      *
@@ -54,13 +57,13 @@ public class Solver {
      * @param d        the top-left point D
      * @param Accuracy the desired accuracy level
      */
-    public Solver(Complex a, Complex b, Complex c, Complex d, Accuracy acc) {
+    public Solver(Complex a, Complex b, Complex c, Complex d, Accuracy accuracyLevel) {
 
         A = a;
         B = b;
         C = c;
         D = d;
-        this.acc = acc;
+        this.accuracyLevel = accuracyLevel;
 
         /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
@@ -85,9 +88,11 @@ public class Solver {
     }
 
     /**
-     * checkInside.
+     * checkWindingNumber.
      *
-     * * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
+     * Check winding number in relation to function f_z.
+     *
+     * If the phase big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI) this
      * means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi (-1.8PI
      * +2PI = 0.2PI, correct phase change).
      *
@@ -97,7 +102,7 @@ public class Solver {
      *
      * @return Bool: winding number close or greater than 1
      */
-    protected Boolean checkInside(String f_z) {
+    protected Boolean checkWindingNumber(String f_z) {
 
         /** Step of "integration" - 200 steps per side length */
         final double step = 0.005 * Math.sqrt(this.area);
@@ -244,10 +249,10 @@ public class Solver {
      */
     protected Solver[] getChildren() {
         Solver[] children = new Solver[4];
-        children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, acc);
-        children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, acc);
-        children[2] = new Solver(MIDDLE, BC_mid, C, CD_mid, acc);
-        children[3] = new Solver(AD_mid, MIDDLE, CD_mid, D, acc);
+        children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, accuracyLevel);
+        children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, accuracyLevel);
+        children[2] = new Solver(MIDDLE, BC_mid, C, CD_mid, accuracyLevel);
+        children[3] = new Solver(AD_mid, MIDDLE, CD_mid, D, accuracyLevel);
         return children;
     }
 
@@ -262,8 +267,8 @@ public class Solver {
      * @param solutions the arraylist to put solutions in
      */
     protected void solveInside(String f_z, ArrayList<Complex> solutions) {
-        if (this.checkInside(f_z)) {
-            if (this.area <= Math.pow(10, -2 * (this.acc.ordinal() + 3))) {
+        if (this.checkWindingNumber(f_z)) {
+            if (this.area <= Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3))) {
                 solutions.add(this.MIDDLE);
             } else {
                 Solver[] children = this.getChildren();
@@ -300,9 +305,9 @@ public class Solver {
          * Round all soultions according to acc, delete duplicates and sort list
          */
         double rd;
-        if (s.acc == Accuracy.LOW) {
+        if (s.accuracyLevel == Accuracy.LOW) {
             rd = 1000d;
-        } else if (s.acc == Accuracy.MED) {
+        } else if (s.accuracyLevel == Accuracy.MED) {
             rd = 10000d;
         } else { /* acc == AcLevel.HIGH */
             rd = 100000d;
@@ -314,9 +319,7 @@ public class Solver {
             solutions.set(i, new Complex(reI, imI));
         }
 
-        /**
-         * Remove duplicates
-         */
+        /** Remove duplicates */
         for (int i = 0; i < solutions.size() - 1; i++) {
             /** Take current Re & Im */
             double reI = solutions.get(i).getRe();
@@ -332,9 +335,7 @@ public class Solver {
             }
         }
 
-        /**
-         * Sort
-         */
+        /** Sort */
         Collections.sort(solutions);
 
         return solutions;
