@@ -14,10 +14,10 @@ import algorithm.Solver.Accuracy;
 import parser.function.Complex;
 
 /**
- * Test solver class for simple functions. Note that "expected" arrays are
- * sorted in ascending order according to method described in
- * Complex.compareTo() function. Test for each function is conducted 3 times at
- * each accuracy level to ensure the right amount of significant digits.
+ * Test Solver with simple functions. Note that "expected" arrays are sorted in
+ * ascending order according to method described in Complex.compareTo()
+ * function. Test for each function is conducted 3 times at each accuracy level
+ * to ensure the right amount of significant digits.
  *
  * Results were checked using Wolfram Mathematica v12.1
  */
@@ -34,9 +34,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -50,9 +48,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -66,9 +62,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -82,9 +76,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(-Math.PI, 0), new Complex(0, 0), new Complex(Math.PI, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -98,9 +90,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(-Math.PI, 0), new Complex(0, 0), new Complex(Math.PI, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -114,9 +104,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(-Math.PI, 0), new Complex(0, 0), new Complex(Math.PI, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -130,9 +118,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = {};
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -146,9 +132,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = {};
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -162,9 +146,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = {};
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -178,9 +160,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -194,9 +174,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -210,9 +188,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(0, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -226,9 +202,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(0, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -242,9 +216,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(0, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -258,9 +230,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(0, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -274,9 +244,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(-1.30024, -0.624811), new Complex(0.300243, 0.624811) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -290,9 +258,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(-1.30024, -0.624811), new Complex(0.300243, 0.624811) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -306,9 +272,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(-1.30024, -0.624811), new Complex(0.300243, 0.624811) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -323,9 +287,7 @@ public class TestSolver {
         Complex[] expected = { new Complex(-0.554392, -0.619406), new Complex(-0.554392, 0.619406),
                 new Complex(1.85718, 0), new Complex(4.5364, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -340,9 +302,7 @@ public class TestSolver {
         Complex[] expected = { new Complex(-0.554392, -0.619406), new Complex(-0.554392, 0.619406),
                 new Complex(1.85718, 0), new Complex(4.5364, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -357,9 +317,7 @@ public class TestSolver {
         Complex[] expected = { new Complex(-0.554392, -0.619406), new Complex(-0.554392, 0.619406),
                 new Complex(1.85718, 0), new Complex(4.5364, 0) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -373,9 +331,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(1, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -389,9 +345,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(1, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -405,9 +359,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(1, 1) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
@@ -421,9 +373,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.LOW;
         Complex[] expected = { new Complex(-1.44262, -1.03978), new Complex(1.44262, 1.03978) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
@@ -437,9 +387,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.MED;
         Complex[] expected = { new Complex(-1.44262, -1.03978), new Complex(1.44262, 1.03978) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
@@ -453,9 +401,7 @@ public class TestSolver {
         Accuracy acc = Accuracy.HIGH;
         Complex[] expected = { new Complex(-1.44262, -1.03978), new Complex(1.44262, 1.03978) };
 
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, acc).solveInside(f_z, solutions);
-        Solver.cleanUpSolutions(solutions, acc);
+        ArrayList<Complex> solutions = Solver.solve(new Solver(A, B, C, D, acc), f_z);
         assertEquals(expected.length, solutions.size());
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);

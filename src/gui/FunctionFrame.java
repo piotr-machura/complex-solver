@@ -198,7 +198,8 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.add(space, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
-        // TODO: Implement solving algorithm here
+        // TODO: Wire up solver here
+
         this.addSolutionsToDisplay();
     }
 
@@ -237,7 +238,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                 }
                 break;
             case "animation":
-                // TODO: implement animation
+                // TODO: Implement new GraphicSolver class
                 break;
 
             default:
