@@ -39,8 +39,6 @@ import parser.function.Complex;
  */
 class FunctionFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
-    /** Function to graph & solve */
-    final String fz;
 
     /** Panels */
     JPanel centerPanel, bottomPanel;
@@ -56,7 +54,8 @@ class FunctionFrame extends JFrame implements ActionListener {
     private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
-    double range;
+    final String f_z;
+    final double range;
     InputSpace space, animSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
@@ -65,24 +64,25 @@ class FunctionFrame extends JFrame implements ActionListener {
     /**
      * FunctionFrame constructor.
      *
-     * @param fz       the function
+     * @param f_z      the function
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String fz, Accuracy acc, double range) {
+    FunctionFrame(String f_z, Accuracy acc, double range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);
-        this.fz = fz;
-        this.setTitle("f(z) = " + this.fz);
+        this.f_z = f_z;
+        this.setTitle("f(z) = " + this.f_z);
         this.setLocationRelativeTo(null);
         this.setIconImage(ICON.getImage());
 
         /** Set up algorithm components */
         this.range = range;
-        space = new InputSpace(this.fz);
-        animSpace = new InputSpace(this.fz);
-        outSpace = new OutputSpace(this.fz);
+        solutions = null;
+        space = new InputSpace(this.f_z);
+        animSpace = new InputSpace(this.f_z);
+        outSpace = new OutputSpace(this.f_z);
 
         /** Panels */
         centerPanel = new JPanel();
