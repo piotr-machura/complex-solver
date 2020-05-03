@@ -31,8 +31,8 @@ import javax.swing.JTextArea;
 
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
-import algorithm.Rectangle;
-import algorithm.Rectangle.AcLevel;
+import algorithm.Solver;
+import algorithm.Solver.AcLevel;
 import parser.function.Complex;
 
 /**
@@ -57,7 +57,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
-    Rectangle rect, animRect;
+    Solver rect;
     InputSpace space, animSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
@@ -90,8 +90,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         Complex B = new Complex(range, -range);
         Complex C = new Complex(range, range);
         Complex D = new Complex(-range, range);
-        rect = new Rectangle(A, B, C, D, acc);
-        animRect = new Rectangle(A, B, C, D, acc);
+        rect = new Solver(A, B, C, D, acc);
 
         /** Panels */
         centerPanel = new JPanel();

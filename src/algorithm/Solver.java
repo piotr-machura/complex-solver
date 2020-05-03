@@ -12,7 +12,9 @@ import parser.main.Parser;
 import parser.util.Variable;
 
 /*
- * The class Rectangle
+ * The class Solver
+ *
+ * Creates a rectangle as shown below:
  *
  * D-----CD_mid-----C
  * |                |
@@ -22,7 +24,7 @@ import parser.util.Variable;
  *
  */
 
-public class Rectangle {
+public class Solver {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
@@ -43,7 +45,7 @@ public class Rectangle {
      * @param d       the up-left point
      * @param AcLevel the accuracy level
      */
-    public Rectangle(Complex a, Complex b, Complex c, Complex d, AcLevel acc) {
+    public Solver(Complex a, Complex b, Complex c, Complex d, AcLevel acc) {
 
         A = a;
         B = b;
@@ -86,20 +88,19 @@ public class Rectangle {
      *
      * @return Bool: winding number close or greater than 1
      */
-    public Boolean checkInside(String f) {
+    public Boolean checkInside(String f_z) {
 
         /** Tick of "integration" */
-        double d = 0.001 * Math.sqrt(this.area);
+        double d = 0.01 * Math.sqrt(this.area);
         double windingNumber = 0;
 
         /** Starting point: A */
         double x = A.getRe();
         double y = A.getIm();
-        Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
         /* Phase prior to step (to be remembered) */
         double prevPhi = 0;
         try {
-            prevPhi = Complex.phase(prev);
+            prevPhi = Complex.phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
         } catch (Exception e) {
             /** Strating in zero - might as well consider phase to be zero. */
         }
@@ -110,7 +111,7 @@ public class Rectangle {
                 /** Go a step forward */
                 x += d;
                 /** Calculate phase after taking a step */
-                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nextPhi = Complex.phase(next);
                 /** Calculate phase change */
                 double deltaPhi = nextPhi - prevPhi;
@@ -129,7 +130,6 @@ public class Rectangle {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
-                prev = next;
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
@@ -150,7 +150,7 @@ public class Rectangle {
         while (y < C.getIm()) {
             try {
                 y += d;
-                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nextPhi = Complex.phase(next);
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
@@ -159,7 +159,6 @@ public class Rectangle {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
-                prev = next;
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
@@ -175,7 +174,7 @@ public class Rectangle {
         while (x > D.getRe()) {
             try {
                 x -= d;
-                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nextPhi = Complex.phase(next);
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
@@ -184,7 +183,6 @@ public class Rectangle {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
-                prev = next;
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 // e.printStackTrace();
@@ -200,7 +198,7 @@ public class Rectangle {
         while (y > A.getIm()) {
             try {
                 y -= d;
-                Complex next = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
+                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
                 double nextPhi = Complex.phase(next);
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
@@ -209,7 +207,6 @@ public class Rectangle {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
-                prev = next;
                 prevPhi = nextPhi;
             } catch (Exception e) {
                 // e.printStackTrace();
@@ -224,8 +221,7 @@ public class Rectangle {
         windingNumber = windingNumber / (2 * Math.PI);
 
         /** Checks if winding number is non-zero */
-        final double epsilon = 0.001;
-        return Math.abs(windingNumber) > 1 - epsilon;
+        return Math.abs(windingNumber) > 0.9;
     }
 
     /**
@@ -236,13 +232,13 @@ public class Rectangle {
      *
      * @return chlidren the array with children
      */
-    Rectangle[] getChildren() {
+    Solver[] getChildren() {
 
-        Rectangle[] children = new Rectangle[4];
-        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, acc);
-        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, acc);
-        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, acc);
-        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, acc);
+        Solver[] children = new Solver[4];
+        children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, acc);
+        children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, acc);
+        children[2] = new Solver(MIDDLE, BC_mid, C, CD_mid, acc);
+        children[3] = new Solver(AD_mid, MIDDLE, CD_mid, D, acc);
         return children;
     }
 
@@ -261,8 +257,8 @@ public class Rectangle {
             if (this.area <= Math.pow(10, -2 * (this.acc.ordinal() + 3))) {
                 solutions.add(this.MIDDLE);
             } else {
-                Rectangle[] children = this.getChildren();
-                for (Rectangle child : children) {
+                Solver[] children = this.getChildren();
+                for (Solver child : children) {
                     child.solveInside(f_z, solutions);
                 }
             }
@@ -285,7 +281,7 @@ public class Rectangle {
             rounder = 1000d;
         } else if (acc == AcLevel.MED) {
             rounder = 10000d;
-        } else { /* acc= AcLevel.HIGH */
+        } else { /* acc == AcLevel.HIGH */
             rounder = 100000d;
         }
 
@@ -303,7 +299,7 @@ public class Rectangle {
             double reI = solutions.get(i).getRe();
             double imI = solutions.get(i).getIm();
             for (int j = i + 1; j < solutions.size(); j++) {
-                /** Compare with all other Re's & Im's and delete them if duplicated */
+                /** Compare with all other solutions and delete them if duplicated */
                 double reJ = solutions.get(j).getRe();
                 double imJ = solutions.get(j).getIm();
                 if (Math.abs(reJ - reI) <= 10 / rounder && Math.abs(imJ - imI) <= 10 / rounder) {
