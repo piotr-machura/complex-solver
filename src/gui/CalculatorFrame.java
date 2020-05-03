@@ -65,7 +65,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     /** Arguments to pass further */
     String f_z;
-    int range; /* Range of 0 indicates automatic range */
+    double range; /* Range of 0 indicates automatic range */
 
     /**
      * CalculatorFrame constructor.
@@ -243,11 +243,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         rangeInput = new JTextField("10") {
             private static final long serialVersionUID = 1L;
 
-            /** If keypress is not digit/backspace/delete -> do nothing */
+            /** If keypress is not digit/backspace/delete/dot -> do nothing */
             @Override
             public void processKeyEvent(KeyEvent ev) {
                 Character c = ev.getKeyChar();
-                if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
+                if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE
+                        || c.toString().equals("."))) {
                     ev.consume();
                 } else {
                     super.processKeyEvent(ev);
@@ -361,7 +362,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                         if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
                             throw new CalculatorException("Incorrect range");
                         }
-                        this.range = Integer.parseInt(rangeInput.getText());
+                        this.range = Double.valueOf(rangeInput.getText());
                     } else {
                         this.range = 0; /** Range of 0 indicates automatic range */
                     }

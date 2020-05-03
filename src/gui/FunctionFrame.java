@@ -31,7 +31,6 @@ import javax.swing.JTextArea;
 
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
-import algorithm.Solver;
 import algorithm.Solver.Accuracy;
 import parser.function.Complex;
 
@@ -57,7 +56,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
-    Solver rect;
+    double range;
     InputSpace space, animSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
@@ -70,7 +69,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String fz, Accuracy acc, int range) {
+    FunctionFrame(String fz, Accuracy acc, double range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);
@@ -80,17 +79,10 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.setIconImage(ICON.getImage());
 
         /** Set up algorithm components */
+        this.range = range;
         space = new InputSpace(this.fz);
         animSpace = new InputSpace(this.fz);
         outSpace = new OutputSpace(this.fz);
-        solutions = new ArrayList<Complex>(0);
-
-        /** 2 rectangles - one without animation and one with animation */
-        Complex A = new Complex(-range, -range);
-        Complex B = new Complex(range, -range);
-        Complex C = new Complex(range, range);
-        Complex D = new Complex(-range, range);
-        rect = new Solver(A, B, C, D, acc);
 
         /** Panels */
         centerPanel = new JPanel();
@@ -210,16 +202,14 @@ class FunctionFrame extends JFrame implements ActionListener {
      */
     private void addSolutionsToDisplay() {
         String solutionsString = "";
-        if (solutions.size() == 0) {
-            solutionsString = "No zeroes found within square:\n";
+        if (solutions == null || solutions.size() == 0) {
+            solutionsString = "No zeroes found within range " + this.range + ".";
         } else {
-            solutionsString += "Zeroes:\n";
+            solutionsString += "Zeroes within range " + this.range + " :\n";
             for (Complex complex : this.solutions) {
                 solutionsString += complex + "\n";
             }
-            solutionsString += "Within square:\n";
         }
-        solutionsString += this.rect;
         solutionsString.trim();
         solutionsDisplay.setText(solutionsString);
     }
