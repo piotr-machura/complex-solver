@@ -32,7 +32,7 @@ import javax.swing.JTextArea;
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
 import algorithm.Solver;
-import algorithm.Solver.AcLevel;
+import algorithm.Solver.Accuracy;
 import parser.function.Complex;
 
 /**
@@ -54,7 +54,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Other components */
     JTextArea solutionsDisplay;
     JLabel saveGraph, saveSolutions;
-    private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
+    private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
     Solver rect;
@@ -70,7 +70,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String fz, AcLevel acc, int range) {
+    FunctionFrame(String fz, Accuracy acc, int range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);

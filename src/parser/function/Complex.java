@@ -642,6 +642,25 @@ public class Complex implements Comparable<Complex> {
         return sub((add(1.0, this)).log(), div(2.0, ((sub(1.0, this)).negate()).log()));
     }
 
+    /**
+     * comperable interfae implementation.
+     *
+     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
+     *
+     * Numbers are sorted prioritizing real value. If real values are the same, then
+     * sort by imaginary value. If both real and imaginary values are equal then the
+     * numbers are equal.
+     *
+     * Technically speaking complex numbers cannot be cannonically ordered, but this
+     * works just fine.
+     *
+     * @param comp the complex to compare against
+     *
+     * @return 1 if this>comp
+     * @return -1 if comp>this
+     * @return 0 if comp==this
+     */
+
     @Override
     public int compareTo(Complex comp) {
         if (this.re > comp.re) {
@@ -652,8 +671,7 @@ public class Complex implements Comparable<Complex> {
             return -1;
         } else if (this.re == comp.re && this.im > comp.im) {
             return 1;
-        } else {
-            /** this.re == comp.re && this.im == comp.im */
+        } else { /* this.re == comp.re && this.im == comp.im */
             return 0;
         }
     }

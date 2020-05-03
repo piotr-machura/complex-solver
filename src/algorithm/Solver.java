@@ -14,7 +14,7 @@ import parser.util.Variable;
 /*
  * The class Solver
  *
- * Creates a rectangle as shown below:
+ * Creates a square as shown below:
  *
  * D-----CD_mid-----C
  * |                |
@@ -22,30 +22,38 @@ import parser.util.Variable;
  * |                |
  * A-----AB_mid-----B
  *
+ *  and solves for function f_z using recursive bisection and winding number algorithm.
  */
 
 public class Solver {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
-    AcLevel acc;
+    Accuracy acc;
 
-    public enum AcLevel {
+    /**
+     * Accuracy enum
+     *
+     * @param LOW  ~4 significant digits
+     * @param MED  ~5 significant digits
+     * @param HIGH ~6 significant digits
+     */
+    public enum Accuracy {
         LOW, MED, HIGH
     }
 
     /**
      * Rectangle constructor.
      *
-     * Constructs a rectangle using points A, B, C, D (as shown above)
+     * Constructs a square using points A, B, C, D (as shown above)
      *
-     * @param a       the down-left point
-     * @param b       the down-right point
-     * @param c       the up-right point
-     * @param d       the up-left point
-     * @param AcLevel the accuracy level
+     * @param a        the down-left point
+     * @param b        the down-right point
+     * @param c        the up-right point
+     * @param d        the up-left point
+     * @param Accuracy the accuracy level
      */
-    public Solver(Complex a, Complex b, Complex c, Complex d, AcLevel acc) {
+    public Solver(Complex a, Complex b, Complex c, Complex d, Accuracy acc) {
 
         A = a;
         B = b;
@@ -60,19 +68,19 @@ public class Solver {
         AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
         MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
 
-        /** Calculating area of rectangle */
+        /** Calculating area of the square */
         area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
     }
 
     /** toString() */
     public String toString() {
-        String rectString = "";
-        rectString += "D: " + D.toString() + "   ";
-        rectString += "C: " + C.toString() + "\n";
-        rectString += "A: " + A.toString() + "   ";
-        rectString += "B: " + B.toString() + "\n";
-        rectString += "area: " + area;
-        return rectString;
+        String str = "";
+        str += "D: " + D.toString() + "   ";
+        str += "C: " + C.toString() + "\n";
+        str += "A: " + A.toString() + "   ";
+        str += "B: " + B.toString() + "\n";
+        str += "area: " + area;
+        return str;
     }
 
     /**
@@ -91,7 +99,7 @@ public class Solver {
     public Boolean checkInside(String f_z) {
 
         /** Tick of "integration" */
-        double d = 0.01 * Math.sqrt(this.area);
+        double d = 0.005 * Math.sqrt(this.area);
         double windingNumber = 0;
 
         /** Starting point: A */
@@ -111,8 +119,8 @@ public class Solver {
                 /** Go a step forward */
                 x += d;
                 /** Calculate phase after taking a step */
-                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nextPhi = Complex.phase(next);
+                double nextPhi = Complex
+                        .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 /** Calculate phase change */
                 double deltaPhi = nextPhi - prevPhi;
                 /**
@@ -150,8 +158,8 @@ public class Solver {
         while (y < C.getIm()) {
             try {
                 y += d;
-                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nextPhi = Complex.phase(next);
+                double nextPhi = Complex
+                        .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
@@ -174,8 +182,8 @@ public class Solver {
         while (x > D.getRe()) {
             try {
                 x -= d;
-                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nextPhi = Complex.phase(next);
+                double nextPhi = Complex
+                        .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
@@ -198,8 +206,8 @@ public class Solver {
         while (y > A.getIm()) {
             try {
                 y -= d;
-                Complex next = Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue();
-                double nextPhi = Complex.phase(next);
+                double nextPhi = Complex
+                        .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 double deltaPhi = nextPhi - prevPhi;
                 if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
@@ -221,13 +229,13 @@ public class Solver {
         windingNumber = windingNumber / (2 * Math.PI);
 
         /** Checks if winding number is non-zero */
-        return Math.abs(windingNumber) > 0.9;
+        return Math.abs(windingNumber) > 0.95;
     }
 
     /**
      * getChildren.
      *
-     * Splits the rectangle into 4 equal children, enumerated starting bottom left
+     * Splits the square into 4 equal children, enumerated starting bottom left
      * going clockwise
      *
      * @return chlidren the array with children
@@ -245,9 +253,9 @@ public class Solver {
     /**
      * solveInside.
      *
-     * Recursively checks rectangle's winding number, splitting it into 4 children
-     * if it's big and viable and discarding it if it's not viable. If it's small
-     * and viable, adds it's middle to f's solution list
+     * Recursively checks square's winding number, splitting it into 4 children if
+     * it's big and viable and discarding it if it's not viable. If it's small and
+     * viable, adds it's middle to f's solution list
      *
      * @param f_z       the function to solve for
      * @param solutions the arraylist to put solutions in
@@ -274,12 +282,12 @@ public class Solver {
      * @param solutions the solutions to clean up
      * @param acc       the accuracy level
      */
-    public static void cleanUpSolutions(ArrayList<Complex> solutions, AcLevel acc) {
+    public static void cleanUpSolutions(ArrayList<Complex> solutions, Accuracy acc) {
         /** Determine rounding size from acc */
         double rounder;
-        if (acc == AcLevel.LOW) {
+        if (acc == Accuracy.LOW) {
             rounder = 1000d;
-        } else if (acc == AcLevel.MED) {
+        } else if (acc == Accuracy.MED) {
             rounder = 10000d;
         } else { /* acc == AcLevel.HIGH */
             rounder = 100000d;

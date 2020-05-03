@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import algorithm.Solver.AcLevel;
+import algorithm.Solver.Accuracy;
 import parser.exception.CalculatorException;
 
 /**
@@ -350,11 +350,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 this.f_z = funcInput.getText();
                 try {
                     this.attemptFix();
-                    AcLevel acc = AcLevel.MED;
+                    Accuracy acc = Accuracy.MED;
                     if (accuracyMenu.getSelectedItem().equals("LOW")) {
-                        acc = AcLevel.LOW;
+                        acc = Accuracy.LOW;
                     } else if (accuracyMenu.getSelectedItem().equals("HIGH")) {
-                        acc = AcLevel.HIGH;
+                        acc = Accuracy.HIGH;
                     }
                     if (!rangeAuto.isSelected()) {
                         /** Throw exception if range is not valid */
@@ -386,8 +386,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  *
                  * TODO: delete entire functions (ex. sin(z))
                  */
-                //
                 if (caretPosition == 0) {
+                    /** Edge case: caret at the beggining -> do nothing */
                     funcInput.requestFocus();
                     break;
                 }
