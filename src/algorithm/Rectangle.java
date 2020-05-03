@@ -5,9 +5,6 @@ package algorithm;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
-
 import parser.exception.CalculatorException;
 import parser.function.Complex;
 import parser.main.Parser;
@@ -28,29 +25,30 @@ public class Rectangle {
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
-    int accuracyLevel;
-    InputSpace space;
+    AcLevel acc;
+
+    public enum AcLevel {
+        LOW, MED, HIGH
+    }
 
     /**
      * Rectangle constructor.
      *
      * Constructs a rectangle using points A, B, C, D (as shown above)
      *
-     * @param a             the down-left point
-     * @param b             the down-right point
-     * @param c             the up-right point
-     * @param d             the up-left point
-     * @param space         the input space to draw in
-     * @param accuracyLevel the accuracy level
+     * @param a       the down-left point
+     * @param b       the down-right point
+     * @param c       the up-right point
+     * @param d       the up-left point
+     * @param AcLevel the accuracy level
      */
-    public Rectangle(Complex a, Complex b, Complex c, Complex d, InputSpace space, int accuracyLevel) {
+    public Rectangle(Complex a, Complex b, Complex c, Complex d, AcLevel acc) {
 
         A = a;
         B = b;
         C = c;
         D = d;
-        this.space = space;
-        this.accuracyLevel = accuracyLevel;
+        this.acc = acc;
 
         /** Calculating mid-points based on given points */
         AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
@@ -89,21 +87,17 @@ public class Rectangle {
      */
     public Boolean checkInside(String f) {
 
-        /** Tick of "integration" - 1000 points checked per side length */
-        double d = 0.001 * Math.sqrt(this.area);
+        /** Tick of "integration" */
+        double d = 0.005 * Math.sqrt(this.area) / (this.acc.ordinal() + 1);
         double windingNumber = 0;
 
-        /** Starting number: A */
+        /** Starting point: A */
         double x = A.getRe();
         double y = A.getIm();
 
         /** Path A->B (going right) */
         while (x < B.getRe()) {
             try {
-                /** For small rectangles there is no need to draw them */
-                if (this.area > 0.001 && space != null) {
-                    space.addPoint(new Complex(x, y));
-                }
                 /** Calculate phase prior to step */
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
@@ -118,14 +112,14 @@ public class Rectangle {
                  * If phsase change is close to 2PI assume that positive x axis was crossed
                  * negtively
                  */
-                if (deltaPhi > 1.9 * Math.PI) {
+                if (deltaPhi > 1.8 * Math.PI) {
                     deltaPhi -= 2 * Math.PI;
                 }
                 /**
                  * If phsase change is close to -2PI assume that positive x axis was crossed
                  * positively
                  */
-                else if (deltaPhi < -1.9 * Math.PI) {
+                else if (deltaPhi < -1.8 * Math.PI) {
                     deltaPhi += 2 * Math.PI;
                 }
                 windingNumber += deltaPhi;
@@ -147,9 +141,6 @@ public class Rectangle {
         /** Path B->C (going up) */
         while (y < C.getIm()) {
             try {
-                if (this.area > 0.001 && space != null) {
-                    space.addPoint(new Complex(x, y));
-                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 y += d;
@@ -175,9 +166,6 @@ public class Rectangle {
         /** Path C->D (going left) */
         while (x > D.getRe()) {
             try {
-                if (this.area > 0.001 && space != null) {
-                    space.addPoint(new Complex(x, y));
-                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 x -= d;
@@ -203,9 +191,6 @@ public class Rectangle {
         /** Path D->A (going down) */
         while (y > A.getIm()) {
             try {
-                if (this.area > 0.001 && space != null) {
-                    space.addPoint(new Complex(x, y));
-                }
                 Complex prev = Parser.eval(f, new Variable("z", new Complex(x, y))).getComplexValue();
                 double prevPhi = Complex.phase(prev);
                 y -= d;
@@ -238,18 +223,18 @@ public class Rectangle {
     /**
      * getChildren.
      *
-     * Splits the rectangle into 4 children, enumerated starting bottom left
-     * clockwise
+     * Splits the rectangle into 4 equal children, enumerated starting bottom left
+     * going clockwise
      *
      * @return chlidren the array with children
      */
     Rectangle[] getChildren() {
 
         Rectangle[] children = new Rectangle[4];
-        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, space, accuracyLevel);
-        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, space, accuracyLevel);
-        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, space, accuracyLevel);
-        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, space, accuracyLevel);
+        children[0] = new Rectangle(A, AB_mid, MIDDLE, AD_mid, acc);
+        children[1] = new Rectangle(AB_mid, B, BC_mid, MIDDLE, acc);
+        children[2] = new Rectangle(MIDDLE, BC_mid, C, CD_mid, acc);
+        children[3] = new Rectangle(AD_mid, MIDDLE, CD_mid, D, acc);
         return children;
     }
 
@@ -260,49 +245,64 @@ public class Rectangle {
      * if it's big and viable and discarding it if it's not viable. If it's small
      * and viable, adds it's middle to f's solution list
      *
-     * @param fz        the function
-     * @param solutions the list to put solutions in
+     * @param f_z       the function to solve for
+     * @param solutions the arraylist to put solutions in
      */
-    public void solveInside(String fz, ArrayList<Complex> solutions) {
-        if (this.checkInside(fz)) {
-            if (this.area <= Math.pow(10, -5 * this.accuracyLevel)) {
+    public void solveInside(String f_z, ArrayList<Complex> solutions) {
+        if (this.checkInside(f_z)) {
+            if (this.area <= Math.pow(10, -5 * (this.acc.ordinal() + 1))) {
                 solutions.add(this.MIDDLE);
             } else {
                 Rectangle[] children = this.getChildren();
                 for (Rectangle child : children) {
-                    child.solveInside(fz, solutions);
+                    child.solveInside(f_z, solutions);
                 }
             }
         }
     }
 
-    public static void main(String[] args) {
-        String f = "cos(z)";
-        System.out.println(f);
-        InputSpace space = new InputSpace(f);
-        // OutputSpace output = new OutputSpace(f);
+    /**
+     * cleanUpSolutions.
+     *
+     * round all solutions according to provided AcLevel and remove duplicates
+     * according to provided Aclevel
+     *
+     * @param solutions the solutions to clean up
+     * @param acc       the accuracy level
+     */
+    public static void cleanUpSolutions(ArrayList<Complex> solutions, AcLevel acc) {
+        /** Determine rounding size from acc */
+        double rounder;
+        if (acc == AcLevel.LOW) {
+            rounder = 1000d;
+        } else if (acc == AcLevel.MED) {
+            rounder = 10000d;
+        } else { /* acc= AcLevel.HIGH */
+            rounder = 100000d;
+        }
 
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.add(space);
-        frame.setVisible(true);
+        /** Round decimals according to accuracyLevel */
+        for (int i = 0; i < solutions.size(); i++) {
 
-        // JFrame frame2 = new JFrame();
-        // frame2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        // frame2.setSize(300, 300);
-        // frame2.add(output);
-        // frame2.setVisible(true);
+            double reI = (double) Math.round(solutions.get(i).getRe() * rounder) / rounder;
+            double imI = (double) Math.round(solutions.get(i).getIm() * rounder) / rounder;
+            solutions.set(i, new Complex(reI, imI));
+        }
 
-        Complex A = new Complex(-5, -5);
-        Complex B = new Complex(5, -5);
-        Complex C = new Complex(5, 5);
-        Complex D = new Complex(-5, 5);
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
-        Rectangle s1 = new Rectangle(A, B, C, D, null, 4);
-        System.out.println("Solving for: " + f + "= 0 in rectangle: \n" + s1);
-        s1.solveInside(f, solutions);
-        System.out.println(solutions);
+        /** Remove duplicates */
+        for (int i = 0; i < solutions.size() - 1; i++) {
+            /** Take current Re & Im */
+            double reI = solutions.get(i).getRe();
+            double imI = solutions.get(i).getIm();
+            for (int j = i + 1; j < solutions.size(); j++) {
+                /** Compare with all other Re's & Im's and delete them if duplicated */
+                double reJ = solutions.get(j).getRe();
+                double imJ = solutions.get(j).getIm();
+                if (Math.abs(reJ - reI) <= 10 / rounder && Math.abs(imJ - imI) <= 10 / rounder) {
+                    solutions.remove(j);
+                }
+
+            }
+        }
     }
-
 }

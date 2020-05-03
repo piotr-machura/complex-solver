@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import algorithm.Rectangle.AcLevel;
 import parser.exception.CalculatorException;
 
 /**
@@ -52,7 +53,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JMenu lanMenu, helpMenu;
     JMenuItem en, pl, help, credits;
     JRadioButton rangeAuto;
-    JComboBox<Integer> accuracyMenu;
+    JComboBox<String> accuracyMenu;
 
     /** Other elements */
     JTextField funcInput, rangeInput;
@@ -64,7 +65,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     /** Arguments to pass further */
     String fz;
-    int accuracy;
     int range; /* Range of 0 indicates automatic range */
 
     /**
@@ -79,7 +79,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         this.setIconImage(ICON.getImage());
         this.range = 10;
-        this.accuracy = 1;
 
         /** Initializing panels */
         centerPanel = new JPanel();
@@ -270,10 +269,10 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         /** Accuracy */
         accMenuLabel = new JLabel("Accuracy");
-        Integer[] accuracyMenuContents = { 1, 2, 3, 4 };
-        accuracyMenu = new JComboBox<Integer>(accuracyMenuContents);
+        String[] accuracyMenuContents = { "LOW", "MED", "HIGH" };
+        accuracyMenu = new JComboBox<String>(accuracyMenuContents);
         accuracyMenu.setBackground(Color.WHITE);
-
+        accuracyMenu.setSelectedItem("MED");
         accuracyContainer.setLayout(new GridLayout(3, 1, 0, 5));
         accuracyContainer.add(accMenuLabel);
         accuracyContainer.add(accuracyMenu);
@@ -351,7 +350,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 this.fz = funcInput.getText();
                 try {
                     this.attemptFix();
-                    this.accuracy = Integer.parseInt(String.valueOf(accuracyMenu.getSelectedItem()));
+                    AcLevel acc = AcLevel.MED;
+                    if (accuracyMenu.getSelectedItem().equals("LOW")) {
+                        acc = AcLevel.LOW;
+                    } else if (accuracyMenu.getSelectedItem().equals("HIGH")) {
+                        acc = AcLevel.HIGH;
+                    }
                     if (!rangeAuto.isSelected()) {
                         /** Throw exception if range is not valid */
                         if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
@@ -361,7 +365,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     } else {
                         this.range = 0; /** Range of 0 indicates automatic range */
                     }
-                    FunctionFrame fFrame = new FunctionFrame(fz, accuracy, range);
+                    FunctionFrame fFrame = new FunctionFrame(fz, acc, range);
                     fFrame.setVisible(true);
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",

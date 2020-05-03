@@ -32,6 +32,7 @@ import javax.swing.JTextArea;
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
 import algorithm.Rectangle;
+import algorithm.Rectangle.AcLevel;
 import parser.function.Complex;
 
 /**
@@ -69,7 +70,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String fz, int accuracy, int range) {
+    FunctionFrame(String fz, AcLevel acc, int range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);
@@ -89,8 +90,8 @@ class FunctionFrame extends JFrame implements ActionListener {
         Complex B = new Complex(range, -range);
         Complex C = new Complex(range, range);
         Complex D = new Complex(-range, range);
-        rect = new Rectangle(A, B, C, D, null, accuracy);
-        animRect = new Rectangle(A, B, C, D, space, accuracy);
+        rect = new Rectangle(A, B, C, D, acc);
+        animRect = new Rectangle(A, B, C, D, acc);
 
         /** Panels */
         centerPanel = new JPanel();
@@ -206,7 +207,6 @@ class FunctionFrame extends JFrame implements ActionListener {
      * addSolutionsToDisplay.
      *
      * Creates a neat string of text from solutions and puts it in solutionsDisplay.
-     * TODO: Make it clean up the solutions (remove duplicates etc.)
      */
     private void addSolutionsToDisplay() {
         String solutionsString = "";
