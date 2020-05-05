@@ -223,6 +223,7 @@ public class Solver {
         try {
             prevPhi = Complex.phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
         } catch (Exception e) {
+            prevPhi = 0;
             /** Strating in zero - might as well consider phase to be zero. */
         }
 
@@ -236,7 +237,7 @@ public class Solver {
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
-            } catch (CalculatorException e) {
+            } catch (Exception e) {
                 /**
                  * This means a zero was encountered and phase cannot be calculated. If moving a
                  * step forward won't go outisde boundary then move, if it will go outisde
@@ -263,7 +264,7 @@ public class Solver {
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
-            } catch (CalculatorException e) {
+            } catch (Exception e) {
                 if (y + step < C.getIm()) {
                     y += step;
                 } else {
@@ -280,7 +281,7 @@ public class Solver {
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
-            } catch (CalculatorException e) {
+            } catch (Exception e) {
                 if (x - step > D.getRe()) {
                     x -= step;
                 } else {
@@ -297,7 +298,7 @@ public class Solver {
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
-            } catch (Exception e) {
+            } catch (CalculatorException e) {
                 if (y - step > A.getIm()) {
                     y -= step;
                 } else {
@@ -349,8 +350,15 @@ public class Solver {
                  * "equator"). Both of them will have non zero winding number, but we only want
                  * roots, not poles.
                  */
-                if (Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 1) {
-                    solutions.add(this.MIDDLE);
+                try {
+                    Boolean root = Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 1;
+                    if (root) {
+                        solutions.add(this.MIDDLE);
+                    }
+                } catch (CalculatorException e) {
+                    /**
+                     * This means it's probably a pole too - do not add it
+                     */
                 }
             } else {
                 Solver[] children = this.getChildren();

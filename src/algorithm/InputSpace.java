@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import parser.exception.CalculatorException;
 import parser.function.Complex;
 import parser.main.Parser;
 import parser.util.Variable;
@@ -73,8 +74,12 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
                 double x = i * tickX;
                 double y = j * tickY;
                 Variable z0 = new Variable("z", new Complex(x, y));
+                Complex z = new Complex();
+                try {
+                    z = Parser.eval(f, z0).getComplexValue();
+                } catch (CalculatorException e) {
+                }
 
-                Complex z = Parser.eval(f, z0).getComplexValue();
                 double fi;
                 try {
                     fi = Complex.phase(z) / 2 / Math.PI;

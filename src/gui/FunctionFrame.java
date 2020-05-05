@@ -83,7 +83,16 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Set up algorithm components */
         this.range = range;
         solutions = null;
-        inpSpace = new InputSpace(this.f_z);
+        // SwingUtilities.invokeLater(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        // inpSpace = new InputSpace(f_z);
+        // FunctionFrame.this.add(inpSpace, BorderLayout.CENTER);
+        // }
+        //
+        // });
+
         outSpace = new OutputSpace(this.f_z);
         this.acc = acc;
 
@@ -177,7 +186,6 @@ class FunctionFrame extends JFrame implements ActionListener {
 
         /** Add main panels to frame */
         this.setLayout(new BorderLayout());
-        this.add(inpSpace, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         /* Solve and showcase roots */

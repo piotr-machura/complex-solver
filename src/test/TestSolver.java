@@ -957,4 +957,47 @@ public class TestSolver {
         }
     }
 
+    @Test
+    public void testSolver_67() {
+        String f_z = "(z-4)/sin(z)";
+        Accuracy acc = Accuracy.LOW;
+        Complex[] expected = { new Complex(4, 0) };
+
+        ArrayList<Complex> solutions = Solver.solve(range, f_z, acc);
+        assertEquals(expected.length, solutions.size());
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.001);
+            assertEquals(expected[i].getIm(), solutions.get(i).getIm(), 0.001);
+        }
+    }
+
+    @Test
+    public void testSolver_68() {
+        String f_z = "z*(z-4)*cos(z) *e^z";
+        Accuracy acc = Accuracy.MED;
+        Complex[] expected = { new Complex(-1.5 * Math.PI, 0), new Complex(-0.5 * Math.PI, 0), new Complex(0, 0),
+                new Complex(0.5 * Math.PI, 0), new Complex(4, 0), new Complex(1.5 * Math.PI, 0) };
+
+        ArrayList<Complex> solutions = Solver.solve(range, f_z, acc);
+        assertEquals(expected.length, solutions.size());
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.0001);
+            assertEquals(expected[i].getIm(), solutions.get(i).getIm(), 0.0001);
+        }
+    }
+
+    @Test
+    public void testSolver_69() {
+        String f_z = "z*(z-4)*cos(z) *e^z";
+        Accuracy acc = Accuracy.HIGH;
+        Complex[] expected = { new Complex(-1.5 * Math.PI, 0), new Complex(-0.5 * Math.PI, 0), new Complex(0, 0),
+                new Complex(0.5 * Math.PI, 0), new Complex(4, 0), new Complex(1.5 * Math.PI, 0) };
+
+        ArrayList<Complex> solutions = Solver.solve(range, f_z, acc);
+        assertEquals(expected.length, solutions.size());
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i].getRe(), solutions.get(i).getRe(), 0.00001);
+            assertEquals(expected[i].getIm(), solutions.get(i).getIm(), 0.00001);
+        }
+    }
 }
