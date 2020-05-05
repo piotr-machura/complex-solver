@@ -181,9 +181,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         /** Function buttons. Each buttons "name" and function is its hash key */
         fnButtons = new HashMap<String, CalcButton>();
         fnButtons.put("ln", new CalcButton("ln", this));
+        fnButtons.put("log", new CalcButton("log", this));
         fnButtons.put("sin", new CalcButton("sin", this));
         fnButtons.put("cos", new CalcButton("cos", this));
-        fnButtons.put("tan", new CalcButton("tan", this));
         fnButtons.put("sinh", new CalcButton("sinh", this));
         fnButtons.put("cosh", new CalcButton("cosh", this));
 
@@ -198,17 +198,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             calcButtonsContainer.add(nmbButtons[i]);
         }
         calcButtonsContainer.add(opButtons.get("e"));
-        calcButtonsContainer.add(fnButtons.get("sin"));
+        calcButtonsContainer.add(opButtons.get("i"));
+
         for (int i = 7; i < 10; i++) {
             calcButtonsContainer.add(nmbButtons[i]);
         }
-        calcButtonsContainer.add(fnButtons.get("ln"));
+        calcButtonsContainer.add(fnButtons.get("sin"));
         calcButtonsContainer.add(fnButtons.get("cos"));
         calcButtonsContainer.add(opButtons.get("."));
         calcButtonsContainer.add(nmbButtons[0]);
         calcButtonsContainer.add(opButtons.get("z"));
-        calcButtonsContainer.add(opButtons.get("i"));
-        calcButtonsContainer.add(fnButtons.get("tan"));
+        calcButtonsContainer.add(fnButtons.get("ln"));
+        calcButtonsContainer.add(fnButtons.get("log"));
+
         calcButtonsContainer.add(opButtons.get("+"));
         calcButtonsContainer.add(opButtons.get("-"));
         calcButtonsContainer.add(opButtons.get("*"));

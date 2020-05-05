@@ -28,10 +28,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
 import algorithm.Solver.Accuracy;
+import algorithm.Solver;
 import parser.function.Complex;
 
 /**
@@ -56,10 +58,11 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Algorithm components */
     final String f_z;
     final double range;
-    InputSpace space, animSpace;
+    InputSpace inpSpace, animSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
     JFrame outFrame;
+    Accuracy acc;
 
     /**
      * FunctionFrame constructor.
@@ -80,9 +83,9 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Set up algorithm components */
         this.range = range;
         solutions = null;
-        space = new InputSpace(this.f_z);
-        animSpace = new InputSpace(this.f_z);
+        inpSpace = new InputSpace(this.f_z);
         outSpace = new OutputSpace(this.f_z);
+        this.acc = acc;
 
         /** Panels */
         centerPanel = new JPanel();
@@ -135,6 +138,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveSolutions.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         saveSolutions.setForeground(Color.BLUE.darker());
         saveSolutions.setHorizontalAlignment(JLabel.CENTER);
+
         /** Add listeners to hyperlinks */
         saveSolutions.addMouseListener(new MouseAdapter() {
             @Override
@@ -142,28 +146,12 @@ class FunctionFrame extends JFrame implements ActionListener {
                 // TODO: saving implementation
                 System.out.println("Saving solutions not implemented");
             }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
         });
         saveGraph.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // TODO: saving implementation
                 System.out.println("Saving the graph not implemented");
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
             }
         });
 
@@ -187,31 +175,31 @@ class FunctionFrame extends JFrame implements ActionListener {
 
         /** Add main panels to frame */
         this.setLayout(new BorderLayout());
-        this.add(space, BorderLayout.CENTER);
+        this.add(inpSpace, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
-        // TODO: Wire up solver here
-
-        this.addSolutionsToDisplay();
-    }
-
-    /**
-     * addSolutionsToDisplay.
-     *
-     * Creates a neat string of text from solutions and puts it in solutionsDisplay.
-     */
-    private void addSolutionsToDisplay() {
-        String solutionsString = "";
-        if (solutions == null || solutions.size() == 0) {
-            solutionsString = "No zeroes found within range " + this.range + ".";
-        } else {
-            solutionsString += "Zeroes within range " + this.range + " :\n";
-            for (Complex complex : this.solutions) {
-                solutionsString += complex + "\n";
+        /* Solve and showcase roots */
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                /** Use solver to get solutions */
+                solutions = Solver.solve(range, f_z, acc);
+                /** Format solutions */
+                String solutionsString = "";
+                if (solutions == null || solutions.size() == 0) {
+                    solutionsString = "No roots found within range " + range + ".";
+                } else {
+                    solutionsString += "Roots within range " + range + " :\n";
+                    for (Complex complex : solutions) {
+                        solutionsString += complex + "\n";
+                    }
+                }
+                solutionsString.trim();
+                /** Add solutions to display and scroll to top */
+                solutionsDisplay.setText(solutionsString);
+                solutionsDisplay.setCaretPosition(0);
             }
-        }
-        solutionsString.trim();
-        solutionsDisplay.setText(solutionsString);
+        });
     }
 
     @Override
