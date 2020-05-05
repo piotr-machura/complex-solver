@@ -83,15 +83,15 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Set up algorithm components */
         this.range = range;
         solutions = null;
-        // SwingUtilities.invokeLater(new Runnable() {
-        //
-        // @Override
-        // public void run() {
-        // inpSpace = new InputSpace(f_z);
-        // FunctionFrame.this.add(inpSpace, BorderLayout.CENTER);
-        // }
-        //
-        // });
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                inpSpace = new InputSpace(f_z);
+                FunctionFrame.this.add(inpSpace, BorderLayout.CENTER);
+            }
+
+        });
 
         outSpace = new OutputSpace(this.f_z);
         this.acc = acc;

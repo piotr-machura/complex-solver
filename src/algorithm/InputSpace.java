@@ -78,6 +78,7 @@ public class InputSpace extends JPanel implements MouseMotionListener, MouseList
                 try {
                     z = Parser.eval(f, z0).getComplexValue();
                 } catch (CalculatorException e) {
+                    z = new Complex(1000000, 1000000);
                 }
 
                 double fi;
