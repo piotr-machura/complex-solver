@@ -309,7 +309,7 @@ public class Solver {
         windingNumber = windingNumber / (2 * Math.PI);
 
         /** Checks if winding number is non-zero */
-        return Math.abs(windingNumber) > 0.9;
+        return Math.abs(windingNumber) > 0.95;
     }
 
     /**
@@ -349,7 +349,7 @@ public class Solver {
                  * "equator"). Both of them will have non zero winding number, but we only want
                  * roots, not poles.
                  */
-                if (Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 00.1) {
+                if (Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 1) {
                     solutions.add(this.MIDDLE);
                 }
             } else {
