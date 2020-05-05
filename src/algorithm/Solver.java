@@ -52,7 +52,13 @@ public class Solver {
      * range, sorted in ascending order according to method described in
      * Complex.compareTo() function.
      *
+     * Current problem: roots and poles tend to "cancel" each other if they both
+     * fall in the same square. Solution is to divide the initial square into many
+     * small ones and solve in each of them idividually.
+     *
      * TODO: create a version with range 0 (an "auto sized" solver).
+     *
+     * TODO: make it split the initial square into many small ones.
      *
      * @param range         half of the sidelength of rectangle to look in
      * @param f_z           the function to solve
@@ -60,17 +66,46 @@ public class Solver {
      *
      * @return solutions the formatted and sorted ArrayList of solutions
      */
-    public static ArrayList<Complex> solve(final double range, final String f_z, final Accuracy accuracyLevel) {
-        /**
-         * Get solutions inside rectangle of side length 2*range using recursive
-         * solveInside function.
-         */
-        Complex A = new Complex(-range, -range);
-        Complex B = new Complex(range, -range);
-        Complex C = new Complex(range, range);
-        Complex D = new Complex(-range, range);
+    public static ArrayList<Complex> solve(final int range, final String f_z, final Accuracy accuracyLevel) {
+
         ArrayList<Complex> solutions = new ArrayList<Complex>();
-        new Solver(A, B, C, D, accuracyLevel).solveInside(f_z, solutions);
+
+        /**
+         * To avoid roots and poles canceling each other: divide starting rectangle into
+         * tiny squares first and solve in each of them.
+         *
+         * ! BUT IT DOESN'T WORK (fails to find a lot of zeroes).
+         *
+         * WHY DOES IT NOT WORK SPLITTING IT INTO 4 SQARES IS LITERALLY THE FIRST THING
+         * THAT HAPPENS AFTER YOU INVOKE SOLVEINSIDE WHY DOES IT FAIL 18 TESTS IF I DO
+         * IT MANUALLY???
+         *
+         * Ok it works when using getChildren, but WHY???
+         *
+         * TODO: Fix it so that no nested children loops are needed
+         */
+        double divRangeX = -range;
+        double divRangeY = -range;
+        while (divRangeY < range) {
+            while (divRangeX < range) {
+                Complex A = new Complex(divRangeX, divRangeY);
+                Complex B = new Complex(divRangeX + 2 * range, divRangeY);
+                Complex C = new Complex(divRangeX + 2 * range, divRangeY + 2 * range);
+                Complex D = new Complex(divRangeX, divRangeY + 2 * range);
+                Solver[] children1 = new Solver(A, B, C, D, accuracyLevel).getChildren();
+                for (Solver child1 : children1) {
+                    Solver[] children2 = child1.getChildren();
+                    for (Solver child2 : children2) {
+                        Solver[] children3 = child2.getChildren();
+                        for (Solver child3 : children3) {
+                            child3.solveInside(f_z, solutions);
+                        }
+                    }
+                }
+                divRangeX += 2 * range;
+            }
+            divRangeY += 2 * range;
+        }
 
         /**
          * Round all soultions according to acc, delete duplicates and sort list
@@ -141,6 +176,33 @@ public class Solver {
     }
 
     /**
+     * deltaPhi.
+     *
+     * Calculates corrected phase change between two points.
+     */
+    double deltaPhi(double prevPhi, double nextPhi) {
+        /** Calculate phase change */
+        double deltaPhi = nextPhi - prevPhi;
+        /**
+         * If the phase went from small -> big (ex. 0.1PI -> 1.9 PI, deltaPhi == 1.8PI)
+         * this means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from
+         * deltaPhi (1.8PI - 2PI = -0.2PI, correct phase change)
+         */
+        if (deltaPhi > 1.8 * Math.PI) {
+            deltaPhi -= 2 * Math.PI;
+        }
+        /**
+         * If the phase went from big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI)
+         * this means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi
+         * (-1.8PI +2PI = 0.2PI, correct phase change).
+         */
+        else if (deltaPhi < -1.8 * Math.PI) {
+            deltaPhi += 2 * Math.PI;
+        }
+        return deltaPhi;
+    }
+
+    /**
      * checkWindingNumber.
      *
      * Check winding number in relation to function f_z.
@@ -172,25 +234,7 @@ public class Solver {
                 /** Calculate phase after taking a step */
                 double nextPhi = Complex
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
-                /** Calculate phase change */
-                double deltaPhi = nextPhi - prevPhi;
-                /**
-                 * If the phase went from small -> big (ex. 0.1PI -> 1.9 PI, deltaPhi == 1.8PI)
-                 * this means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from
-                 * deltaPhi (1.8PI - 2PI = -0.2PI, correct phase change)
-                 */
-                if (deltaPhi > 1.8 * Math.PI) {
-                    deltaPhi -= 2 * Math.PI;
-                }
-                /**
-                 * If the phase went from big -> small (ex. 1.9PI -> 0.1 PI, deltaPhi == -1.8PI)
-                 * this means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi
-                 * (-1.8PI +2PI = 0.2PI, correct phase change).
-                 */
-                else if (deltaPhi < -1.8 * Math.PI) {
-                    deltaPhi += 2 * Math.PI;
-                }
-                windingNumber += deltaPhi;
+                windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 /**
@@ -217,13 +261,7 @@ public class Solver {
                 y += step;
                 double nextPhi = Complex
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
-                double deltaPhi = nextPhi - prevPhi;
-                if (deltaPhi > 1.8 * Math.PI) {
-                    deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -1.8 * Math.PI) {
-                    deltaPhi += 2 * Math.PI;
-                }
-                windingNumber += deltaPhi;
+                windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 if (y + step < C.getIm()) {
@@ -240,13 +278,7 @@ public class Solver {
                 x -= step;
                 double nextPhi = Complex
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
-                double deltaPhi = nextPhi - prevPhi;
-                if (deltaPhi > 1.8 * Math.PI) {
-                    deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -1.8 * Math.PI) {
-                    deltaPhi += 2 * Math.PI;
-                }
-                windingNumber += deltaPhi;
+                windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
             } catch (CalculatorException e) {
                 if (x - step > D.getRe()) {
@@ -263,13 +295,7 @@ public class Solver {
                 y -= step;
                 double nextPhi = Complex
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
-                double deltaPhi = nextPhi - prevPhi;
-                if (deltaPhi > 1.8 * Math.PI) {
-                    deltaPhi -= 2 * Math.PI;
-                } else if (deltaPhi < -1.8 * Math.PI) {
-                    deltaPhi += 2 * Math.PI;
-                }
-                windingNumber += deltaPhi;
+                windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
             } catch (Exception e) {
                 if (y - step > A.getIm()) {
@@ -283,7 +309,21 @@ public class Solver {
         windingNumber = windingNumber / (2 * Math.PI);
 
         /** Checks if winding number is non-zero */
-        return Math.abs(windingNumber) > 0.95;
+        return Math.abs(windingNumber) > 0.9;
+    }
+
+    /**
+     * getChildren.
+     *
+     * @return array of 4 equal children enumerated starting bottom left clockwise
+     */
+    Solver[] getChildren() {
+        Solver[] children = new Solver[4];
+        children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, accuracyLevel);
+        children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, accuracyLevel);
+        children[2] = new Solver(MIDDLE, BC_mid, C, CD_mid, accuracyLevel);
+        children[3] = new Solver(AD_mid, MIDDLE, CD_mid, D, accuracyLevel);
+        return children;
     }
 
     /**
@@ -299,13 +339,21 @@ public class Solver {
     private void solveInside(final String f_z, ArrayList<Complex> solutions) {
         if (this.checkWindingNumber(f_z)) {
             if (this.area <= Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3))) {
-                solutions.add(this.MIDDLE);
+                /**
+                 * Add MIDDLE to solutions, but only if Abs(f_z(MIDDLE)) is small. This needs to
+                 * be checked because this algorithm will detect both roots AND poles of a
+                 * function.
+                 *
+                 * Why? Google Reimann sphere and imagine a point travelling around zero (below
+                 * the "equator"), and then another point spinning around infinity (above the
+                 * "equator"). Both of them will have non zero winding number, but we only want
+                 * roots, not poles.
+                 */
+                if (Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 00.1) {
+                    solutions.add(this.MIDDLE);
+                }
             } else {
-                Solver[] children = new Solver[4];
-                children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, accuracyLevel);
-                children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, accuracyLevel);
-                children[2] = new Solver(MIDDLE, BC_mid, C, CD_mid, accuracyLevel);
-                children[3] = new Solver(AD_mid, MIDDLE, CD_mid, D, accuracyLevel);
+                Solver[] children = this.getChildren();
                 for (Solver child : children) {
                     child.solveInside(f_z, solutions);
                 }

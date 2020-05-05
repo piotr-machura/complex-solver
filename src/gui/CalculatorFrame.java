@@ -65,7 +65,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     /** Arguments to pass further */
     String f_z;
-    double range; /* Range of 0 indicates automatic range */
+    int range; /* Range of 0 indicates automatic range */
 
     /**
      * CalculatorFrame constructor.
@@ -249,8 +249,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             @Override
             public void processKeyEvent(KeyEvent ev) {
                 Character c = ev.getKeyChar();
-                if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE
-                        || c.toString().equals("."))) {
+                if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
                     ev.consume();
                 } else {
                     super.processKeyEvent(ev);
@@ -364,7 +363,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                         if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
                             throw new CalculatorException("Incorrect range");
                         }
-                        this.range = Double.valueOf(rangeInput.getText());
+                        this.range = Integer.parseInt(rangeInput.getText());
                     } else {
                         this.range = 0; /** Range of 0 indicates automatic range */
                     }

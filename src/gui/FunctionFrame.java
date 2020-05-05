@@ -57,7 +57,7 @@ class FunctionFrame extends JFrame implements ActionListener {
 
     /** Algorithm components */
     final String f_z;
-    final double range;
+    final int range;
     InputSpace inpSpace, animSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
@@ -71,7 +71,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String f_z, Accuracy acc, double range) {
+    FunctionFrame(String f_z, Accuracy acc, int range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);
@@ -112,9 +112,11 @@ class FunctionFrame extends JFrame implements ActionListener {
         solutionsDisplay = new JTextArea(4, 25);
         solutionsDisplay.setEnabled(false);
         solutionsDisplay.setDisabledTextColor(Color.BLACK);
+        solutionsDisplay.setFont(new Font("Sans Serrif", Font.PLAIN, 16));
         solutionsWrapper = new JScrollPane(solutionsDisplay);
         solutionsWrapper.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         solutionsWrapper.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        solutionsWrapper.setPreferredSize(new Dimension(300, 75));
 
         /** Output space button */
         outSpaceButton = new JButton("Output space");
@@ -189,12 +191,15 @@ class FunctionFrame extends JFrame implements ActionListener {
                 if (solutions == null || solutions.size() == 0) {
                     solutionsString = "No roots found within range " + range + ".";
                 } else {
-                    solutionsString += "Roots within range " + range + " :\n";
+                    solutionsString += "Roots in range " + range + "\n";
+                    int ordinal = 1;
                     for (Complex complex : solutions) {
+                        solutionsString += ordinal + "|  ";
                         solutionsString += complex + "\n";
+                        ordinal += 1;
                     }
                 }
-                solutionsString.trim();
+                solutionsString = solutionsString.trim();
                 /** Add solutions to display and scroll to top */
                 solutionsDisplay.setText(solutionsString);
                 solutionsDisplay.setCaretPosition(0);
