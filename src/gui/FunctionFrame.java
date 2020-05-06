@@ -9,6 +9,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,14 +18,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,8 +42,8 @@ import javax.swing.SwingUtilities;
 
 import algorithm.InputSpace;
 import algorithm.OutputSpace;
-import algorithm.Solver.Accuracy;
 import algorithm.Solver;
+import algorithm.Solver.Accuracy;
 import parser.function.Complex;
 
 /**
@@ -150,19 +160,61 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveSolutions.setForeground(Color.BLUE.darker());
         saveSolutions.setHorizontalAlignment(JLabel.CENTER);
 
+        /** File chooser for saving the output */
+
         /** Add listeners to hyperlinks */
         saveSolutions.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO: saving implementation
-                System.out.println("Saving solutions not implemented");
+                try {
+                    /** Choose file to save to with fileChooser */
+                    JFileChooser fileChooser = new JFileChooser("Save solutions");
+                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
+                        File outputFile = new File(fileChooser.getSelectedFile() + ".txt");
+
+                        /** osw writes text form textArea to selected file */
+                        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputFile),
+                                Charset.forName("UTF-8").newEncoder());
+                        osw.write(solutionsDisplay.getText());
+                        osw.close();
+
+                        /** Notify user about succesful write */
+                        JOptionPane.showMessageDialog(FunctionFrame.this,
+                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         saveGraph.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO: saving implementation
-                System.out.println("Saving the graph not implemented");
+                /** Create BufferedImage from inpSpace */
+                BufferedImage savedImage = new BufferedImage(inpSpace.getWidth(), inpSpace.getHeight(),
+                        BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = savedImage.createGraphics();
+                inpSpace.paintAll(g2d);
+                try {
+                    /** Choose file to save to with fileChooser */
+                    JFileChooser fileChooser = new JFileChooser("Save graph");
+                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
+                        File outputFile = new File(fileChooser.getSelectedFile() + ".png");
+                        /** ImageIO writes the image to outputFile */
+                        ImageIO.write(savedImage, "png", outputFile);
+                        /** Notify user about succesful write */
+                        JOptionPane.showMessageDialog(FunctionFrame.this,
+                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -208,7 +260,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                     }
                 }
                 solutionsString = solutionsString.trim();
-                /** Add solutions to display and scroll to top */
+                /** Add solutions to display and scroll to the top */
                 solutionsDisplay.setText(solutionsString);
                 solutionsDisplay.setCaretPosition(0);
             }
@@ -233,7 +285,8 @@ class FunctionFrame extends JFrame implements ActionListener {
                 break;
 
             default:
-                System.out.println("Unsupported operation: " + buttonID);
+                JOptionPane.showMessageDialog(this, "Unsupported operation: " + buttonID, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
         }
 
