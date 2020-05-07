@@ -272,7 +272,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         });
 
         /** Set GraphicSolver farme */
-        graphicSolver = new GraphicSolver(f_z);
+        graphicSolver = new GraphicSolver(f_z, this.range);
 
         graphicSolverFrame = new JFrame("Output space");
         graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

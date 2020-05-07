@@ -34,16 +34,25 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
   boolean panning = false;
   Graphics2D previous;
 
-  public GraphicSolver(String f) {
+  double tickX = scaleX / zoomX;
+  double tickY = scaleY / zoomY;
+
+  /** Animation components */
+  int way = 0; // 0-right, 1-down, 2-left, 3-up
+  Complex A, B, C, D;
+  int range;
+
+  public GraphicSolver(String f, int range) {
     this.f = f;
+    this.range = range;
     addMouseMotionListener(this);
     addMouseListener(this);
     addMouseWheelListener(this);
 
-    sq_points.add(new Complex(-1, 1));
-    sq_points.add(new Complex(1, -1));
-    sq_points.add(new Complex(1, 1));
-    sq_points.add(new Complex(-1, -1));
+    A = new Complex(-range, range);
+    B = new Complex(range, range);
+    C = new Complex(range, -range);
+    D = new Complex(-range, -range);
   }
 
   public void addPoint(Complex p) {
@@ -66,43 +75,44 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
       return;
     }
 
-    double tickX = scaleX / zoomX;
-    double tickY = scaleY / zoomY;
+    // add square points
+    int sq_pts_len = sq_points.size();
+    if (sq_pts_len < 1)
+      sq_points.add(A);
+    else {
+      Complex last = sq_points.get(sq_pts_len - 1);
+      double l_re = last.getRe();
+      double l_im = last.getIm();
 
-    /**
-     * Paints output space with small 1x1 pixel rectangles, color chosen as follows:
-     * hue = phase f(z) , saturation = 1, brightness = raidus f(z)
-     */
-    // for (int j = -getHeight() / 2 + centerY; j < getHeight() / 2 + centerY; j++)
-    // {
-    // for (int i = -getWidth() / 2 - centerX; i < getWidth() / 2 - centerX; i++) {
+      if (way == 0) {
+        double new_re = l_re + 0.1;
+        sq_points.add(new Complex(new_re, l_im));
+        if (new_re < B.getRe())
+          way++;
+      }
 
-    // double x = i * tickX;
-    // double y = j * tickY;
-    // Variable z0 = new Variable("z", new Complex(x, y));
-    // Complex z = new Complex();
-    // try {
-    // z = Parser.eval(f, z0).getComplexValue();
-    // } catch (CalculatorException e) {
-    // z = new Complex(1000000, 1000000);
-    // }
+      if (way == 1) {
+        double new_im = l_re - 0.1;
+        sq_points.add(new Complex(l_re, new_im));
+        if (new_im > C.getIm())
+          way++;
+      }
 
-    // double fi;
-    // try {
-    // fi = Complex.phase(z) / 2 / Math.PI;
-    // } catch (Exception e) {
-    // fi = 0;
-    // }
+      if (way == 2) {
+        double new_re = l_re - 0.1;
+        sq_points.add(new Complex(new_re, l_im));
+        if (new_re > C.getRe())
+          way++;
+      }
 
-    // double r = Complex.abs(z);
-    // if (r > 1)
-    // r = 1;
+      if (way == 3) {
+        double new_im = l_re + 0.1;
+        sq_points.add(new Complex(l_re, new_im));
+        if (new_im < A.getIm())
+          way = -1;
+      }
 
-    // g2.setColor(Color.getHSBColor((float) fi, 1, (float) r));
-    // g2.fillRect(i + centerX, j - centerY, 1, 1);
-
-    // }
-    // }
+    }
 
     // draw rectangle points
     for (Complex p : sq_points) {
@@ -126,7 +136,7 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         r = 1;
 
       g2.setColor(Color.getHSBColor((float) fi, 1, (float) r));
-      g2.fillRect((int) (p.getRe() * zoomY / scaleY) - 2 + centerX, (int) (p.getIm() * zoomY / scaleY) - 2 - centerY, 4,
+      g2.fillRect((int) (p.getRe() * zoomX / scaleX) - 2 + centerX, (int) (p.getIm() * zoomY / scaleY) - 2 - centerY, 4,
           4);
     }
 
