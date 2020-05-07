@@ -264,7 +264,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         rangeAuto.setActionCommand("auto");
         rangeAuto.addActionListener(this);
         rangeContainer.setLayout(new GridLayout(3, 1, 0, 5));
-        rangeContainer.setPreferredSize(new Dimension(60, 80));
+        rangeContainer.setPreferredSize(new Dimension(70, 80));
         rangeContainer.add(rangeLabel);
         rangeContainer.add(rangeInput);
         rangeContainer.add(rangeAuto);
@@ -278,7 +278,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyContainer.setLayout(new GridLayout(3, 1, 0, 5));
         accuracyContainer.add(accMenuLabel);
         accuracyContainer.add(accuracyMenu);
-        accuracyContainer.setPreferredSize(new Dimension(60, 80));
+        accuracyContainer.setPreferredSize(new Dimension(100, 80));
 
         /** Add containers to bottom panel */
         bottomPanel.setLayout(new FlowLayout());
@@ -339,8 +339,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "credits":
-                JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński", "Credits",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński ID 298179",
+                        "Credits", JOptionPane.INFORMATION_MESSAGE);
                 break;
 
             case "help":
