@@ -44,6 +44,7 @@ import algorithm.InputSpace;
 import algorithm.OutputSpace;
 import algorithm.Solver;
 import algorithm.Solver.Accuracy;
+import animation.GraphicSolver;
 import parser.function.Complex;
 
 /**
@@ -68,11 +69,15 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Algorithm components */
     final String f_z;
     final int range;
-    InputSpace inpSpace, animSpace;
+    InputSpace inpSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
     JFrame outFrame;
     Accuracy acc;
+
+    /** Animation components */
+    JFrame graphicSolverFrame;
+    GraphicSolver graphicSolver;
 
     /**
      * FunctionFrame constructor.
@@ -265,6 +270,16 @@ class FunctionFrame extends JFrame implements ActionListener {
                 solutionsDisplay.setCaretPosition(0);
             }
         });
+
+        /** Set GraphicSolver farme */
+        graphicSolver = new GraphicSolver(f_z);
+
+        graphicSolverFrame = new JFrame("Output space");
+        graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        graphicSolverFrame.setSize(500, 500);
+        graphicSolverFrame.setResizable(false);
+        graphicSolverFrame.setLocationRelativeTo(null);
+        graphicSolverFrame.add(graphicSolver);
     }
 
     @Override
@@ -281,7 +296,13 @@ class FunctionFrame extends JFrame implements ActionListener {
                 }
                 break;
             case "animation":
-                // TODO: Implement new GraphicSolver class
+                if (!graphicSolverFrame.isVisible()) {
+                    graphicSolverFrame.setVisible(true);
+                } else {
+                    graphicSolverFrame.setState(JFrame.NORMAL);
+                    graphicSolverFrame.toFront();
+                    graphicSolverFrame.requestFocus();
+                }
                 break;
 
             default:
