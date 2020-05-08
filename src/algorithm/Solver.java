@@ -56,10 +56,6 @@ public class Solver {
      * fall in the same square. Solution is to divide the initial square into many
      * small ones and solve in each of them idividually.
      *
-     * TODO: create a version with range 0 (an "auto sized" solver).
-     *
-     * TODO: make it split the initial square into many small ones.
-     *
      * @param range         half of the sidelength of rectangle to look in
      * @param f_z           the function to solve
      * @param accuracyLevel the desired accuracyLevel
@@ -67,7 +63,8 @@ public class Solver {
      * @return solutions the formatted and sorted ArrayList of solutions
      */
     public static ArrayList<Complex> solve(final int range, final String f_z, final Accuracy accuracyLevel) {
-
+        // TODO: create a version with range 0 (an "auto sized" solver).
+        // TODO: make it split the initial square into many small ones.
         ArrayList<Complex> solutions = new ArrayList<Complex>();
 
         /**
@@ -81,8 +78,6 @@ public class Solver {
          * IT MANUALLY???
          *
          * Ok it works when using getChildren, but WHY???
-         *
-         * TODO: Fix it so that no nested children loops are needed
          */
         double divRangeX = -range;
         double divRangeY = -range;
@@ -92,6 +87,7 @@ public class Solver {
                 Complex B = new Complex(divRangeX + 2 * range, divRangeY);
                 Complex C = new Complex(divRangeX + 2 * range, divRangeY + 2 * range);
                 Complex D = new Complex(divRangeX, divRangeY + 2 * range);
+                // TODO: Fix it so that no nested children loops are needed
                 Solver[] children1 = new Solver(A, B, C, D, accuracyLevel).getChildren();
                 for (Solver child1 : children1) {
                     Solver[] children2 = child1.getChildren();
@@ -243,11 +239,9 @@ public class Solver {
                  * step forward won't go outisde boundary then move, if it will go outisde
                  * boundary (which means you are at a corner) then proceed to checking next
                  * side.
-                 *
-                 * TODO: Make it "circle" around zero insted of just passing through it.
-                 *
                  */
                 if (x + step < B.getRe()) {
+                    // TODO: Make it "circle" around zero insted of just passing through it.
                     x += step;
                 } else {
                     break;

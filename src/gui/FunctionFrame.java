@@ -165,8 +165,6 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveSolutions.setForeground(Color.BLUE.darker());
         saveSolutions.setHorizontalAlignment(JLabel.CENTER);
 
-        /** File chooser for saving the output */
-
         /** Add listeners to hyperlinks */
         saveSolutions.addMouseListener(new MouseAdapter() {
             @Override

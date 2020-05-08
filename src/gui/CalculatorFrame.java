@@ -33,6 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import algorithm.Solver.Accuracy;
+import help.Help;
 import parser.exception.CalculatorException;
 
 /**
@@ -50,8 +51,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     HashMap<String, CalcButton> fnButtons, opButtons;
     JButton solveButton;
     JMenuBar upMenu;
-    JMenu lanMenu, helpMenu;
-    JMenuItem en, pl, help, credits;
+    JMenu langMenu;
+    JMenuItem en, pl, help;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
 
@@ -61,7 +62,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     TextPrompt inputPrompt;
     Font mathFont;
 
-    private static final ImageIcon ICON = new ImageIcon("/cIcon.png"); // ! Nie działa
+    private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Arguments to pass further */
     String f_z;
@@ -94,30 +95,24 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upMenu = new JMenuBar();
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
         upMenu.setPreferredSize(new Dimension(600, 30));
-        lanMenu = new JMenu("Language");
-        helpMenu = new JMenu("Help");
+        langMenu = new JMenu("Language");
         en = new JMenuItem("English");
         pl = new JMenuItem("Polski");
         help = new JMenuItem("Help");
-        credits = new JMenuItem("Credits");
 
         en.setActionCommand("en");
         pl.setActionCommand("pl");
         help.setActionCommand("help");
-        credits.setActionCommand("credits");
 
         en.addActionListener(this);
         pl.addActionListener(this);
         help.addActionListener(this);
-        credits.addActionListener(this);
 
-        lanMenu.add(en);
-        lanMenu.add(pl);
-        helpMenu.add(help);
-        helpMenu.add(credits);
+        langMenu.add(en);
+        langMenu.add(pl);
 
-        upMenu.add(lanMenu);
-        upMenu.add(helpMenu);
+        upMenu.add(help);
+        upMenu.add(langMenu);
 
         /** Input text field */
         funcInput = new JTextField();
@@ -125,6 +120,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         funcInput.setMaximumSize(new Dimension(600, 50));
         mathFont = new Font("SansSerif", Font.PLAIN, 28);
         funcInput.setFont(mathFont);
+        funcInput.setHorizontalAlignment(JTextField.CENTER);
 
         inputPrompt = new TextPrompt("f(z) = 0", funcInput);
         inputPrompt.changeStyle(Font.ITALIC);
@@ -298,10 +294,10 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      * attemptFix.
      *
      * Attempts to fix missing brackets, missing "*" etc.
-     *
-     * TODO: This need to do a lot more than it's doing now.
      */
+
     void attemptFix() throws CalculatorException {
+        // TODO: This need to do a lot more than it's doing now.
         if (this.f_z.equals("")) {
             throw new CalculatorException("Empty input");
         } else if (!f_z.contains("z")) {
@@ -344,7 +340,21 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
 
             case "help":
-                // TODO: help window
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        /** Invoke help window if not visible, bring it up if closed */
+                        if (Help.getInstance().isVisible() == false) {
+                            Help.getInstance().setVisible(true);
+                        } else {
+                            Help.getInstance().requestFocus();
+                            Help.getInstance().setState(JFrame.NORMAL);
+                            Help.getInstance().toFront();
+                        }
+                    }
+                });
+
                 break;
 
             case "solve":
@@ -385,9 +395,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /**
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing
-                 *
-                 * TODO: delete entire functions (ex. sin(z))
                  */
+                // TODO: delete entire functions (ex. sin(z))
                 if (caretPosition == 0) {
                     /** Edge case: caret at the beggining -> do nothing */
                     funcInput.requestFocus();
