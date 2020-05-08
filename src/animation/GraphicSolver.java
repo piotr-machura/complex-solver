@@ -28,42 +28,50 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
   int scrollSpeed = 2;
   int centerX = 10, centerY = 10;
   float zoomX = 200, zoomY = 200;
-  float scaleX = 4, scaleY = 4;
+  float scaleX, scaleY;
   String f;
   ArrayList<Complex> sq_points = new ArrayList<Complex>();
   boolean panning = false;
   Graphics2D previous;
 
-  double tickX = scaleX / zoomX;
-  double tickY = scaleY / zoomY;
+  double tickX, tickY;
 
   /** Animation components */
   int way = 0; // 0-right, 1-down, 2-left, 3-up
   Complex A, B, C, D;
   int range;
+  double res; // rect resolution - difference between points
 
-  public GraphicSolver(String f, int range) {
+  public GraphicSolver(final String f, final int range) {
     this.f = f;
     this.range = range;
+    scaleX = range;
+    scaleY = range;
+
+    tickX = scaleX / zoomX;
+    tickY = scaleY / zoomY;
+
+    res = tickX;
+
     addMouseMotionListener(this);
     addMouseListener(this);
     addMouseWheelListener(this);
 
-    A = new Complex(-range, range);
-    B = new Complex(range, range);
-    C = new Complex(range, -range);
-    D = new Complex(-range, -range);
+    A = new Complex(-range, -range);
+    B = new Complex(range, -range);
+    C = new Complex(range, range);
+    D = new Complex(-range, range);
   }
 
-  public void addPoint(Complex p) {
+  public void addPoint(final Complex p) {
     sq_points.add(p);
     this.repaint();
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
+  protected void paintComponent(final Graphics g) {
     super.paintComponent(g);
-    Graphics2D g2 = (Graphics2D) g;
+    final Graphics2D g2 = (Graphics2D) g;
     g2.translate(getWidth() / 2, getHeight() / 2);
 
     if (panning) {
@@ -77,45 +85,48 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
     // add square points
     int sq_pts_len = sq_points.size();
-    if (sq_pts_len < 1)
+    if (sq_pts_len < 1) {
       sq_points.add(A);
-    else {
+      repaint();
+    } else if (way != -1) {
       Complex last = sq_points.get(sq_pts_len - 1);
       double l_re = last.getRe();
       double l_im = last.getIm();
 
       if (way == 0) {
-        double new_re = l_re + 0.1;
-        sq_points.add(new Complex(new_re, l_im));
-        if (new_re < B.getRe())
-          way++;
-      }
-
-      if (way == 1) {
-        double new_im = l_re - 0.1;
-        sq_points.add(new Complex(l_re, new_im));
-        if (new_im > C.getIm())
-          way++;
-      }
-
-      if (way == 2) {
-        double new_re = l_re - 0.1;
-        sq_points.add(new Complex(new_re, l_im));
-        if (new_re > C.getRe())
-          way++;
-      }
-
-      if (way == 3) {
-        double new_im = l_re + 0.1;
-        sq_points.add(new Complex(l_re, new_im));
-        if (new_im < A.getIm())
+        Complex new_pt = new Complex(l_re + res, l_im);
+        sq_points.add(new_pt);
+        if (new_pt.getRe() > B.getRe()) {
+          sq_points.add(B);
+          way = 1;
+        }
+      } else if (way == 1) {
+        Complex new_pt = new Complex(l_re, l_im + res);
+        sq_points.add(new_pt);
+        if (new_pt.getIm() > C.getIm()) {
+          sq_points.add(C);
+          way = 2;
+        }
+      } else if (way == 2) {
+        Complex new_pt = new Complex(l_re - res, l_im);
+        sq_points.add(new_pt);
+        if (new_pt.getRe() < D.getRe())
+          way = 3;
+      } else if (way == 3) {
+        Complex new_pt = new Complex(l_re, l_im - res);
+        sq_points.add(new_pt);
+        if (new_pt.getIm() - res < A.getIm()) {
           way = -1;
+        }
       }
 
+      repaint();
     }
 
     // draw rectangle points
-    for (Complex p : sq_points) {
+    for (
+
+    Complex p : sq_points) {
       Variable z0 = new Variable("z", p);
       Complex z = new Complex();
       try {
@@ -160,14 +171,14 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
   }
 
   @Override
-  public void mousePressed(MouseEvent e) {
+  public void mousePressed(final MouseEvent e) {
     originX = e.getX();
     originY = e.getY();
     panning = true;
   }
 
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     if (originX != -1 && originY != -1) {
       offX = originX - e.getX();
       offY = originY - e.getY();
@@ -177,7 +188,7 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
   }
 
   @Override
-  public void mouseReleased(MouseEvent e) {
+  public void mouseReleased(final MouseEvent e) {
     centerX -= offX;
     centerY += offY;
     panning = false;
@@ -187,26 +198,26 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
   }
 
   @Override
-  public void mouseWheelMoved(MouseWheelEvent e) {
+  public void mouseWheelMoved(final MouseWheelEvent e) {
     zoomX -= e.getPreciseWheelRotation() * scrollSpeed;
     zoomY -= e.getPreciseWheelRotation() * scrollSpeed;
     this.repaint();
   }
 
   @Override
-  public void mouseMoved(MouseEvent e) {
+  public void mouseMoved(final MouseEvent e) {
   }
 
   @Override
-  public void mouseClicked(MouseEvent e) {
+  public void mouseClicked(final MouseEvent e) {
   }
 
   @Override
-  public void mouseEntered(MouseEvent e) {
+  public void mouseEntered(final MouseEvent e) {
   }
 
   @Override
-  public void mouseExited(MouseEvent e) {
+  public void mouseExited(final MouseEvent e) {
   }
 
 }

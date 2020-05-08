@@ -52,7 +52,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JButton solveButton;
     JMenuBar upMenu;
     JMenu langMenu;
-    JMenuItem en, pl, help;
+    JMenuItem en, pl, help, credits;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
 
@@ -99,19 +99,23 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         en = new JMenuItem("English");
         pl = new JMenuItem("Polski");
         help = new JMenuItem("Help");
+        credits = new JMenuItem("Credits");
 
         en.setActionCommand("en");
         pl.setActionCommand("pl");
         help.setActionCommand("help");
+        credits.setActionCommand("credits");
 
         en.addActionListener(this);
         pl.addActionListener(this);
         help.addActionListener(this);
+        credits.addActionListener(this);
 
         langMenu.add(en);
         langMenu.add(pl);
 
         upMenu.add(help);
+        upMenu.add(credits);
         upMenu.add(langMenu);
 
         /** Input text field */
