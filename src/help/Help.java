@@ -57,6 +57,8 @@ public class Help extends JFrame implements TreeSelectionListener {
         DefaultMutableTreeNode category = null;
         DefaultMutableTreeNode article = null;
 
+        // TODO: replace placeholder html documents with real ones
+
         /** Set up articles in category: Math */
         category = new DefaultMutableTreeNode("Math");
         top.add(category);
@@ -133,9 +135,6 @@ public class Help extends JFrame implements TreeSelectionListener {
         public HelpArticle(String articleName, String filename) {
             this.articleName = articleName;
             this.articleURL = getClass().getResource(filename);
-            if (articleURL == null) {
-                System.err.println("Couldn't find file: " + filename);
-            }
         }
 
         public String toString() {

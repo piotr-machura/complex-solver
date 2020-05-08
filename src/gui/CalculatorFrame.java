@@ -294,10 +294,10 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      * attemptFix.
      *
      * Attempts to fix missing brackets, missing "*" etc.
-     *
-     * TODO: This need to do a lot more than it's doing now.
      */
+
     void attemptFix() throws CalculatorException {
+        // TODO: This need to do a lot more than it's doing now.
         if (this.f_z.equals("")) {
             throw new CalculatorException("Empty input");
         } else if (!f_z.contains("z")) {
@@ -395,9 +395,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /**
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing
-                 *
-                 * TODO: delete entire functions (ex. sin(z))
                  */
+                // TODO: delete entire functions (ex. sin(z))
                 if (caretPosition == 0) {
                     /** Edge case: caret at the beggining -> do nothing */
                     funcInput.requestFocus();
