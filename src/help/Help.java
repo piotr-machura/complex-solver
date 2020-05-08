@@ -113,7 +113,7 @@ public class Help extends JFrame implements TreeSelectionListener {
         try {
             htmlPane.setPage(getClass().getResource("documents/about.html"));
         } catch (IOException e) {
-            htmlPane.setText("Could not load welcome page");
+            htmlPane.setText("Could not load page: documents/about.html");
         }
         JScrollPane htmlDisplay = new JScrollPane(htmlPane);
         htmlDisplay.setPreferredSize(new Dimension(600, 600));
@@ -156,14 +156,14 @@ public class Help extends JFrame implements TreeSelectionListener {
             try {
                 htmlPane.setPage(selectedArticle.articleURL);
             } catch (IOException ex) {
-                htmlPane.setText("Could not read URL: " + selectedArticle.articleURL);
+                htmlPane.setText("Could not load page: " + selectedArticle.articleURL);
             }
         } else if (node.getLevel() == 0) {
             /** If the root was selected -> display welcome page */
             try {
                 htmlPane.setPage(getClass().getResource("documents/about.html"));
             } catch (IOException ex) {
-                htmlPane.setText("Could not read URL: documents/about.html");
+                htmlPane.setText("Could not load page: documents/about.html");
             }
         }
     }
