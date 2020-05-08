@@ -52,6 +52,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JButton solveButton;
     JMenuBar upMenu;
     JMenu langMenu;
+    JMenu helpMenu;
     JMenuItem en, pl, help, credits;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
@@ -96,6 +97,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
         upMenu.setPreferredSize(new Dimension(600, 30));
         langMenu = new JMenu("Language");
+        helpMenu = new JMenu("Help");
         en = new JMenuItem("English");
         pl = new JMenuItem("Polski");
         help = new JMenuItem("Help");
@@ -113,10 +115,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         langMenu.add(en);
         langMenu.add(pl);
+        helpMenu.add(help);
+        helpMenu.add(credits);
 
-        upMenu.add(help);
-        upMenu.add(credits);
         upMenu.add(langMenu);
+        upMenu.add(helpMenu);
 
         /** Input text field */
         funcInput = new JTextField();
@@ -236,7 +239,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         solveButton.setPreferredSize(new Dimension(150, 50));
 
         solveContainer.setLayout(new FlowLayout(FlowLayout.TRAILING, 63, 10));
-        solveContainer.setPreferredSize(new Dimension(400, 80));
+        solveContainer.setPreferredSize(new Dimension(415, 80));
         solveContainer.add(solveButton);
 
         /** Range */
@@ -258,13 +261,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 return;
             }
         };
-        rangeInput.setPreferredSize(new Dimension(50, 25));
+        rangeInput.setPreferredSize(new Dimension(30, 25));
         rangeInput.setEditable(true);
         rangeAuto = new JRadioButton("Auto");
         rangeAuto.setActionCommand("auto");
         rangeAuto.addActionListener(this);
         rangeContainer.setLayout(new GridLayout(3, 1, 0, 5));
-        rangeContainer.setPreferredSize(new Dimension(70, 80));
+        rangeContainer.setPreferredSize(new Dimension(60, 80));
         rangeContainer.add(rangeLabel);
         rangeContainer.add(rangeInput);
         rangeContainer.add(rangeAuto);
@@ -278,7 +281,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyContainer.setLayout(new GridLayout(3, 1, 0, 5));
         accuracyContainer.add(accMenuLabel);
         accuracyContainer.add(accuracyMenu);
-        accuracyContainer.setPreferredSize(new Dimension(100, 80));
+        accuracyContainer.setPreferredSize(new Dimension(60, 80));
 
         /** Add containers to bottom panel */
         bottomPanel.setLayout(new FlowLayout());

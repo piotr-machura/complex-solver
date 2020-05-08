@@ -124,10 +124,11 @@ class FunctionFrame extends JFrame implements ActionListener {
         outFrame.setLocationRelativeTo(null);
         outFrame.add(outSpace);
 
-        /** Close output space window when closing main window */
+        /** Close output space and animation window when closing main window */
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 outFrame.dispatchEvent(new WindowEvent(outFrame, WindowEvent.WINDOW_CLOSING));
+                graphicSolverFrame.dispatchEvent(new WindowEvent(graphicSolverFrame, WindowEvent.WINDOW_CLOSING));
             }
         });
 
@@ -272,7 +273,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Set GraphicSolver farme */
         graphicSolver = new GraphicSolver(f_z, this.range);
 
-        graphicSolverFrame = new JFrame("Output space");
+        graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
         graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         graphicSolverFrame.setSize(500, 500);
         graphicSolverFrame.setResizable(false);

@@ -45,7 +45,7 @@ public class Help extends JFrame implements TreeSelectionListener {
         this.setSize(620, 720);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         /**
@@ -58,6 +58,19 @@ public class Help extends JFrame implements TreeSelectionListener {
         DefaultMutableTreeNode article = null;
 
         // TODO: replace placeholder html documents with real ones
+
+        /** Set up articles in category: How to */
+        category = new DefaultMutableTreeNode("How to");
+        top.add(category);
+
+        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "documents/test.html"));
+        category.add(article);
+        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "documents/test.html"));
+        category.add(article);
+        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "documents/test.html"));
+        category.add(article);
+        article = new DefaultMutableTreeNode(new HelpArticle("GUI Elements", "documents/test.html"));
+        category.add(article);
 
         /** Set up articles in category: Math */
         category = new DefaultMutableTreeNode("Math");
@@ -72,19 +85,6 @@ public class Help extends JFrame implements TreeSelectionListener {
         article = new DefaultMutableTreeNode(new HelpArticle("Winding number algorithm", "documents/test.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "documents/test.html"));
-        category.add(article);
-
-        /** Set up articles in category: How to */
-        category = new DefaultMutableTreeNode("How to");
-        top.add(category);
-
-        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "documents/test.html"));
-        category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "documents/test.html"));
-        category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "documents/test.html"));
-        category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("GUI Elements", "documents/test.html"));
         category.add(article);
 
         /** Set up articles in category: Troubleshooting */
@@ -124,7 +124,7 @@ public class Help extends JFrame implements TreeSelectionListener {
     }
 
     /**
-     * the class HelpArticle.
+     * The class HelpArticle.
      *
      * Contains article's name and URL to a HTML document.
      */
