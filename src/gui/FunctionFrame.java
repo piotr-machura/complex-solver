@@ -27,6 +27,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -98,14 +100,21 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** Set up algorithm components */
         this.range = range;
         solutions = null;
-        SwingUtilities.invokeLater(new Runnable() {
+        /** Create input space in a new thread and add it to frame */
+        ExecutorService inpSpaceExec = Executors.newSingleThreadExecutor();
+        inpSpaceExec.execute(new Runnable() {
 
             @Override
             public void run() {
                 inpSpace = new InputSpace(f_z);
-                FunctionFrame.this.add(inpSpace, BorderLayout.CENTER);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        FunctionFrame.this.add(inpSpace, BorderLayout.CENTER);
+                    }
+                });
+                inpSpaceExec.shutdown();
             }
-
         });
 
         outSpace = new OutputSpace(this.f_z);
@@ -245,7 +254,8 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         /* Solve and showcase roots */
-        SwingUtilities.invokeLater(new Runnable() {
+        ExecutorService solverExec = Executors.newSingleThreadExecutor();
+        solverExec.execute(new Runnable() {
             @Override
             public void run() {
                 /** Use solver to get solutions */
@@ -263,10 +273,17 @@ class FunctionFrame extends JFrame implements ActionListener {
                         ordinal += 1;
                     }
                 }
-                solutionsString = solutionsString.trim();
-                /** Add solutions to display and scroll to the top */
-                solutionsDisplay.setText(solutionsString);
-                solutionsDisplay.setCaretPosition(0);
+                final String solutionsReadyToDisplay = solutionsString.trim();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        /** Add solutions to display and scroll to the top */
+                        solutionsDisplay.setText(solutionsReadyToDisplay);
+                        solutionsDisplay.setCaretPosition(0);
+                    }
+                });
+                solverExec.shutdown();
             }
         });
 
