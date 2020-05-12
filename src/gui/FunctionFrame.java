@@ -147,6 +147,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         solutionsDisplay.setEnabled(false);
         solutionsDisplay.setDisabledTextColor(Color.BLACK);
         solutionsDisplay.setFont(new Font("Sans Serrif", Font.PLAIN, 16));
+        solutionsDisplay.setText("Solving...");
         solutionsWrapper = new JScrollPane(solutionsDisplay);
         solutionsWrapper.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         solutionsWrapper.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
