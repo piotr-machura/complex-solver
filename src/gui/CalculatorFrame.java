@@ -13,7 +13,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.KeyAdapter;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -135,22 +135,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         inputPrompt.setHorizontalAlignment(SwingConstants.CENTER);
 
         /** Press enter to solve */
-        funcInput.addKeyListener(new KeyListener() {
+        funcInput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == 10) { /** <- keycode for "Enter" key */
-                    actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "solve"));
+                    solveButton.doClick();
                 }
             }
-
-            @Override
-            public void keyTyped(final KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(final KeyEvent e) {
-            }
-
         });
         upperPanel.setLayout(new BoxLayout(upperPanel, 1));
 
