@@ -57,18 +57,20 @@ public class Help extends JFrame implements TreeSelectionListener {
         DefaultMutableTreeNode category = null;
         DefaultMutableTreeNode article = null;
 
-        // TODO: replace placeholder html documents with real ones
-
         /** Set up articles in category: How to */
         category = new DefaultMutableTreeNode("How to");
         top.add(category);
 
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("GUI Elements", "documents/test.html"));
         category.add(article);
 
@@ -76,14 +78,19 @@ public class Help extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("Math");
         top.add(category);
 
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Complex functions", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Roots of complex functions", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Poles of complex functions", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Winding number algorithm", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "documents/test.html"));
         category.add(article);
 
@@ -91,10 +98,17 @@ public class Help extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("Troubleshooting");
         top.add(category);
 
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load", "documents/test.html"));
         category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Solutions stuck at \"Solving...\"", "documents/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "documents/test.html"));
         category.add(article);
 
@@ -111,6 +125,7 @@ public class Help extends JFrame implements TreeSelectionListener {
         htmlPane = new JEditorPane();
         htmlPane.setEditable(false);
         try {
+            // TODO: replace placeholder html document with real one
             htmlPane.setPage(getClass().getResource("documents/about.html"));
         } catch (IOException e) {
             htmlPane.setText("Could not load page: documents/about.html");
