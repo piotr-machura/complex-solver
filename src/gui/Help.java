@@ -60,6 +60,13 @@ public class Help extends JFrame implements TreeSelectionListener {
          */
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("All categories");
 
+        /** Make tree from top node */
+        tree = new JTree(top);
+        tree.addTreeSelectionListener(this);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        JScrollPane treeDisplay = new JScrollPane(tree);
+        treeDisplay.setPreferredSize(new Dimension(600, 100));
+
         /** Create tree nodes */
         DefaultMutableTreeNode category = null;
         DefaultMutableTreeNode article = null;
@@ -113,13 +120,6 @@ public class Help extends JFrame implements TreeSelectionListener {
         // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "docs/test.html"));
         category.add(article);
-
-        /** Make tree from top node */
-        tree = new JTree(top);
-        tree.addTreeSelectionListener(this);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        JScrollPane treeDisplay = new JScrollPane(tree);
-        treeDisplay.setPreferredSize(new Dimension(600, 100));
 
         /**
          * Set up the html viewer
