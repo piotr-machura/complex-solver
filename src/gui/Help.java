@@ -76,8 +76,22 @@ public class Help extends JFrame implements TreeSelectionListener {
         category.add(article);
         article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "docs/saving-results.html"));
         category.add(article);
+
+        /** Set up articles in category: Troubleshooting */
+        category = new DefaultMutableTreeNode("Troubleshooting");
+        top.add(category);
+
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Guide to GUI Elements", "docs/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "docs/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load", "docs/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(new HelpArticle("Solutions stuck at \"Solving...\"", "docs/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "docs/test.html"));
         category.add(article);
 
         /** Set up articles in category: Math */
@@ -98,23 +112,6 @@ public class Help extends JFrame implements TreeSelectionListener {
         category.add(article);
         // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "docs/test.html"));
-        category.add(article);
-
-        /** Set up articles in category: Troubleshooting */
-        category = new DefaultMutableTreeNode("Troubleshooting");
-        top.add(category);
-
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Solutions stuck at \"Solving...\"", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "docs/test.html"));
         category.add(article);
 
         /** Make tree from top node */

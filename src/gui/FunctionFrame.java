@@ -143,11 +143,12 @@ class FunctionFrame extends JFrame implements ActionListener {
 
         /** Set up bottom panel */
         /** Scrollable solutions display */
-        solutionsDisplay = new JTextArea(4, 25);
-        solutionsDisplay.setEnabled(false);
+        solutionsDisplay = new JTextArea();
+        solutionsDisplay.setEditable(false);
         solutionsDisplay.setDisabledTextColor(Color.BLACK);
         solutionsDisplay.setFont(new Font("Sans Serrif", Font.PLAIN, 16));
         solutionsDisplay.setText("Solving...");
+        solutionsDisplay.setTabSize(2);
         solutionsWrapper = new JScrollPane(solutionsDisplay);
         solutionsWrapper.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         solutionsWrapper.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -266,15 +267,13 @@ class FunctionFrame extends JFrame implements ActionListener {
                 if (solutions == null || solutions.size() == 0) {
                     solutionsString = "No roots found within range " + range + ".";
                 } else {
-                    solutionsString += "Roots in range " + range + "\n";
-                    int ordinal = 1;
-                    for (Complex complex : solutions) {
-                        solutionsString += ordinal + "|  ";
-                        solutionsString += complex + "\n";
-                        ordinal += 1;
+                    solutionsString += "Roots found in range " + range + " :\n";
+                    for (int i = 0; i < solutions.size(); i++) {
+                        solutionsString += i + 1 + "\t|\t";
+                        solutionsString += solutions.get(i) + "\n";
                     }
                 }
-                final String solutionsReadyToDisplay = solutionsString.trim();
+                final String solutionsReadyToDisplay = solutionsString.strip();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -288,7 +287,7 @@ class FunctionFrame extends JFrame implements ActionListener {
             }
         });
 
-        /** Set GraphicSolver farme */
+        /** Set GraphicSolver frame */
         graphicSolver = new GraphicSolver(f_z, this.range);
 
         graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
