@@ -1,12 +1,18 @@
-package help;
+package gui.help;
 
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.net.URL;
 
@@ -14,6 +20,7 @@ import java.awt.HeadlessException;
 import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Desktop;
 
 /**
  * The singleton class HelpFrame.
@@ -61,17 +68,19 @@ public class Help extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("How to");
         top.add(category);
 
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "documents/html/step-by-step.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Range options", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("GUI Elements", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "documents/html/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(new HelpArticle("GUI Elements", "documents/html/test.html"));
         category.add(article);
 
         /** Set up articles in category: Math */
@@ -79,19 +88,19 @@ public class Help extends JFrame implements TreeSelectionListener {
         top.add(category);
 
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Complex functions", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Complex functions", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Roots of complex functions", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Roots of complex functions", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Poles of complex functions", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Poles of complex functions", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Winding number algorithm", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Winding number algorithm", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "documents/html/test.html"));
         category.add(article);
 
         /** Set up articles in category: Troubleshooting */
@@ -99,17 +108,18 @@ public class Help extends JFrame implements TreeSelectionListener {
         top.add(category);
 
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "documents/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load", "documents/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Solutions stuck at \"Solving...\"", "documents/test.html"));
+                new HelpArticle("Graph takes a long time to load", "documents/html/test.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "documents/test.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Solutions stuck at \"Solving...\"", "documents/html/test.html"));
+        category.add(article);
+        // TODO: replace placeholder html document with real one
+        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "documents/html/test.html"));
         category.add(article);
 
         /** Make tree from top node */
@@ -124,14 +134,48 @@ public class Help extends JFrame implements TreeSelectionListener {
          */
         htmlPane = new JEditorPane();
         htmlPane.setEditable(false);
+        htmlPane.setEditorKit(new HTMLEditorKit());
+        /**
+         * Make links clickable - taken from
+         * https://docs.oracle.com/javase/8/docs/api/javax/swing/JEditorPane.html
+         */
+        htmlPane.addHyperlinkListener(new HyperlinkListener() {
+
+            @Override
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    JEditorPane pane = (JEditorPane) e.getSource();
+                    if (e instanceof HTMLFrameHyperlinkEvent) {
+                        HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
+                        HTMLDocument doc = (HTMLDocument) pane.getDocument();
+                        doc.processHTMLFrameHyperlinkEvent(evt);
+                    } else {
+                        try {
+                            /** If possible to open link in browser -> open */
+                            if (Desktop.isDesktopSupported()) {
+                                Desktop.getDesktop().browse(e.getURL().toURI());
+                            } else {
+                                /** Provide the user with link to open themselves */
+                                JOptionPane.showMessageDialog(null,
+                                        "Opening links in browser nor supported.\nLink: " + e.getURL(), "ERROR",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (Throwable t) {
+                            t.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
         try {
-            // TODO: replace placeholder html document with real one
-            htmlPane.setPage(getClass().getResource("documents/about.html"));
+            htmlPane.setPage(getClass().getResource("documents/html/README.html"));
         } catch (IOException e) {
-            htmlPane.setText("Could not load page: documents/about.html");
+            htmlPane.setText("Could not load page: documents/html/README.html");
         }
         JScrollPane htmlDisplay = new JScrollPane(htmlPane);
         htmlDisplay.setPreferredSize(new Dimension(600, 600));
+        htmlDisplay.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        htmlDisplay.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         this.add(treeDisplay);
         this.add(htmlDisplay);
@@ -176,9 +220,9 @@ public class Help extends JFrame implements TreeSelectionListener {
         } else if (node.getLevel() == 0) {
             /** If the root was selected -> display welcome page */
             try {
-                htmlPane.setPage(getClass().getResource("documents/about.html"));
+                htmlPane.setPage(getClass().getResource("documents/html/about.html"));
             } catch (IOException ex) {
-                htmlPane.setText("Could not load page: documents/about.html");
+                htmlPane.setText("Could not load page: documents/html/about.html");
             }
         }
     }

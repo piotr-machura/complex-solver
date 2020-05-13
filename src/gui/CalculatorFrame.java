@@ -33,7 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import algorithm.Solver.Accuracy;
-import help.Help;
+import gui.help.Help;
 import parser.exception.CalculatorException;
 
 /**
