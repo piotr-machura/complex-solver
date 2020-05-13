@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Choosing your own range</title>
+
+    <link rel="stylesheet" href="markdown.css">
+    <link rel="stylesheet" href="highlight.css">
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body class="vscode-light">
+    <h1 id="choosing-your-own-range">Choosing your own range</h1>
+    <img src="range-options\manual.jpg" alt="manual-range" width="80" />
+    <p>Algorithm looks for solutions in a rectangle centered at the origin. <code>Range</code> denotes
+        <strong>half</strong> the sidelength of that rectangle. This means that roots of |<em>Re</em>| &lt;
+        <code>Range</code> and |<em>Im</em>| &lt; <code>Range</code> will be found.</p>
+    <h1 id="using-automatic-range">Using automatic range</h1>
+    <img src="range-options\auto.jpg" alt="auto-range" width="80" />
+    <p><code>Auto</code> option will start with a rectangle of sidelenght 10 (<code>Range</code> of 5) and look for
+        roots inside. If there are none, then it will look in a rectangle of sidelength 20 (<code>Range</code> of 10)
+        and so on until it finds at least one root. Hwoever, it will terminate when it reaches sidelength of
+        200(<code>Range</code> of 100).</p>
+
+</body>
+
+</html>

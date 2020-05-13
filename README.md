@@ -10,5 +10,5 @@ This program was created as an end-of-semester project for the "Object Oriented 
 # Credits
 [Piotr Machura](https://github.com/piotrmachura16) \
 [Kacper Ledwosiński](https://github.com/kapipapi) \
-[GitHub repo](https://github.com/piotrmachura16/complex-solver-java) \
+[GitHub repo](https://github.com/piotrmachura16/complex-solver-java)
 
