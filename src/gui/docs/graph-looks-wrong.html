@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Input your function</title>
+
+    <link rel="stylesheet" href="res\markdown.css">
+    <link rel="stylesheet" href="res\highlight.css">
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body class="vscode-light">
+    <h1 id="loading-the-graph">Incorrect interpretation of the input</h1>
+    <img src="res\graph-looks-wrong\z-sinz.jpg" alt="z-sinz" width="400" />
+    <p>Your input is interpreted by a parsing library, which sometimes doesn't work well with implicit multiplication.
+        This means "5z" might not be interpreted the same as "5*z". Our implementation attempt to fix your input to
+        include the "*" signs, but it may miss some. Please make sure you explicitly include the multiplication sign.
+    </p>
+
+</body>
+
+</html>

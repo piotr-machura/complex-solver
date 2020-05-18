@@ -88,17 +88,13 @@ public class Help extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("Troubleshooting");
         top.add(category);
 
-        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "docs/roots-not-found.html"));
         category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "docs/test.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Graph takes a long time to load \\ solutions stuck at \"Solving...\"",
+                        "docs/long-time-to-load-stuck-at-solving.html"));
         category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Solutions stuck at \"Solving...\"", "docs/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "docs/graph-looks-wrong.html"));
         category.add(article);
 
         /** Set up articles in category: Math */
