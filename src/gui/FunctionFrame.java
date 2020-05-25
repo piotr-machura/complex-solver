@@ -71,6 +71,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Algorithm components */
     final String f_z;
     final int range;
+    protected static final int AUTO_RANGE = 0;
     InputSpace inpSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
@@ -261,7 +262,11 @@ class FunctionFrame extends JFrame implements ActionListener {
             @Override
             public void run() {
                 /** Use solver to get solutions */
-                solutions = Solver.solve(range, f_z, acc);
+                if (range == AUTO_RANGE) {
+                    solutions = Solver.solve(f_z, acc);
+                } else {
+                    solutions = Solver.solve(range, f_z, acc);
+                }
                 /** Format solutions */
                 String solutionsString = "";
                 if (solutions == null || solutions.size() == 0) {

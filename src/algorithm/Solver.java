@@ -23,9 +23,8 @@ import parser.util.Variable;
 /**
  * The class Solver.
  *
- * All methods, including contructor, are considered private/protected. In order
- * to utilize this class use the static solve(double, String, Accuracy)
- * function.
+ * In order to utilize this class use the static solve() function. All other
+ * methods, including contructor, are private.
  */
 public class Solver {
 
@@ -40,105 +39,125 @@ public class Solver {
         LOW, MED, HIGH
     }
 
+    /** Automatic range founder parameters */
+    private static final int AUTO_RANGE_START = 5;
+    private static final int AUTO_RANGE_INCREMENT = 5;
+    private static final int AUTO_RANGE_MAX = 100;
+    private static final int AUTO_RANGE_FAILED = 0;
+
+    /** Algorithm adjustments */
+    private static final double MAX_LEGAL_DELTAPHI = 1.8 * Math.PI;
+    private static final double STEPS_PER_SIDELENGTH = 200;
+    private static final double MIN_LEGAL_WINDING_NUMBER = 0.95 * 2 * Math.PI;
+    private static final double MAX_LEGAL_ABS_OF_ROOT = 1;
+
+    /** Output formatting adjustments */
+    private static final double ROUNDER_LOW = 1000d;
+    private static final double ROUNDER_MED = 10000d;
+    private static final double ROUNDER_HIGH = 100000d;
+
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
     double area;
     final Accuracy accuracyLevel;
+    final double MIN_LEGAL_AREA;
 
     /**
      * solve.
      *
-     * Static method returning simplified ArrayList of solutions to f_z in a given
-     * range, sorted in ascending order according to method described in
-     * Complex.compareTo() function.
+     * Main method of the static Solver class. Finds roots of the complex function
+     * f_z with max Re = range and max Im = range (in a rectangel of sidelength
+     * 2*range).
      *
-     * Current problem: roots and poles tend to "cancel" each other if they both
-     * fall in the same square. Solution is to divide the initial square into many
-     * small ones and solve in each of them idividually.
+     * @param range         half of the sidelength of rectangle to look in.
+     * @param f_z           the function to solve.
+     * @param accuracyLevel the desired accuracyLevel.
      *
-     * @param range         half of the sidelength of rectangle to look in
+     * @return the list of solutions found inside range orted in ascending order
+     *         according to method described in Complex.compareTo() function.
+     */
+    public static ArrayList<Complex> solve(final int range, final String f_z, final Accuracy accuracyLevel) {
+        ArrayList<Complex> solutions = new ArrayList<Complex>();
+        if (range == AUTO_RANGE_FAILED) {
+            return solutions;
+        } else {
+            /**
+             * To avoid roots and poles canceling each other: divide starting rectangle into
+             * 64 tiny squares first and solve in each of them.
+             */
+            Solver[] children1 = new Solver(range, accuracyLevel).getChildren();
+            for (Solver child1 : children1) {
+                Solver[] children2 = child1.getChildren();
+                for (Solver child2 : children2) {
+                    Solver[] children3 = child2.getChildren();
+                    for (Solver child3 : children3) {
+                        child3.solveInside(f_z, solutions);
+                    }
+                }
+            }
+
+            /** Set up an approprieate rounder */
+            double rd = ROUNDER_MED;
+            if (accuracyLevel == Accuracy.LOW) {
+                rd = ROUNDER_LOW;
+            } else if (accuracyLevel == Accuracy.HIGH) {
+                rd = ROUNDER_HIGH;
+            }
+            /** Round decimals according to accuracyLevel */
+            for (int i = 0; i < solutions.size(); i++) {
+                double reI = (double) Math.round(solutions.get(i).getRe() * rd) / rd;
+                double imI = (double) Math.round(solutions.get(i).getIm() * rd) / rd;
+                solutions.set(i, new Complex(reI, imI));
+            }
+
+            /** Remove duplicates */
+            for (int i = 0; i < solutions.size() - 1; i++) {
+                double reI = solutions.get(i).getRe();
+                double imI = solutions.get(i).getIm();
+                for (int j = i + 1; j < solutions.size(); j++) {
+                    /** Compare with all other solutions and delete them if duplicated */
+                    double reJ = solutions.get(j).getRe();
+                    double imJ = solutions.get(j).getIm();
+                    if (Math.abs(reJ - reI) <= 10 / rd && Math.abs(imJ - imI) <= 10 / rd) {
+                        solutions.remove(j);
+                    }
+                }
+            }
+            Collections.sort(solutions);
+            return solutions;
+        }
+
+    }
+
+    /**
+     * solve (automatic verison).
+     *
+     * Starts with a range of AUTO_RANGE_START and adds AUTO_RANGE_INCREMENT until a
+     * root is found. If a root is found invokes solve() with current range.
+     * Terminates when AUTO_RANGE_MAX is reached and no roots were found.
+     *
      * @param f_z           the function to solve
      * @param accuracyLevel the desired accuracyLevel
      *
      * @return solutions the formatted and sorted ArrayList of solutions
      */
-    public static ArrayList<Complex> solve(final int range, final String f_z, final Accuracy accuracyLevel) {
-        // TODO: create a version with range 0 (an "auto sized" solver).
-        // TODO: make it split the initial square into many small ones.
-        ArrayList<Complex> solutions = new ArrayList<Complex>();
 
-        /**
-         * To avoid roots and poles canceling each other: divide starting rectangle into
-         * tiny squares first and solve in each of them.
-         *
-         * ! BUT IT DOESN'T WORK (fails to find a lot of zeroes).
-         *
-         * WHY DOES IT NOT WORK SPLITTING IT INTO 4 SQARES IS LITERALLY THE FIRST THING
-         * THAT HAPPENS AFTER YOU INVOKE SOLVEINSIDE WHY DOES IT FAIL 18 TESTS IF I DO
-         * IT MANUALLY???
-         *
-         * Ok it works when using getChildren, but WHY???
-         */
-        double divRangeX = -range;
-        double divRangeY = -range;
-        while (divRangeY < range) {
-            while (divRangeX < range) {
-                Complex A = new Complex(divRangeX, divRangeY);
-                Complex B = new Complex(divRangeX + 2 * range, divRangeY);
-                Complex C = new Complex(divRangeX + 2 * range, divRangeY + 2 * range);
-                Complex D = new Complex(divRangeX, divRangeY + 2 * range);
-                // TODO: Fix it so that no nested children loops are needed
-                Solver[] children1 = new Solver(A, B, C, D, accuracyLevel).getChildren();
-                for (Solver child1 : children1) {
-                    Solver[] children2 = child1.getChildren();
-                    for (Solver child2 : children2) {
-                        Solver[] children3 = child2.getChildren();
-                        for (Solver child3 : children3) {
-                            child3.solveInside(f_z, solutions);
-                        }
-                    }
+    public static ArrayList<Complex> solve(final String f_z, final Accuracy accuracyLevel) {
+        int range = AUTO_RANGE_START;
+        while (true) {
+            Boolean isCurrentRangeValid = new Solver(range, accuracyLevel).checkWindingNumber(f_z);
+            if (isCurrentRangeValid) {
+                break;
+            } else if (!isCurrentRangeValid) {
+                if (range > AUTO_RANGE_MAX) {
+                    range = AUTO_RANGE_FAILED;
+                    break;
+                } else {
+                    range += AUTO_RANGE_INCREMENT;
                 }
-                divRangeX += 2 * range;
-            }
-            divRangeY += 2 * range;
-        }
-
-        /**
-         * Round all soultions according to acc, delete duplicates and sort list
-         */
-        double rd;
-        if (accuracyLevel == Accuracy.LOW) {
-            rd = 1000d;
-        } else if (accuracyLevel == Accuracy.MED) {
-            rd = 10000d;
-        } else { /* acc == AcLevel.HIGH */
-            rd = 100000d;
-        }
-        /** Round decimals according to accuracyLevel */
-        for (int i = 0; i < solutions.size(); i++) {
-            double reI = (double) Math.round(solutions.get(i).getRe() * rd) / rd;
-            double imI = (double) Math.round(solutions.get(i).getIm() * rd) / rd;
-            solutions.set(i, new Complex(reI, imI));
-        }
-
-        /** Remove duplicates */
-        for (int i = 0; i < solutions.size() - 1; i++) {
-            /** Take current Re & Im */
-            double reI = solutions.get(i).getRe();
-            double imI = solutions.get(i).getIm();
-            for (int j = i + 1; j < solutions.size(); j++) {
-                /** Compare with all other solutions and delete them if duplicated */
-                double reJ = solutions.get(j).getRe();
-                double imJ = solutions.get(j).getIm();
-                if (Math.abs(reJ - reI) <= 10 / rd && Math.abs(imJ - imI) <= 10 / rd) {
-                    solutions.remove(j);
-                }
-
             }
         }
-        /** Sort and return solutions */
-        Collections.sort(solutions);
-        return solutions;
+        return Solver.solve(range, f_z, accuracyLevel);
     }
 
     /**
@@ -146,13 +165,13 @@ public class Solver {
      *
      * Constructs a square using points A, B, C, D as shown in Solver.java header.
      *
-     * @param a        the bottom-left point A
-     * @param b        the bottom-right point B
-     * @param c        the top-right point C
-     * @param d        the top-left point D
-     * @param Accuracy the desired accuracy level
+     * @param a             the bottom-left point A
+     * @param b             the bottom-right point B
+     * @param c             the top-right point C
+     * @param d             the top-left point D
+     * @param accuracyLevel the desired accuracy level
      */
-    protected Solver(Complex a, Complex b, Complex c, Complex d, final Accuracy accuracyLevel) {
+    private Solver(Complex a, Complex b, Complex c, Complex d, final Accuracy accuracyLevel) {
 
         A = a;
         B = b;
@@ -169,14 +188,50 @@ public class Solver {
 
         /** Calculate area of the square */
         area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
+
+        /** Calculate the minimum area allowed for this rectangle */
+        MIN_LEGAL_AREA = Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3));
+    }
+
+    /**
+     * Square constructor.
+     *
+     * Constructs a square with sidelength 2*range centered at the origin.
+     *
+     * @param range         half of the rectangle's sidelenght.
+     * @param accuracyLevel the desired accuracy level.
+     */
+    private Solver(int range, final Accuracy accuracyLevel) {
+        A = new Complex(-range, -range);
+        B = new Complex(range, -range);
+        C = new Complex(range, range);
+        D = new Complex(-range, range);
+        this.accuracyLevel = accuracyLevel;
+
+        /** Calculate mid-points based on given points */
+        AB_mid = new Complex((B.getRe() + A.getRe()) / 2, A.getIm());
+        BC_mid = new Complex(B.getRe(), (C.getIm() + B.getIm()) / 2);
+        CD_mid = new Complex((C.getRe() + D.getRe()) / 2, C.getIm());
+        AD_mid = new Complex(D.getRe(), (D.getIm() + A.getIm()) / 2);
+        MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
+
+        /** Calculate area of the square */
+        area = (B.getRe() - A.getRe()) * (C.getIm() - B.getIm());
+        /** Calculate the minimum area allowed for this rectangle */
+        MIN_LEGAL_AREA = Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3));
     }
 
     /**
      * deltaPhi.
      *
      * Calculates corrected phase change between two points.
+     *
+     * @param prevPhi the phase prior to step
+     * @param nextPhi the phase after a step
+     *
+     * @return the phase change adjusted with MAX_LEGAL_DELTAPHI in mind
      */
-    double deltaPhi(double prevPhi, double nextPhi) {
+    private double deltaPhi(double prevPhi, double nextPhi) {
         /** Calculate phase change */
         double deltaPhi = nextPhi - prevPhi;
         /**
@@ -184,7 +239,7 @@ public class Solver {
          * this means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from
          * deltaPhi (1.8PI - 2PI = -0.2PI, correct phase change)
          */
-        if (deltaPhi > 1.8 * Math.PI) {
+        if (deltaPhi > MAX_LEGAL_DELTAPHI) {
             deltaPhi -= 2 * Math.PI;
         }
         /**
@@ -192,7 +247,7 @@ public class Solver {
          * this means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi
          * (-1.8PI +2PI = 0.2PI, correct phase change).
          */
-        else if (deltaPhi < -1.8 * Math.PI) {
+        else if (deltaPhi < -MAX_LEGAL_DELTAPHI) {
             deltaPhi += 2 * Math.PI;
         }
         return deltaPhi;
@@ -207,8 +262,8 @@ public class Solver {
      */
     private Boolean checkWindingNumber(final String f_z) {
 
-        /** Step of "integration" - 200 steps per side length */
-        final double step = 0.005 * Math.sqrt(this.area);
+        /** Step of "integration" - STEPS_PER_SIDELENGTH steps per side length */
+        final double step = Math.sqrt(this.area) / STEPS_PER_SIDELENGTH;
         double windingNumber = 0;
 
         /** Starting point: A */
@@ -300,11 +355,7 @@ public class Solver {
                 }
             }
         }
-        /** Total number of revolutions = (total phase change) / 2 PI */
-        windingNumber = windingNumber / (2 * Math.PI);
-
-        /** Checks if winding number is non-zero */
-        return Math.abs(windingNumber) > 0.95;
+        return Math.abs(windingNumber) > MIN_LEGAL_WINDING_NUMBER;
     }
 
     /**
@@ -312,7 +363,7 @@ public class Solver {
      *
      * @return array of 4 equal children enumerated starting bottom left clockwise
      */
-    Solver[] getChildren() {
+    private Solver[] getChildren() {
         Solver[] children = new Solver[4];
         children[0] = new Solver(A, AB_mid, MIDDLE, AD_mid, accuracyLevel);
         children[1] = new Solver(AB_mid, B, BC_mid, MIDDLE, accuracyLevel);
@@ -333,25 +384,20 @@ public class Solver {
      */
     private void solveInside(final String f_z, ArrayList<Complex> solutions) {
         if (this.checkWindingNumber(f_z)) {
-            if (this.area <= Math.pow(10, -2 * (this.accuracyLevel.ordinal() + 3))) {
+            if (this.area <= this.MIN_LEGAL_AREA) {
                 /**
-                 * Add MIDDLE to solutions, but only if Abs(f_z(MIDDLE)) is small. This needs to
-                 * be checked because this algorithm will detect both roots AND poles of a
-                 * function.
-                 *
-                 * Why? Google Reimann sphere and imagine a point travelling around zero (below
-                 * the "equator"), and then another point spinning around infinity (above the
-                 * "equator"). Both of them will have non zero winding number, but we only want
-                 * roots, not poles.
+                 * Add MIDDLE to solutions if Abs(f_z(MIDDLE)) < MAX_LEGAL_ABS_OF_ROOT. This
+                 * needs to be checked because this algorithm will detect both roots AND poles
+                 * of a function.
                  */
                 try {
-                    Boolean root = Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue()) < 1;
-                    if (root) {
+                    double absOfRoot = Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue());
+                    if (absOfRoot < MAX_LEGAL_ABS_OF_ROOT) {
                         solutions.add(this.MIDDLE);
                     }
                 } catch (CalculatorException e) {
                     /**
-                     * This means it's probably a pole too - do not add it
+                     * This means it's probably a pole too - do not add it and ignore.
                      */
                 }
             } else {

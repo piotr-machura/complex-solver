@@ -66,7 +66,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     /** Arguments to pass further */
     String f_z;
-    int range; /* Range of 0 indicates automatic range */
+    int range;
 
     /**
      * CalculatorFrame constructor.
@@ -372,7 +372,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                         }
                         this.range = Integer.parseInt(rangeInput.getText());
                     } else {
-                        this.range = 0; /** Range of 0 indicates automatic range */
+                        this.range = FunctionFrame.AUTO_RANGE;
                     }
                     FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
                     fFrame.setVisible(true);
