@@ -1,6 +1,3 @@
-/**
- * Made by: Piotr Machura
- */
 package gui;
 
 import java.awt.BorderLayout;
@@ -32,11 +29,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import algorithm.Solver.Accuracy;
-import parser.exception.CalculatorException;
+import algorithm.solver.SolverAccuracy;
+import algorithm.parser.exception.CalculatorException;
 
 /**
  * The class CalculatorFrame
+ *
+ * @Author Piotr Machura
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -359,11 +358,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 this.f_z = funcInput.getText();
                 try {
                     this.attemptFix();
-                    Accuracy acc = Accuracy.MED;
+                    SolverAccuracy acc = SolverAccuracy.MED;
                     if (accuracyMenu.getSelectedItem().equals("LOW")) {
-                        acc = Accuracy.LOW;
+                        acc = SolverAccuracy.LOW;
                     } else if (accuracyMenu.getSelectedItem().equals("HIGH")) {
-                        acc = Accuracy.HIGH;
+                        acc = SolverAccuracy.HIGH;
                     }
                     if (!rangeAuto.isSelected()) {
                         /** Throw exception if range is not valid */

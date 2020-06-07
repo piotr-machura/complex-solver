@@ -1,6 +1,3 @@
-/**
- * ! This is a standalone class taken from https://tips4java.wordpress.com/2009/11/29/text-prompt/
- */
 package gui;
 
 import java.awt.BorderLayout;
@@ -23,6 +20,8 @@ import javax.swing.text.JTextComponent;
  * The Font and foreground Color of the prompt will default to those properties
  * of the parent text component. You are free to change the properties after
  * class construction.
+ *
+ * @Credit https://tips4java.wordpress.com/2009/11/29/text-prompt/
  */
 public class TextPrompt extends JLabel implements FocusListener, DocumentListener {
 

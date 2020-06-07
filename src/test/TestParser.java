@@ -1,19 +1,18 @@
-/**
- * Written by: Piotr Machura
- */
 package test;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import parser.main.Parser;
-import parser.exception.CalculatorException;
+import algorithm.parser.main.Parser;
+import algorithm.parser.exception.CalculatorException;
 
 /**
  * Test simple parser cases - no variables, just reduction of numerical values.
  *
  * Results were checked using Wolfram Mathematica v12.1
+ *
+ * @Author Piotr Machura
  */
 public class TestParser {
 

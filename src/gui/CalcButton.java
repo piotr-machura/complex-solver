@@ -6,14 +6,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 /**
- * The class CalculatorFrame
+ * The class CalcButton.
+ *
+ * Autmatically sets up actionListener and actionCommand based on it's name.
+ *
+ * @Author Piotr Machura
  */
 public class CalcButton extends JButton {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * CalcButton automatically sets up some properties when created
-     */
     public CalcButton(String name, ActionListener acListener) {
         super(name);
         this.setActionCommand(name);

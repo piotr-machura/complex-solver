@@ -1,6 +1,3 @@
-/**
- * Made by: Piotr Machura
- */
 package gui;
 
 import java.awt.BorderLayout;
@@ -42,15 +39,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import algorithm.InputSpace;
-import algorithm.OutputSpace;
-import algorithm.Solver;
-import algorithm.Solver.Accuracy;
-import animation.GraphicSolver;
-import parser.function.Complex;
+import visual.InputSpace;
+import visual.OutputSpace;
+import algorithm.solver.Solver;
+import algorithm.solver.SolverAccuracy;
+import visual.GraphicSolver;
+import algorithm.parser.function.Complex;
 
 /**
- * The class FunctionFrame
+ * The class FunctionFrame.
+ *
+ * JFrame with graph of function f_z and it's solutions. Displays input/otuput
+ * space, allows saving graph to a .png file and soltions to .txt file.
+ *
+ * @Author Piotr Machura
  */
 class FunctionFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -76,7 +78,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
     JFrame outFrame;
-    Accuracy acc;
+    SolverAccuracy acc;
 
     /** Animation components */
     JFrame graphicSolverFrame;
@@ -89,7 +91,7 @@ class FunctionFrame extends JFrame implements ActionListener {
      * @param accuracy the accuracy level
      * @param range    the size of rectangle
      */
-    FunctionFrame(String f_z, Accuracy acc, int range) {
+    FunctionFrame(String f_z, SolverAccuracy acc, int range) {
         /** Basic parameters */
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(800, 700);

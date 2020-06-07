@@ -23,7 +23,12 @@ import java.awt.FlowLayout;
 import java.awt.Desktop;
 
 /**
- * The singleton class HelpFrame.
+ * The singleton class Help.
+ *
+ * Opens a help JFrame with a content tree and content panel. Displays help
+ * articles formatted as HTML.
+ *
+ * @Author Piotr Machura
  */
 public class Help extends JFrame implements TreeSelectionListener {
     private static final long serialVersionUID = 1L;
@@ -37,7 +42,7 @@ public class Help extends JFrame implements TreeSelectionListener {
      * HelpFrame is a singleton class, instance is accessible through a static
      * getInstance() method.
      *
-     * @return the instance of HelpFrame
+     * @return the singleton instance of HelpFrame
      */
     public static Help getInstance() {
         return instance;
@@ -47,6 +52,9 @@ public class Help extends JFrame implements TreeSelectionListener {
     private JEditorPane htmlPane;
     private JTree tree;
 
+    /**
+     * The private singleton instance contructor.
+     */
     private Help() throws HeadlessException {
         super("Help");
         this.setSize(620, 760);
@@ -124,7 +132,9 @@ public class Help extends JFrame implements TreeSelectionListener {
         htmlPane.setEditable(false);
         htmlPane.setEditorKit(new HTMLEditorKit());
         /**
-         * Make links clickable - taken from
+         * Make links clickable
+         *
+         * @ Credit
          * https://docs.oracle.com/javase/8/docs/api/javax/swing/JEditorPane.html
          */
         htmlPane.addHyperlinkListener(new HyperlinkListener() {
@@ -171,9 +181,11 @@ public class Help extends JFrame implements TreeSelectionListener {
     }
 
     /**
-     * The class HelpArticle.
+     * The inner class HelpArticle.
      *
      * Contains article's name and URL to a HTML document.
+     *
+     * @Author Piotr Machura
      */
     private class HelpArticle {
         public String articleName;
