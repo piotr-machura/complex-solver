@@ -83,46 +83,46 @@ public class Help extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("How to");
         top.add(category);
 
-        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "docs/step-by-step.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "res/how-to/step-by-step.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Range options", "docs/range-options.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Range options", "res/how-to/range-options.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "docs/accuracy-options.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "res/how-to/accuracy-options.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "docs/saving-results.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "res/how-to/saving-results.html"));
         category.add(article);
 
         /** Set up articles in category: Troubleshooting */
         category = new DefaultMutableTreeNode("Troubleshooting");
         top.add(category);
 
-        article = new DefaultMutableTreeNode(new HelpArticle("Some roots were not found", "docs/roots-not-found.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Some roots were not found", "res/troubleshooting/roots-not-found.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
                 new HelpArticle("Graph takes a long time to load \\ solutions stuck at \"Solving...\"",
-                        "docs/long-time-to-load-stuck-at-solving.html"));
+                        "res/troubleshooting/long-time-to-load-stuck-at-solving.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Graph looks wrong", "docs/graph-looks-wrong.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Graph looks wrong", "res/troubleshooting/graph-looks-wrong.html"));
         category.add(article);
 
-        /** Set up articles in category: Math */
-        category = new DefaultMutableTreeNode("Math");
+        /** Set up articles in category: Math background */
+        category = new DefaultMutableTreeNode("Math background");
         top.add(category);
 
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Complex functions", "docs/test.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Complex functions", "res/math-background/complex-functions.html"));
+        category.add(article);
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Roots and poles of complex functions", "res/math-background/roots-and-poles.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Roots of complex functions", "docs/test.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "res/riemann-sphere.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Poles of complex functions", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("Winding number algorithm", "docs/test.html"));
-        category.add(article);
-        // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "docs/test.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("Winding number algorithm", "res/winding-number-algorithm.html"));
         category.add(article);
 
         /**
@@ -134,8 +134,7 @@ public class Help extends JFrame implements TreeSelectionListener {
         /**
          * Make links clickable
          *
-         * @ Credit
-         * https://docs.oracle.com/javase/8/docs/api/javax/swing/JEditorPane.html
+         * @Credit https://docs.oracle.com/javase/8/docs/api/javax/swing/JEditorPane.html
          */
         htmlPane.addHyperlinkListener(new HyperlinkListener() {
 
@@ -166,9 +165,9 @@ public class Help extends JFrame implements TreeSelectionListener {
             }
         });
         try {
-            htmlPane.setPage(getClass().getResource("docs/README.html"));
+            htmlPane.setPage(getClass().getResource("res/README.html"));
         } catch (IOException e) {
-            htmlPane.setText("Could not load page: docs/README.html");
+            htmlPane.setText("Could not load page: res/README.html");
         }
         JScrollPane htmlDisplay = new JScrollPane(htmlPane);
         htmlDisplay.setPreferredSize(new Dimension(600, 600));
@@ -183,26 +182,42 @@ public class Help extends JFrame implements TreeSelectionListener {
     /**
      * The inner class HelpArticle.
      *
-     * Contains article's name and URL to a HTML document.
+     * Contains article's name and realtive file path of the a HTML document, both
+     * as a URL and as a string.
      *
      * @Author Piotr Machura
      */
     private class HelpArticle {
         public String articleName;
+        public String filepath;
         public URL articleURL;
 
-        public HelpArticle(String articleName, String filename) {
+        /**
+         * HelpArticle contructor.
+         *
+         * @param articleName the name of the article
+         * @param filepath    the relative filepath to HTML article
+         */
+        public HelpArticle(String articleName, String filepath) {
             this.articleName = articleName;
-            this.articleURL = getClass().getResource(filename);
+            this.filepath = filepath;
+            this.articleURL = getClass().getResource(filepath);
         }
 
         public String toString() {
             return this.articleName;
         }
+
+        public String getFilePathAsString() {
+            return this.filepath;
+        }
     }
 
     /**
      * TreeSelectionListener implementation.
+     *
+     * If a leaf is selected displays approprieate document. If the root was
+     * selected displays "About" page.
      */
     @Override
     public void valueChanged(TreeSelectionEvent e) {
@@ -210,19 +225,17 @@ public class Help extends JFrame implements TreeSelectionListener {
         if (node == null)
             return;
         if (node.isLeaf()) {
-            /** If leaf was selected -> display article document */
             HelpArticle selectedArticle = (HelpArticle) node.getUserObject();
             try {
                 htmlPane.setPage(selectedArticle.articleURL);
             } catch (IOException ex) {
-                htmlPane.setText("Could not load page: " + selectedArticle.articleURL);
+                htmlPane.setText("Could not load page: " + selectedArticle.getFilePathAsString());
             }
         } else if (node.getLevel() == 0) {
-            /** If the root was selected -> display welcome page */
             try {
-                htmlPane.setPage(getClass().getResource("docs/README.html"));
+                htmlPane.setPage(getClass().getResource("res/README.html"));
             } catch (IOException ex) {
-                htmlPane.setText("Could not load page: docs/README.html");
+                htmlPane.setText("Could not load page: res/README.html");
             }
         }
     }

@@ -1,0 +1,51 @@
+<!-- Author: Piotr Machura -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Complex functions</title>
+
+    <link rel="stylesheet" href="..\markdown.css">
+    <link rel="stylesheet" href="..\highlight.css">
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body class="vscode-light">
+    <h1 id="input-your-function">4D nature of complex functions</h1>
+    <p>Complex numbers can be thought of as 2D vectors, with the real part as a horizontal component and
+        the imaginary part as vertical component. This makes complex functions a special case of vector field -
+        transforming a 2D space into a new, different 2D space. Graphing it the way we are used to for real functions
+        would therefore require a 4D graph, which is impossible to viusalize. </p>
+    <h1 id="input-your-function">Graphing a complex function</h1>
+    <img src="complexGraph.jpg" alt="complex-graph" width="500" />
+    <p>This program utilizes a special technique to get around this problem called domain coloring. First, we split the
+        function into an input space and an output space. Output space is then colored, with its hue corresponding to
+        the angle, and its brightness representing the distance from the origin. Then all the points from input space
+        "jump" to output space in a way described by the function and are colored accoridng to where they land in output
+        space. Then they "jump" back to where they were beforehand, keeping the color they gained sitting in the output
+        space, and thus the function is graphed.</p>
+    <p><a href="https://en.wikipedia.org/wiki/Domain_coloring">Relevant wikipedia article</a></p>
+
+</body>
+
+</html>
