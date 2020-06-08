@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Desktop;
+import java.awt.Toolkit;
 
 /**
  * The singleton class Help.
@@ -62,6 +63,7 @@ public class Help extends JFrame implements TreeSelectionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
 
         /**
          * Set up the tree structure

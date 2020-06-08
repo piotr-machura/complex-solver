@@ -16,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -68,7 +68,6 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Other components */
     JTextArea solutionsDisplay;
     JLabel saveGraph, saveSolutions;
-    private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Algorithm components */
     final String f_z;
@@ -98,7 +97,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.f_z = f_z;
         this.setTitle("f(z) = " + this.f_z);
         this.setLocationRelativeTo(null);
-        this.setIconImage(ICON.getImage());
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
 
         /** Set up algorithm components */
         this.range = range;
@@ -135,6 +134,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         outFrame.setResizable(false);
         outFrame.setLocationRelativeTo(null);
         outFrame.add(outSpace);
+        outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
 
         /** Close output space and animation window when closing main window */
         this.addWindowListener(new WindowAdapter() {
@@ -302,6 +302,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         graphicSolverFrame.setSize(500, 500);
         graphicSolverFrame.setResizable(false);
         graphicSolverFrame.setLocationRelativeTo(null);
+        graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
         graphicSolverFrame.add(graphicSolver);
     }
 

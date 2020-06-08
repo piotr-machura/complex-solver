@@ -11,10 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+import java.awt.Toolkit;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -50,7 +50,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JButton solveButton;
     JMenuBar upMenu;
     JMenu helpMenu;
-    JMenuItem en, pl, help, credits;
+    JMenuItem help, credits;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
 
@@ -59,8 +59,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
-
-    private static final ImageIcon ICON = new ImageIcon("cIcon.png"); // ! Nie działa
 
     /** Arguments to pass further */
     String f_z;
@@ -76,7 +74,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setResizable(false);
         this.setTitle("Complex Solver");
 
-        this.setIconImage(ICON.getImage());
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
         this.range = 10;
 
         /** Initializing panels */
@@ -97,13 +95,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         help = new JMenuItem("Help");
         credits = new JMenuItem("Credits");
 
-        en.setActionCommand("en");
-        pl.setActionCommand("pl");
         help.setActionCommand("help");
         credits.setActionCommand("credits");
 
-        en.addActionListener(this);
-        pl.addActionListener(this);
         help.addActionListener(this);
         credits.addActionListener(this);
 
