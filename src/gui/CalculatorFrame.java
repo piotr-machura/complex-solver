@@ -49,7 +49,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     HashMap<String, CalcButton> fnButtons, opButtons;
     JButton solveButton;
     JMenuBar upMenu;
-    JMenu langMenu;
     JMenu helpMenu;
     JMenuItem en, pl, help, credits;
     JRadioButton rangeAuto;
@@ -94,10 +93,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upMenu = new JMenuBar();
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
         upMenu.setPreferredSize(new Dimension(600, 30));
-        langMenu = new JMenu("Language");
         helpMenu = new JMenu("Help");
-        en = new JMenuItem("English");
-        pl = new JMenuItem("Polski");
         help = new JMenuItem("Help");
         credits = new JMenuItem("Credits");
 
@@ -111,12 +107,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         help.addActionListener(this);
         credits.addActionListener(this);
 
-        langMenu.add(en);
-        langMenu.add(pl);
         helpMenu.add(help);
         helpMenu.add(credits);
 
-        upMenu.add(langMenu);
         upMenu.add(helpMenu);
 
         /** Input text field */
@@ -322,14 +315,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         String afterCaret = currentText.substring(caretPosition, currentText.length());
 
         switch (buttonID) {
-            case "en":
-                // TODO: localization
-                break;
-
-            case "pl":
-                // TODO: localization
-                break;
-
             case "credits":
                 JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński ID 298179",
                         "Credits", JOptionPane.INFORMATION_MESSAGE);
