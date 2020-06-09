@@ -35,7 +35,7 @@ public class Help extends JFrame implements TreeSelectionListener {
     private static final long serialVersionUID = 1L;
 
     /** The singleton instance */
-    static Help instance = new Help();
+    private static Help instance = new Help();
 
     /**
      * getInstance.

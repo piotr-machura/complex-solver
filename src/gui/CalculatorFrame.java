@@ -280,12 +280,14 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      */
 
     void attemptFix() throws CalculatorException {
-        // TODO: This need to do a lot more than it's doing now.
         if (this.f_z.equals("")) {
             throw new CalculatorException("Empty input");
         } else if (!f_z.contains("z")) {
             throw new CalculatorException("No variable found");
         }
+        /**
+         * Brackets
+         */
         long countOBr = f_z.chars().filter(ch -> ch == '(').count();
         long countCBr = f_z.chars().filter(ch -> ch == ')').count();
         if (countOBr > countCBr) {
@@ -294,9 +296,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 countCBr += 1;
             }
             funcInput.setText(this.f_z);
-            JOptionPane.showMessageDialog(null, "There was an attempt at fixing: missing brackets", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
         }
+        /**
+         * Multiplication
+         */
+        // TODO
+
     }
 
     @Override
@@ -371,26 +376,27 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                  * Delete character before caret. Edge case: caret at the beginning -> do
                  * nothing
                  */
-                // TODO: delete entire functions (ex. sin(z))
                 if (caretPosition == 0) {
-                    /** Edge case: caret at the beggining -> do nothing */
                     funcInput.requestFocus();
                     break;
                 }
-
                 funcInput.setText(beforeCaret.substring(0, beforeCaret.length() - 1) + afterCaret);
 
-                /** Refocus on text field and move caret to the left */
-                funcInput.requestFocus();
+                /**
+                 * Refocus on text field and move caret to the left by the amount of deleted
+                 * characters
+                 */
+
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        funcInput.requestFocus();
                         funcInput.setCaretPosition(caretPosition - 1);
                     }
                 });
                 break;
             case "auto":
-                /** Prepare range to be set to 0 and disable input box */
+                /** Warn the user and disable input box */
                 if (rangeAuto.isSelected()) {
                     rangeInput.setEditable(false);
                     JOptionPane.showMessageDialog(null,
@@ -411,11 +417,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 funcInput.setText(newText);
 
                 /** Refocus on text field and move caret to the right */
-                funcInput.requestFocus();
+
                 final int moveCaretBy = putAtCaret.length();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        funcInput.requestFocus();
                         funcInput.setCaretPosition(caretPosition + moveCaretBy);
                     }
                 });
@@ -425,9 +432,15 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
     /** Test */
     public static void main(final String[] args) {
-        final CalculatorFrame frame = new CalculatorFrame();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                final CalculatorFrame frame = new CalculatorFrame();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
+
     }
 
 }

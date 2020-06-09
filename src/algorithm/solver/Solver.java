@@ -284,7 +284,6 @@ public class Solver {
                  * side.
                  */
                 if (x + step < B.getRe()) {
-                    // TODO: Make it "circle" around zero insted of just passing through it.
                     x += step;
                 } else {
                     break;

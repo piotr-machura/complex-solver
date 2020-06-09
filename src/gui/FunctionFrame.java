@@ -274,7 +274,12 @@ class FunctionFrame extends JFrame implements ActionListener {
                 if (solutions == null || solutions.size() == 0) {
                     solutionsString = "No roots found within range " + range + ".";
                 } else {
-                    solutionsString += "Roots found in range " + range + " :\n";
+                    if (range != AUTO_RANGE) {
+                        solutionsString += "Roots found in range " + range + " :\n";
+                    } else {
+                        solutionsString += "Roots found automatically:\n";
+                    }
+
                     for (int i = 0; i < solutions.size(); i++) {
                         solutionsString += i + 1 + "\t|\t";
                         solutionsString += solutions.get(i) + "\n";
