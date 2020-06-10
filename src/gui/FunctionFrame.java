@@ -285,7 +285,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                         solutionsString += solutions.get(i) + "\n";
                     }
                 }
-                final String solutionsReadyToDisplay = solutionsString.strip();
+                final String solutionsReadyToDisplay = solutionsString.trim();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -299,16 +299,18 @@ class FunctionFrame extends JFrame implements ActionListener {
             }
         });
 
-        /** Set GraphicSolver frame */
-        graphicSolver = new GraphicSolver(f_z, this.range);
-
+        /** GraphicSolver definition */
+        graphicSolver = new GraphicSolver(f_z, range);
         graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
+
+        /** Set GraphicSolver frame */
         graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         graphicSolverFrame.setSize(500, 500);
         graphicSolverFrame.setResizable(false);
         graphicSolverFrame.setLocationRelativeTo(null);
         graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
         graphicSolverFrame.add(graphicSolver);
+
     }
 
     @Override
@@ -328,12 +330,12 @@ class FunctionFrame extends JFrame implements ActionListener {
                 if (!graphicSolverFrame.isVisible()) {
                     graphicSolverFrame.setVisible(true);
                 } else {
+                    graphicSolver.replay();
                     graphicSolverFrame.setState(JFrame.NORMAL);
                     graphicSolverFrame.toFront();
                     graphicSolverFrame.requestFocus();
                 }
                 break;
-
             default:
                 JOptionPane.showMessageDialog(this, "Unsupported operation: " + buttonID, "Error",
                         JOptionPane.ERROR_MESSAGE);
