@@ -78,9 +78,10 @@ public class Complex implements Comparable<Complex> {
     /**
      * toString.
      *
-     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
+     * ! Written for the purpouses of winding number algorithm
      *
      * @return formattted string output
+     * @Author Piotr Machura
      */
     public String toString() {
         if (im == 0)
@@ -95,7 +96,7 @@ public class Complex implements Comparable<Complex> {
     /**
      * phase.
      *
-     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
+     * ! Written for the purpouses of winding number algorithm
      *
      * Returns phase as phi +2kPI, where phi = [0, 2pi], throws CalculatorException
      * for point 0+0i
@@ -105,6 +106,8 @@ public class Complex implements Comparable<Complex> {
      * @return the phase
      *
      * @throws CalculatorException the calculator exception
+     *
+     * @Author Piotr Machura
      */
     public static double phase(Complex z) throws CalculatorException {
         double y = Math.abs(z.im);
@@ -647,7 +650,7 @@ public class Complex implements Comparable<Complex> {
     /**
      * comperable interfae implementation.
      *
-     * ! Made by: Piotr Machura for the purpouses of winding number algorithm
+     * ! Written for the purpouses of winding number algorithm
      *
      * Numbers are sorted prioritizing real value. If real values are the same, then
      * sort by imaginary value. If both real and imaginary values are equal then the
@@ -661,6 +664,8 @@ public class Complex implements Comparable<Complex> {
      * @return 1 if this>comp
      * @return -1 if comp>this
      * @return 0 if comp==this
+     *
+     * @Author Piotr Machura
      */
 
     @Override

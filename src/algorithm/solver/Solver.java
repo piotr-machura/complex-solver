@@ -23,7 +23,7 @@ import algorithm.parser.util.Variable;
  * In order to utilize this class use the static solve() function. All other
  * methods, including contructor, are private.
  *
- * @Author Piotr Machura
+ * @Author Piotr Machura (unless specified otherwise)
  */
 public class Solver {
 
@@ -247,6 +247,8 @@ public class Solver {
      * Check winding number in relation to function f_z.
      *
      * @return Bool: winding number close or greater than 1
+     *
+     * @Author Piotr Machura, Kacper Ledwosiński
      */
     private Boolean checkWindingNumber(final String f_z) {
 
@@ -261,7 +263,7 @@ public class Solver {
         double prevPhi = 0;
         try {
             prevPhi = Complex.phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
-        } catch (Exception e) {
+        } catch (CalculatorException e) {
             prevPhi = 0;
             /** Strating in zero - might as well consider phase to be zero. */
         }
@@ -334,7 +336,7 @@ public class Solver {
                         .phase(Parser.eval(f_z, new Variable("z", new Complex(x, y))).getComplexValue());
                 windingNumber += deltaPhi(prevPhi, nextPhi);
                 prevPhi = nextPhi;
-            } catch (CalculatorException e) {
+            } catch (Exception e) {
                 if (y - step > A.getIm()) {
                     y -= step;
                 } else {
@@ -349,6 +351,8 @@ public class Solver {
      * getChildren.
      *
      * @return array of 4 equal children enumerated starting bottom left clockwise
+     *
+     * @Author Kacper Ledwosiński
      */
     private Solver[] getChildren() {
         Solver[] children = new Solver[4];
@@ -368,14 +372,16 @@ public class Solver {
      *
      * @param f_z       the function to solve for
      * @param solutions the arraylist to put solutions in
+     *
+     * @Author Piotr Machura, Kacper Ledwosiński
      */
     private void solveInside(final String f_z, ArrayList<Complex> solutions) {
         if (this.checkWindingNumber(f_z)) {
             if (this.area <= this.MIN_LEGAL_AREA) {
                 /**
-                 * Add MIDDLE to solutions if Abs(f_z(MIDDLE)) < MAX_LEGAL_ABS_OF_ROOT. This
-                 * needs to be checked because this algorithm will detect both roots AND poles
-                 * of a function.
+                 * Add MIDDLE to solutions if Abs(f_z(MIDDLE)) is small. This needs to be
+                 * checked because this algorithm will detect both roots AND poles of a
+                 * function.
                  */
                 try {
                     double absOfRoot = Complex.abs(Parser.eval(f_z, new Variable("z", this.MIDDLE)).getComplexValue());
