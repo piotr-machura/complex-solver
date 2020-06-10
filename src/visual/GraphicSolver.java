@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,7 +48,7 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
     Complex[][] childPosition;
     int range;
     double res; // rect resolution - difference between points
-    int divideDeep = 1;
+    int divideDeep = 2;
     int deepCounter = 0;
 
     ExecutorService graphicExec = Executors.newSingleThreadExecutor();
@@ -73,7 +74,8 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         D = new Complex(-range, range);
 
         childPosition = getChildPositions(divideDeep, new Complex[] { A, B, C, D });
-        System.out.println(childPosition);
+        System.out.println(Arrays.deepToString(childPosition));
+        System.out.println(childPosition.length);
     }
 
     public void replay() {
@@ -90,7 +92,7 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
     Complex[][] getChildPositions(int deep, Complex[] parents) {
         if (deep == 0)
-            return null;
+            return new Complex[][] { parents };
 
         Complex[][] tmpChilds = new Complex[(int) Math.pow(4, deep)][4];
         Complex AB_mid = new Complex((parents[1].getRe() + parents[0].getRe()) / 2, parents[0].getIm());
@@ -104,12 +106,12 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         Complex[][] rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, C, CD_mid });
         Complex[][] rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, D });
 
-        for (int i = 0; i < (int) Math.pow(4, deep); i++) {
-            for (int j = 0; j < (int) Math.pow(4, deep - 1); j++) {
-                tmpChilds[i] = rect1[j];
-                tmpChilds[i] = rect2[j];
-                tmpChilds[i] = rect3[j];
-                tmpChilds[i] = rect4[j];
+        for (int i = 0; i < (int) Math.pow(4, deep); i += 4) {
+            for (int j = 0; j < (int) Math.pow(4, deep - 1); j += 4) {
+                tmpChilds[i + 0] = rect1[j];
+                tmpChilds[i + 1] = rect2[j];
+                tmpChilds[i + 2] = rect3[j];
+                tmpChilds[i + 3] = rect4[j];
             }
         }
         return tmpChilds;
@@ -169,7 +171,8 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
             repaint();
         } else {
-            if (deepCounter <= divideDeep) {
+            if (deepCounter <= (int) Math.pow(4, divideDeep)) {
+                deepCounter++;
 
             }
         }
