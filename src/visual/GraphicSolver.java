@@ -106,13 +106,11 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         Complex[][] rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, C, CD_mid });
         Complex[][] rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, D });
 
-        for (int i = 0; i < (int) Math.pow(4, deep); i += 4) {
-            for (int j = 0; j < (int) Math.pow(4, deep - 1); j += 4) {
-                tmpChilds[i + 0] = rect1[j];
-                tmpChilds[i + 1] = rect2[j];
-                tmpChilds[i + 2] = rect3[j];
-                tmpChilds[i + 3] = rect4[j];
-            }
+        for (int j = 0; j < (int) Math.pow(4, deep - 1); j++) {
+            tmpChilds[j + 0] = rect1[j];
+            tmpChilds[j + 1] = rect2[j];
+            tmpChilds[j + 2] = rect3[j];
+            tmpChilds[j + 3] = rect4[j];
         }
         return tmpChilds;
     }
