@@ -186,8 +186,7 @@ class FunctionFrame extends JFrame implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 try {
                     /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser("Save solutions");
-                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
                     if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".txt");
 
@@ -218,8 +217,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                 inpSpace.paintAll(g2d);
                 try {
                     /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser("Save graph");
-                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
                     if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".png");
                         /** ImageIO writes the image to outputFile */
