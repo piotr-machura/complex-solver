@@ -73,9 +73,9 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         C = new Complex(range, range);
         D = new Complex(-range, range);
 
-        childPosition = getChildPositions(divideDeep, new Complex[] { A, B, C, D });
-        System.out.println(Arrays.deepToString(childPosition));
-        System.out.println(childPosition.length);
+        // childPosition = getChildPositions(divideDeep, new Complex[] { A, B, C, D });
+        // System.out.println(Arrays.deepToString(childPosition));
+        // System.out.println(childPosition.length);
     }
 
     public void replay() {
@@ -90,30 +90,39 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         this.repaint();
     }
 
-    Complex[][] getChildPositions(int deep, Complex[] parents) {
-        if (deep == 0)
-            return new Complex[][] { parents };
+    // Complex[][] getChildPositions(int deep, Complex[] parents) {
+    // if (deep == 0)
+    // return new Complex[][] { parents };
 
-        Complex[][] tmpChilds = new Complex[(int) Math.pow(4, deep)][4];
-        Complex AB_mid = new Complex((parents[1].getRe() + parents[0].getRe()) / 2, parents[0].getIm());
-        Complex BC_mid = new Complex(parents[1].getRe(), (parents[2].getIm() + parents[1].getIm()) / 2);
-        Complex CD_mid = new Complex((parents[2].getRe() + parents[3].getRe()) / 2, parents[2].getIm());
-        Complex AD_mid = new Complex(parents[3].getRe(), (parents[3].getIm() + parents[0].getIm()) / 2);
-        Complex MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
+    // Complex[][] tmpChilds = new Complex[(int) Math.pow(4, deep)][4];
+    // Complex AB_mid = new Complex((parents[1].getRe() + parents[0].getRe()) / 2,
+    // parents[0].getIm());
+    // Complex BC_mid = new Complex(parents[1].getRe(), (parents[2].getIm() +
+    // parents[1].getIm()) / 2);
+    // Complex CD_mid = new Complex((parents[2].getRe() + parents[3].getRe()) / 2,
+    // parents[2].getIm());
+    // Complex AD_mid = new Complex(parents[3].getRe(), (parents[3].getIm() +
+    // parents[0].getIm()) / 2);
+    // Complex MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2,
+    // (CD_mid.getIm() + AB_mid.getIm()) / 2);
 
-        Complex[][] rect1 = getChildPositions(deep - 1, new Complex[] { A, AB_mid, MIDDLE, AD_mid });
-        Complex[][] rect2 = getChildPositions(deep - 1, new Complex[] { AB_mid, B, BC_mid, MIDDLE });
-        Complex[][] rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, C, CD_mid });
-        Complex[][] rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, D });
+    // Complex[][] rect1 = getChildPositions(deep - 1, new Complex[] { A, AB_mid,
+    // MIDDLE, AD_mid });
+    // Complex[][] rect2 = getChildPositions(deep - 1, new Complex[] { AB_mid, B,
+    // BC_mid, MIDDLE });
+    // Complex[][] rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE,
+    // BC_mid, C, CD_mid });
+    // Complex[][] rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid,
+    // MIDDLE, CD_mid, D });
 
-        for (int j = 0; j < (int) Math.pow(4, deep - 1); j++) {
-            tmpChilds[j + 0] = rect1[j];
-            tmpChilds[j + 1] = rect2[j];
-            tmpChilds[j + 2] = rect3[j];
-            tmpChilds[j + 3] = rect4[j];
-        }
-        return tmpChilds;
-    }
+    // for (int j = 0; j < (int) Math.pow(4, deep - 1); j++) {
+    // tmpChilds[j + 0] = rect1[j];
+    // tmpChilds[j + 1] = rect2[j];
+    // tmpChilds[j + 2] = rect3[j];
+    // tmpChilds[j + 3] = rect4[j];
+    // }
+    // return tmpChilds;
+    // }
 
     @Override
     protected void paintComponent(final Graphics g) {
