@@ -189,7 +189,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                     /** Choose file to save to with fileChooser */
                     JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
                     fileChooser.setDialogTitle("Save solutions");
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text file (.txt)", "txt"));
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text (.txt)", "txt"));
                     if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".txt");
                         /** osw writes text form textArea to selected file */
@@ -221,8 +221,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                     /** Choose file to save to with fileChooser */
                     JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
                     fileChooser.setDialogTitle("Save graph");
-                    fileChooser
-                            .setFileFilter(new FileNameExtensionFilter("Portable network graphics file (.png)", "png"));
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Portable Network Graphics (.png)", "png"));
                     if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".png");
                         /** ImageIO writes the image to outputFile */
