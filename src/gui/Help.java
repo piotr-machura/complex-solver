@@ -119,11 +119,9 @@ public class Help extends JFrame implements TreeSelectionListener {
         article = new DefaultMutableTreeNode(
                 new HelpArticle("Roots and poles of complex functions", "res/math-background/roots-and-poles.html"));
         category.add(article);
-        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(
                 new HelpArticle("The Riemann Sphere", "res/math-background/riemann-sphere.html"));
         category.add(article);
-        // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(
                 new HelpArticle("Winding number algorithm", "res/math-background/winding-number-algorithm.html"));
         category.add(article);

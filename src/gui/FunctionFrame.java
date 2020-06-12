@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import visual.InputSpace;
 import visual.OutputSpace;
@@ -187,9 +188,10 @@ class FunctionFrame extends JFrame implements ActionListener {
                 try {
                     /** Choose file to save to with fileChooser */
                     JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save solutions");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text file (.txt)", "txt"));
                     if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".txt");
-
                         /** osw writes text form textArea to selected file */
                         OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputFile),
                                 Charset.forName("UTF-8").newEncoder());
@@ -198,7 +200,7 @@ class FunctionFrame extends JFrame implements ActionListener {
 
                         /** Notify user about succesful write */
                         JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                "Succesfully saved solutions to:\n" + outputFile.getName(), "Succes",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (IOException ex) {
@@ -218,13 +220,16 @@ class FunctionFrame extends JFrame implements ActionListener {
                 try {
                     /** Choose file to save to with fileChooser */
                     JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save graph");
+                    fileChooser
+                            .setFileFilter(new FileNameExtensionFilter("Portable network graphics file (.png)", "png"));
                     if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
                         File outputFile = new File(fileChooser.getSelectedFile() + ".png");
                         /** ImageIO writes the image to outputFile */
                         ImageIO.write(savedImage, "png", outputFile);
                         /** Notify user about succesful write */
                         JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                "Succesfully saved graph to:\n" + outputFile.getName(), "Succes",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (Exception ex) {
