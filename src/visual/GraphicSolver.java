@@ -74,7 +74,6 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         D = new Complex(-range, range);
 
         childPosition = getChildPositions(divideDeep, new Complex[] { A, B, C, D });
-        System.out.println(childPosition.size());
     }
 
     public void replay() {
