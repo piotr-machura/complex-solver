@@ -59,6 +59,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
+    Boolean showAutoWarning;
 
     /** Arguments to pass further */
     String f_z;
@@ -242,6 +243,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         rangeInput.setEditable(true);
         rangeAuto = new JRadioButton("Auto");
         rangeAuto.setActionCommand("auto");
+        showAutoWarning = true;
         rangeAuto.addActionListener(this);
         rangeContainer.setLayout(new GridLayout(3, 1, 0, 5));
         rangeContainer.setPreferredSize(new Dimension(60, 80));
@@ -400,9 +402,15 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /** Warn the user and disable input box */
                 if (rangeAuto.isSelected()) {
                     rangeInput.setEditable(false);
-                    JOptionPane.showMessageDialog(null,
-                            "This looks for a rectangle so big it has at least one root inside.\nMight result in extended processing time.",
-                            "Warning", JOptionPane.WARNING_MESSAGE);
+                    if (showAutoWarning) {
+                        Object[] choiceOptions = { "Ok", "Do not show again" };
+                        String autoWarningMessage = "This will start with range 5 and automatically enlarge it until it finds a root or reaches 100.";
+                        autoWarningMessage += "\nMight result in extended processing time.";
+                        /** showOptionDialog will return 1 if "Do not show again" button is clicked */
+                        showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,
+                                choiceOptions[1]) != 1);
+                    }
                 } else {
                     rangeInput.setEditable(true);
                 }
