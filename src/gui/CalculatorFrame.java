@@ -59,10 +59,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     JLabel rangeLabel, accMenuLabel;
     TextPrompt inputPrompt;
     Font mathFont;
+    Boolean showAutoWarning;
 
     /** Arguments to pass further */
     String f_z;
     int range;
+    SolverAccuracy acc;
 
     /**
      * CalculatorFrame constructor.
@@ -241,6 +243,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         rangeInput.setEditable(true);
         rangeAuto = new JRadioButton("Auto");
         rangeAuto.setActionCommand("auto");
+        showAutoWarning = true;
         rangeAuto.addActionListener(this);
         rangeContainer.setLayout(new GridLayout(3, 1, 0, 5));
         rangeContainer.setPreferredSize(new Dimension(60, 80));
@@ -274,16 +277,32 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * attemptFix.
+     * validateInput.
      *
-     * Attempts to fix missing brackets, missing "*" etc.
+     * Prepares the function f_z to be passed further. Sets the accuracy level and
+     * checks for closing bracekts.
      */
 
-    void attemptFix() throws CalculatorException {
+    private void validateInput() throws CalculatorException {
         if (this.f_z.equals("")) {
             throw new CalculatorException("Empty input");
         } else if (!f_z.contains("z")) {
             throw new CalculatorException("No variable found");
+        }
+        acc = SolverAccuracy.MED;
+        if (accuracyMenu.getSelectedItem().equals("LOW")) {
+            acc = SolverAccuracy.LOW;
+        } else if (accuracyMenu.getSelectedItem().equals("HIGH")) {
+            acc = SolverAccuracy.HIGH;
+        }
+        if (!rangeAuto.isSelected()) {
+            /** Throw exception if range is not valid */
+            if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
+                throw new CalculatorException("Incorrect range");
+            }
+            this.range = Integer.parseInt(rangeInput.getText());
+        } else {
+            this.range = FunctionFrame.AUTO_RANGE;
         }
         /**
          * Brackets
@@ -297,13 +316,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
             }
             funcInput.setText(this.f_z);
         }
-        /**
-         * Multiplication
-         */
-        // TODO
-
     }
 
+    /**
+     * ActionListener implementation.
+     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         final String buttonID = e.getActionCommand();
@@ -341,29 +358,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /** Set fz equal to input field and attempt to fix it to meet the standards */
                 this.f_z = funcInput.getText();
                 try {
-                    this.attemptFix();
-                    SolverAccuracy acc = SolverAccuracy.MED;
-                    if (accuracyMenu.getSelectedItem().equals("LOW")) {
-                        acc = SolverAccuracy.LOW;
-                    } else if (accuracyMenu.getSelectedItem().equals("HIGH")) {
-                        acc = SolverAccuracy.HIGH;
-                    }
-                    if (!rangeAuto.isSelected()) {
-                        /** Throw exception if range is not valid */
-                        if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
-                            throw new CalculatorException("Incorrect range");
-                        }
-                        this.range = Integer.parseInt(rangeInput.getText());
-                    } else {
-                        this.range = FunctionFrame.AUTO_RANGE;
-                    }
-                    FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
-                    fFrame.setVisible(true);
+                    this.validateInput();
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
                             JOptionPane.ERROR_MESSAGE);
+<<<<<<< HEAD
                     exc.printStackTrace();
+=======
+                    break;
+>>>>>>> 79690e75cd845a46a17a0db09cb0b8a6a89a2336
                 }
+                FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
+                fFrame.setVisible(true);
                 break;
 
             case "CE":
@@ -400,9 +406,15 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 /** Warn the user and disable input box */
                 if (rangeAuto.isSelected()) {
                     rangeInput.setEditable(false);
-                    JOptionPane.showMessageDialog(null,
-                            "This looks for a rectangle so big it has at least one root inside.\nMight result in extended processing time.",
-                            "Warning", JOptionPane.WARNING_MESSAGE);
+                    if (showAutoWarning) {
+                        Object[] choiceOptions = { "Ok", "Do not show again" };
+                        String autoWarningMessage = "This will start with range 5 and automatically enlarge it until it finds a root or reaches 100.";
+                        autoWarningMessage += "\nMight result in extended processing time.";
+                        /** showOptionDialog will return 1 if "Do not show again" button is clicked */
+                        showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,
+                                choiceOptions[1]) != 1);
+                    }
                 } else {
                     rangeInput.setEditable(true);
                 }
@@ -430,18 +442,4 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 break;
         }
     }
-
-    /** Test */
-    public static void main(final String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                final CalculatorFrame frame = new CalculatorFrame();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            }
-        });
-
-    }
-
 }

@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import visual.InputSpace;
 import visual.OutputSpace;
@@ -186,20 +187,26 @@ class FunctionFrame extends JFrame implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 try {
                     /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser("Save solutions");
-                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save solutions");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text (.txt)", "txt"));
                     if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
-                        File outputFile = new File(fileChooser.getSelectedFile() + ".txt");
-
+                        File outputFile = null;
+                        if (fileChooser.getSelectedFile().toString().endsWith(".txt")) {
+                            outputFile = new File(fileChooser.getSelectedFile().toString());
+                        } else {
+                            outputFile = new File(fileChooser.getSelectedFile() + ".txt");
+                        }
                         /** osw writes text form textArea to selected file */
                         OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputFile),
                                 Charset.forName("UTF-8").newEncoder());
+                        osw.write("Function: " + f_z + "\n");
                         osw.write(solutionsDisplay.getText());
                         osw.close();
 
                         /** Notify user about succesful write */
                         JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                "Succesfully saved solutions to:\n" + outputFile.getName(), "Succes",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (IOException ex) {
@@ -218,15 +225,21 @@ class FunctionFrame extends JFrame implements ActionListener {
                 inpSpace.paintAll(g2d);
                 try {
                     /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser("Save graph");
-                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save graph");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Portable Network Graphics (.png)", "png"));
                     if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
-                        File outputFile = new File(fileChooser.getSelectedFile() + ".png");
+                        File outputFile = null;
+                        if (fileChooser.getSelectedFile().toString().endsWith(".png")) {
+                            outputFile = new File(fileChooser.getSelectedFile().toString());
+                        } else {
+                            outputFile = new File(fileChooser.getSelectedFile() + ".png");
+                        }
                         /** ImageIO writes the image to outputFile */
                         ImageIO.write(savedImage, "png", outputFile);
                         /** Notify user about succesful write */
                         JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved to:\n" + outputFile.getName(), "Succes",
+                                "Succesfully saved graph to:\n" + outputFile.getName(), "Succes",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (Exception ex) {
@@ -272,7 +285,11 @@ class FunctionFrame extends JFrame implements ActionListener {
                 /** Format solutions */
                 String solutionsString = "";
                 if (solutions == null || solutions.size() == 0) {
-                    solutionsString = "No roots found within range " + range + ".";
+                    if (range != AUTO_RANGE) {
+                        solutionsString = "No roots were found within range " + range + ".";
+                    } else {
+                        solutionsString += "No roots were found automatically.";
+                    }
                 } else {
                     if (range != AUTO_RANGE) {
                         solutionsString += "Roots found in range " + range + " :\n";
