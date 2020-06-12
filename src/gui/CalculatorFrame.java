@@ -362,7 +362,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
                             JOptionPane.ERROR_MESSAGE);
+<<<<<<< HEAD
                     break;
+=======
+                    exc.printStackTrace();
+>>>>>>> 4be9ea57ad34a87647451193c810555967a16b2d
                 }
                 FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
                 fFrame.setVisible(true);
