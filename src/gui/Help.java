@@ -120,11 +120,12 @@ public class Help extends JFrame implements TreeSelectionListener {
                 new HelpArticle("Roots and poles of complex functions", "res/math-background/roots-and-poles.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
-        article = new DefaultMutableTreeNode(new HelpArticle("The Riemann Sphere", "res/riemann-sphere.html"));
+        article = new DefaultMutableTreeNode(
+                new HelpArticle("The Riemann Sphere", "res/math-background/riemann-sphere.html"));
         category.add(article);
         // TODO: replace placeholder html document with real one
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Winding number algorithm", "res/winding-number-algorithm.html"));
+                new HelpArticle("Winding number algorithm", "res/math-background/winding-number-algorithm.html"));
         category.add(article);
 
         /**
@@ -176,6 +177,8 @@ public class Help extends JFrame implements TreeSelectionListener {
         htmlDisplay.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         htmlDisplay.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
+        JTreeExpander.setTreeExpandedState(tree, true);
+        JTreeExpander.makeTreeUnCollapsible(tree);
         this.add(treeDisplay);
         this.add(htmlDisplay);
 
