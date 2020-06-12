@@ -656,7 +656,6 @@ public class TestSolver {
         }
     }
 
-    // ! Does not pass
     @Test
     public void testSolver_46() {
         String f_z = "z/cos(z)";
@@ -671,7 +670,6 @@ public class TestSolver {
         }
     }
 
-    // ! Does not pass
     @Test
     public void testSolver_47() {
         String f_z = "z/cos(z)";

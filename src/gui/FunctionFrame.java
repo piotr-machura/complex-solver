@@ -345,6 +345,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                 break;
             case "animation":
                 if (!graphicSolverFrame.isVisible()) {
+                    graphicSolver.replay();
                     graphicSolverFrame.setVisible(true);
                 } else {
                     graphicSolver.replay();
