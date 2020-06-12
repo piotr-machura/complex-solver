@@ -72,7 +72,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     public CalculatorFrame() throws HeadlessException {
         /** Basic parameters */
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(600, 530);
+        this.setSize(600, 550);
         this.setResizable(false);
         this.setTitle("Complex Solver");
 
@@ -108,6 +108,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         upMenu.add(helpMenu);
 
+        this.setJMenuBar(upMenu);
+
         /** Input text field */
         funcInput = new JTextField();
         funcInput.setPreferredSize(new Dimension(600, 50));
@@ -130,9 +132,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 }
             }
         });
-        upperPanel.setLayout(new BoxLayout(upperPanel, 1));
-
-        upperPanel.add(upMenu);
+        upperPanel.setLayout(new FlowLayout());
         upperPanel.add(funcInput);
 
         /** Set up calculator buttons */
@@ -362,11 +362,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
                             JOptionPane.ERROR_MESSAGE);
-<<<<<<< HEAD
-                    exc.printStackTrace();
-=======
                     break;
->>>>>>> 79690e75cd845a46a17a0db09cb0b8a6a89a2336
                 }
                 FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
                 fFrame.setVisible(true);
