@@ -14,7 +14,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.Toolkit;
 import java.util.HashMap;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
