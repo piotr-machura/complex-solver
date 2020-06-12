@@ -49,7 +49,7 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
     ArrayList<Complex[]> childPosition = new ArrayList<Complex[]>();
     int range;
     double res; // rect resolution - difference between points
-    int divideDeep = 2;
+    int divideDeep = 1;
     int deepCounter = 0;
 
     ExecutorService graphicExec = Executors.newSingleThreadExecutor();
@@ -171,9 +171,14 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
             repaint();
         } else {
-            if (deepCounter <= (int) Math.pow(4, divideDeep)) {
+            if (deepCounter < (int) Math.pow(4, divideDeep)) {
+                A = childPosition.get(deepCounter)[0];
+                B = childPosition.get(deepCounter)[1];
+                C = childPosition.get(deepCounter)[2];
+                D = childPosition.get(deepCounter)[3];
+                dir = Direction.RIGHT;
+                this.repaint();
                 deepCounter++;
-
             }
         }
 
