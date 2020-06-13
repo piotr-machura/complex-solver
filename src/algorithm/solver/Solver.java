@@ -159,7 +159,7 @@ public class Solver {
      * @param d             the top-left point D
      * @param accuracyLevel the desired accuracy level
      */
-    private Solver(Complex a, Complex b, Complex c, Complex d, final SolverAccuracy accuracyLevel) {
+    public Solver(Complex a, Complex b, Complex c, Complex d, final SolverAccuracy accuracyLevel) {
 
         A = a;
         B = b;
@@ -250,7 +250,7 @@ public class Solver {
      *
      * @Author Piotr Machura, Kacper Ledwosiński
      */
-    private Boolean checkWindingNumber(final String f_z) {
+    public Boolean checkWindingNumber(final String f_z) {
 
         /** Step of "integration" - STEPS_PER_SIDELENGTH steps per side length */
         final double step = Math.sqrt(this.area) / STEPS_PER_SIDELENGTH;

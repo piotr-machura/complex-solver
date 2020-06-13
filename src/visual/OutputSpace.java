@@ -20,6 +20,8 @@ public class OutputSpace extends JPanel {
     String f;
     ArrayList<Complex> sq_points = new ArrayList<Complex>();
 
+    Complex currentPoint = new Complex(0, 0);
+
     public OutputSpace(String f) {
         this.f = f;
     }
@@ -27,6 +29,10 @@ public class OutputSpace extends JPanel {
     public void addPoint(Complex p) {
         sq_points.add(p);
         this.repaint();
+    }
+
+    public void setCurrent(Complex c) {
+        this.currentPoint = c;
     }
 
     @Override
@@ -59,7 +65,22 @@ public class OutputSpace extends JPanel {
             }
         }
 
-        // ? Co się tutaj dzieje
+        // draw current point
+        double fi;
+        try {
+            fi = Complex.phase(currentPoint) / 2 / Math.PI;
+        } catch (Exception e) {
+            fi = 0;
+        }
+
+        double r = Complex.abs(currentPoint);
+        if (r > 1)
+            r = 1;
+
+        g2.setColor(Color.getHSBColor((float) (1 - fi), 1, (float) (1 - r)));
+        int x = (int) (currentPoint.getRe() * zoomX / scaleX);
+        int y = (int) (currentPoint.getIm() * zoomY / scaleY);
+        g2.fillArc(x - 5, y - 5, 10, 10, 0, 360);
 
         g2.setColor(Color.gray);
         g2.drawLine(-getWidth() / 2, 0, getWidth() / 2, 0);

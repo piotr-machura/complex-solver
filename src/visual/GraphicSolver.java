@@ -3,6 +3,8 @@ package visual;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -11,18 +13,22 @@ import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import javax.swing.Timer;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import algorithm.parser.exception.CalculatorException;
 import algorithm.parser.function.Complex;
 import algorithm.parser.main.Parser;
 import algorithm.parser.util.Variable;
+import algorithm.solver.Solver;
+import algorithm.solver.SolverAccuracy;
 
 /**
  * @Author Kacper Ledwosiński
  */
-public class GraphicSolver extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener {
+public class GraphicSolver extends JPanel
+        implements MouseMotionListener, MouseListener, MouseWheelListener, ActionListener, Runnable {
     private static final long serialVersionUID = 1L;
 
     enum Direction {
@@ -44,14 +50,19 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
     /** Animation components */
     Direction dir = Direction.RIGHT; // 0-right, 1-down, 2-left, 3-up
     Complex A, B, C, D;
-    // Complex[][] childPosition;
     ArrayList<Complex[]> childPosition = new ArrayList<Complex[]>();
     int range;
     double res; // rect resolution - difference between points
     int divideDeep = 1;
     int deepCounter = 0;
+    Timer graphicTime;
+
+    int speed = 0; // ms timer delay
 
     ExecutorService graphicExec = Executors.newSingleThreadExecutor();
+
+    public JFrame outFrame;
+    OutputSpace outputSpace;
 
     public GraphicSolver(final String f, final int range) {
         this.f = f;
@@ -74,11 +85,24 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         D = new Complex(-range, range);
 
         childPosition = getChildPositions(divideDeep, new Complex[] { A, B, C, D });
-        System.out.println(childPosition.size());
+        graphicExec.execute(this);
+
+        this.outputSpace = new OutputSpace(this.f);
+
+        /** Output space frame */
+        outFrame = new JFrame("Output space");
+        outFrame.setSize(200, 250);
+        outFrame.setResizable(false);
+        outFrame.setLocationRelativeTo(null);
+        outFrame.add(this.outputSpace);
     }
 
     public void replay() {
         sq_points = new ArrayList<Complex>();
+        A = new Complex(-range, -range);
+        B = new Complex(range, -range);
+        C = new Complex(range, range);
+        D = new Complex(-range, range);
         deepCounter = 0;
         dir = Direction.RIGHT;
         this.repaint();
@@ -91,28 +115,51 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
     ArrayList<Complex[]> getChildPositions(int deep, Complex[] parents) {
         ArrayList<Complex[]> tmpChilds = new ArrayList<Complex[]>();
+        tmpChilds.add(parents);
         if (deep == 0) {
-            tmpChilds.add(parents);
             return tmpChilds;
+        }
+
+        // remove first square
+        if (deep == this.divideDeep) {
+            tmpChilds = new ArrayList<Complex[]>();
         }
 
         Complex AB_mid = new Complex((parents[1].getRe() + parents[0].getRe()) / 2, parents[0].getIm());
         Complex BC_mid = new Complex(parents[1].getRe(), (parents[2].getIm() + parents[1].getIm()) / 2);
         Complex CD_mid = new Complex((parents[2].getRe() + parents[3].getRe()) / 2, parents[2].getIm());
         Complex AD_mid = new Complex(parents[3].getRe(), (parents[3].getIm() + parents[0].getIm()) / 2);
-        Complex MIDDLE = new Complex((BC_mid.getRe() + AD_mid.getRe()) / 2, (CD_mid.getIm() + AB_mid.getIm()) / 2);
+        Complex MIDDLE = new Complex((AB_mid.getRe() + CD_mid.getRe()) / 2, (AD_mid.getIm() + BC_mid.getIm()) / 2);
 
-        ArrayList<Complex[]> rect1 = getChildPositions(deep - 1, new Complex[] { A, AB_mid, MIDDLE, AD_mid });
-        ArrayList<Complex[]> rect2 = getChildPositions(deep - 1, new Complex[] { AB_mid, B, BC_mid, MIDDLE });
-        ArrayList<Complex[]> rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, C, CD_mid });
-        ArrayList<Complex[]> rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, D });
+        Boolean rect1zero = new Solver(parents[0], AB_mid, MIDDLE, AD_mid, SolverAccuracy.LOW)
+                .checkWindingNumber(this.f);
+        ArrayList<Complex[]> rect1 = new ArrayList<Complex[]>();
+        if (!rect1zero)
+            rect1 = getChildPositions(deep - 1, new Complex[] { parents[0], AB_mid, MIDDLE, AD_mid });
 
-        for (int j = 0; j < (int) Math.pow(4, deep - 1); j++) {
-            tmpChilds.add(rect1.get(j));
-            tmpChilds.add(rect2.get(j));
-            tmpChilds.add(rect3.get(j));
-            tmpChilds.add(rect4.get(j));
-        }
+        Boolean rect2zero = new Solver(AB_mid, parents[1], BC_mid, MIDDLE, SolverAccuracy.LOW)
+                .checkWindingNumber(this.f);
+        ArrayList<Complex[]> rect2 = new ArrayList<Complex[]>();
+        if (!rect2zero)
+            rect2 = getChildPositions(deep - 1, new Complex[] { AB_mid, parents[1], BC_mid, MIDDLE });
+
+        Boolean rect3zero = new Solver(MIDDLE, BC_mid, parents[2], CD_mid, SolverAccuracy.LOW)
+                .checkWindingNumber(this.f);
+        ArrayList<Complex[]> rect3 = new ArrayList<Complex[]>();
+        if (!rect3zero)
+            rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, parents[2], CD_mid });
+
+        Boolean rect4zero = new Solver(AD_mid, MIDDLE, CD_mid, parents[3], SolverAccuracy.LOW)
+                .checkWindingNumber(this.f);
+        ArrayList<Complex[]> rect4 = new ArrayList<Complex[]>();
+        if (!rect4zero)
+            rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, parents[3] });
+
+        tmpChilds.addAll(rect1);
+        tmpChilds.addAll(rect2);
+        tmpChilds.addAll(rect3);
+        tmpChilds.addAll(rect4);
+
         return tmpChilds;
     }
 
@@ -122,63 +169,17 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         final Graphics2D g2 = (Graphics2D) g;
         g2.translate(getWidth() / 2, getHeight() / 2);
 
+        if (!graphicTime.isRunning())
+            graphicTime.start();
+
         if (panning) {
+            graphicTime.stop();
             g2.setColor(Color.black);
             g2.drawLine(-getWidth() / 2 + originX, -getHeight() / 2 + originY, -getWidth() / 2 + originX - offX,
                     -getHeight() / 2 + originY - offY);
             g2.drawLine(-getWidth() / 2, -centerY - offY, getWidth() / 2, -centerY - offY);
             g2.drawLine(centerX - offX, -getHeight() / 2, centerX - offX, getHeight() / 2);
             return;
-        }
-
-        // add square points
-        int sq_pts_len = sq_points.size();
-        if (sq_pts_len < 1) {
-            sq_points.add(A);
-            repaint();
-        } else if (dir != Direction.STOP) {
-            Complex last = sq_points.get(sq_pts_len - 1);
-            double l_re = last.getRe();
-            double l_im = last.getIm();
-
-            if (dir == Direction.RIGHT) {
-                Complex new_pt = new Complex(l_re + res, l_im);
-                sq_points.add(new_pt);
-                if (new_pt.getRe() > B.getRe()) {
-                    sq_points.add(B);
-                    dir = Direction.DOWN;
-                }
-            } else if (dir == Direction.DOWN) {
-                Complex new_pt = new Complex(l_re, l_im + res);
-                sq_points.add(new_pt);
-                if (new_pt.getIm() > C.getIm()) {
-                    sq_points.add(C);
-                    dir = Direction.LEFT;
-                }
-            } else if (dir == Direction.LEFT) {
-                Complex new_pt = new Complex(l_re - res, l_im);
-                sq_points.add(new_pt);
-                if (new_pt.getRe() < D.getRe())
-                    dir = Direction.UP;
-            } else if (dir == Direction.UP) {
-                Complex new_pt = new Complex(l_re, l_im - res);
-                sq_points.add(new_pt);
-                if (new_pt.getIm() - res < A.getIm()) {
-                    dir = Direction.STOP;
-                }
-            }
-
-            repaint();
-        } else {
-            if (deepCounter < (int) Math.pow(4, divideDeep)) {
-                A = childPosition.get(deepCounter)[0];
-                B = childPosition.get(deepCounter)[1];
-                C = childPosition.get(deepCounter)[2];
-                D = childPosition.get(deepCounter)[3];
-                dir = Direction.RIGHT;
-                this.repaint();
-                deepCounter++;
-            }
         }
 
         // draw rectangle points
@@ -221,6 +222,65 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
         for (int i = -(int) ((getHeight() - 2 * centerY) / (2 * zoomY / scaleY))
                 - 1; i < (int) ((getHeight() + 2 * centerY) / (2 * zoomY / scaleY)) + 1; i++) {
             g2.fillRect(-5 + centerX, (int) (i * zoomY / scaleY) - 1 - centerY, 10, 2);
+        }
+
+        repaint();
+    }
+
+    @Override
+    public void run() {
+        graphicTime = new Timer(speed, this);
+    }
+
+    public void update() {
+        // add square points
+        int sq_pts_len = sq_points.size();
+        if (sq_pts_len < 1) {
+            sq_points.add(A);
+        } else if (dir != Direction.STOP) {
+            Complex last = sq_points.get(sq_pts_len - 1);
+            double l_re = last.getRe();
+            double l_im = last.getIm();
+
+            if (dir == Direction.RIGHT) {
+                Complex new_pt = new Complex(l_re + res, l_im);
+                sq_points.add(new_pt);
+                this.outputSpace.setCurrent(new_pt);
+                if (new_pt.getRe() > B.getRe()) {
+                    sq_points.add(B);
+                    dir = Direction.DOWN;
+                }
+            } else if (dir == Direction.DOWN) {
+                Complex new_pt = new Complex(l_re, l_im + res);
+                sq_points.add(new_pt);
+                this.outputSpace.setCurrent(new_pt);
+                if (new_pt.getIm() > C.getIm()) {
+                    sq_points.add(C);
+                    dir = Direction.LEFT;
+                }
+            } else if (dir == Direction.LEFT) {
+                Complex new_pt = new Complex(l_re - res, l_im);
+                sq_points.add(new_pt);
+                this.outputSpace.setCurrent(new_pt);
+                if (new_pt.getRe() < D.getRe())
+                    dir = Direction.UP;
+            } else if (dir == Direction.UP) {
+                Complex new_pt = new Complex(l_re, l_im - res);
+                sq_points.add(new_pt);
+                this.outputSpace.setCurrent(new_pt);
+                if (new_pt.getIm() - res < A.getIm()) {
+                    dir = Direction.STOP;
+                }
+            }
+        } else {
+            if (deepCounter < childPosition.size()) {
+                A = childPosition.get(deepCounter)[0];
+                B = childPosition.get(deepCounter)[1];
+                C = childPosition.get(deepCounter)[2];
+                D = childPosition.get(deepCounter)[3];
+                dir = Direction.RIGHT;
+                deepCounter++;
+            }
         }
     }
 
@@ -272,6 +332,11 @@ public class GraphicSolver extends JPanel implements MouseMotionListener, MouseL
 
     @Override
     public void mouseExited(final MouseEvent e) {
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.update();
     }
 
 }

@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
@@ -77,7 +75,6 @@ class FunctionFrame extends JFrame implements ActionListener {
     InputSpace inpSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;
-    JFrame outFrame;
     SolverAccuracy acc;
 
     /** Animation components */
@@ -127,23 +124,6 @@ class FunctionFrame extends JFrame implements ActionListener {
         centerPanel = new JPanel();
         bottomPanel = new JPanel();
         utilContainer = new JPanel();
-
-        /** Output space frame */
-        outFrame = new JFrame("Output space");
-        outFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        outFrame.setSize(200, 250);
-        outFrame.setResizable(false);
-        outFrame.setLocationRelativeTo(null);
-        outFrame.add(outSpace);
-        outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
-
-        /** Close output space and animation window when closing main window */
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                outFrame.dispatchEvent(new WindowEvent(outFrame, WindowEvent.WINDOW_CLOSING));
-                graphicSolverFrame.dispatchEvent(new WindowEvent(graphicSolverFrame, WindowEvent.WINDOW_CLOSING));
-            }
-        });
 
         /** Set up bottom panel */
         /** Scrollable solutions display */
@@ -335,12 +315,12 @@ class FunctionFrame extends JFrame implements ActionListener {
         final String buttonID = e.getActionCommand();
         switch (buttonID) {
             case "output":
-                if (!outFrame.isVisible()) {
-                    outFrame.setVisible(true);
+                if (!graphicSolver.outFrame.isVisible()) {
+                    graphicSolver.outFrame.setVisible(true);
                 } else {
-                    outFrame.setState(JFrame.NORMAL);
-                    outFrame.toFront();
-                    outFrame.requestFocus();
+                    graphicSolver.outFrame.setState(JFrame.NORMAL);
+                    graphicSolver.outFrame.toFront();
+                    graphicSolver.outFrame.requestFocus();
                 }
                 break;
             case "animation":
