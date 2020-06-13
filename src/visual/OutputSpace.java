@@ -53,12 +53,16 @@ public class OutputSpace extends JPanel {
 
                 double x = i * tickX;
                 double y = j * tickY;
-
-                double fi = Math.atan2(x, y) / (2 * Math.PI);
-                double r = Math.sqrt(x * x + y * y);
-                if (r > 1)
+                double fi;
+                try {
+                    fi = Complex.phase(new Complex(x, y)) / (2 * Math.PI);
+                } catch (Exception e) {
+                    fi = 0;
+                }
+                double r = Complex.abs(new Complex(x, y));
+                if (r > 1) {
                     r = 1;
-
+                }
                 g2.setColor(Color.getHSBColor((float) fi, 1, (float) r));
                 g2.fillRect(i, j, 1, 1);
 
