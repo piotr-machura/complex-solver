@@ -40,9 +40,6 @@ public class Help extends JFrame implements TreeSelectionListener {
     /**
      * getInstance.
      *
-     * HelpFrame is a singleton class, instance is accessible through a static
-     * getInstance() method.
-     *
      * @return the singleton instance of HelpFrame
      */
     public static Help getInstance() {

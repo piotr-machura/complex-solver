@@ -32,12 +32,17 @@ import algorithm.solver.SolverAccuracy;
 import algorithm.parser.exception.CalculatorException;
 
 /**
- * The class CalculatorFrame
+ * The singleton class CalculatorFrame
+ *
+ * Main frame of the program.
  *
  * @Author Piotr Machura
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
+
+    /** The singleton instance */
+    public static CalculatorFrame instance = new CalculatorFrame();
 
     /** Panels */
     JPanel upperPanel, centerPanel, bottomPanel;
@@ -66,9 +71,18 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     SolverAccuracy acc;
 
     /**
-     * CalculatorFrame constructor.
+     * getInstance.
+     *
+     * @return the singleton instance
      */
-    public CalculatorFrame() throws HeadlessException {
+    public static CalculatorFrame getInstance() {
+        return instance;
+    }
+
+    /**
+     * CalculatorFrame instance constructor.
+     */
+    private CalculatorFrame() throws HeadlessException {
         /** Basic parameters */
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(600, 550);
@@ -280,14 +294,75 @@ public class CalculatorFrame extends JFrame implements ActionListener {
      *
      * Prepares the function f_z to be passed further. Sets the accuracy level and
      * checks for closing bracekts.
+     *
+     * @throws CalculatorException when the input is invalid
      */
-
     private void validateInput() throws CalculatorException {
-        if (this.f_z.equals("")) {
+
+        String fTmp = funcInput.getText();
+        if (fTmp.equals("")) {
             throw new CalculatorException("Empty input");
-        } else if (!f_z.contains("z")) {
+        } else if (!fTmp.contains("z")) {
             throw new CalculatorException("No variable found");
         }
+
+        /**
+         * Remove all function names and all other valid tokens. If anything remains
+         * invalidate input.
+         */
+        for (String functionToken : fnButtons.keySet()) {
+            fTmp = fTmp.replaceAll(functionToken, "");
+        }
+        fTmp = fTmp.replaceAll("[\\(\\)*+^zie\\-0123456789\\\\/.]", "");
+        if (!fTmp.equals("")) {
+            throw new CalculatorException("Invalid tokens: " + fTmp + " found in the input");
+        }
+
+        /** Correct the amount of opening/closing brackets */
+        fTmp = funcInput.getText();
+        long countOpeningBrackets = fTmp.chars().filter(ch -> ch == '(').count();
+        long countClosingBrackets = fTmp.chars().filter(ch -> ch == ')').count();
+        if (countOpeningBrackets > countClosingBrackets) {
+            while (countOpeningBrackets > countClosingBrackets) {
+                fTmp += ")";
+                countClosingBrackets += 1;
+            }
+        } else if (countOpeningBrackets < countClosingBrackets) {
+            throw new CalculatorException("Too many closing brackets");
+        }
+
+        /**
+         * Fix implicit multiplication - check if each char is a "z" (except for the
+         * first and last one), then check if it has an operator as one of it's
+         * neighbours. If not then add a multiplication sign "*". Start checking "left
+         * sides" of each "z", then check "right sides".
+         */
+        for (int i = 1; i < fTmp.length(); i++) {
+            if (fTmp.charAt(i) == 'z') {
+                if (!"+-/^*(".contains("" + fTmp.charAt(i - 1))) {
+                    /** Insert "*" to the left of "z" */
+                    StringBuffer fTmpBuffer = new StringBuffer(fTmp);
+                    fTmpBuffer.insert(i, "*");
+                    fTmp = fTmpBuffer.toString();
+                    i++;
+                }
+
+            }
+        }
+        for (int i = 0; i < fTmp.length() - 1; i++) {
+            if (fTmp.charAt(i) == 'z') {
+                if (!"+-/^*)".contains("" + fTmp.charAt(i + 1))) {
+                    /** Insert "*" to the right of "z" */
+                    StringBuffer fTmpBuffer = new StringBuffer(fTmp);
+                    fTmpBuffer.insert(i + 1, "*");
+                    fTmp = fTmpBuffer.toString();
+                    i++;
+                }
+            }
+        }
+
+        funcInput.setText(fTmp);
+        /** Validate accuracy */
         acc = SolverAccuracy.MED;
         if (accuracyMenu.getSelectedItem().equals("LOW")) {
             acc = SolverAccuracy.LOW;
@@ -296,24 +371,15 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         }
         if (!rangeAuto.isSelected()) {
             /** Throw exception if range is not valid */
-            if (rangeInput.getText().equals("0") || rangeInput.getText().equals("")) {
-                throw new CalculatorException("Incorrect range");
+            if (rangeInput.getText().equals("0")) {
+                throw new CalculatorException("A range of 0 is invalid");
+            }
+            if (rangeInput.getText().equals("")) {
+                throw new CalculatorException("An empty range is invalid");
             }
             this.range = Integer.parseInt(rangeInput.getText());
         } else {
             this.range = FunctionFrame.AUTO_RANGE;
-        }
-        /**
-         * Brackets
-         */
-        long countOBr = f_z.chars().filter(ch -> ch == '(').count();
-        long countCBr = f_z.chars().filter(ch -> ch == ')').count();
-        if (countOBr > countCBr) {
-            while (countOBr > countCBr) {
-                this.f_z += ")";
-                countCBr += 1;
-            }
-            funcInput.setText(this.f_z);
         }
     }
 
@@ -355,9 +421,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
             case "solve":
                 /** Set fz equal to input field and attempt to fix it to meet the standards */
-                this.f_z = funcInput.getText();
                 try {
                     this.validateInput();
+                    this.f_z = funcInput.getText();
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
                             JOptionPane.ERROR_MESSAGE);

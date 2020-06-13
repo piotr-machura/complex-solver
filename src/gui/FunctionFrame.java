@@ -73,7 +73,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     /** Algorithm components */
     final String f_z;
     final int range;
-    protected static final int AUTO_RANGE = 0;
+    static final int AUTO_RANGE = 0;
     InputSpace inpSpace;
     OutputSpace outSpace;
     ArrayList<Complex> solutions;

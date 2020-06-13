@@ -9,9 +9,8 @@ public class MainClass {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                final CalculatorFrame frame = new CalculatorFrame();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
+                CalculatorFrame.getInstance().setLocationRelativeTo(null);
+                CalculatorFrame.getInstance().setVisible(true);
             }
         });
 
