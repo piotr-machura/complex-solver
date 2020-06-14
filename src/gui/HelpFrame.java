@@ -31,18 +31,18 @@ import java.awt.Toolkit;
  *
  * @Author Piotr Machura
  */
-public class Help extends JFrame implements TreeSelectionListener {
+public class HelpFrame extends JFrame implements TreeSelectionListener {
     private static final long serialVersionUID = 1L;
 
     /** The singleton instance */
-    private static Help instance = new Help();
+    private static HelpFrame instance = new HelpFrame();
 
     /**
      * getInstance.
      *
      * @return the singleton instance of HelpFrame
      */
-    public static Help getInstance() {
+    public static HelpFrame getInstance() {
         return instance;
     }
 
@@ -53,7 +53,7 @@ public class Help extends JFrame implements TreeSelectionListener {
     /**
      * The private singleton instance contructor.
      */
-    private Help() throws HeadlessException {
+    private HelpFrame() throws HeadlessException {
         super("Help");
         this.setSize(620, 760);
         this.setResizable(false);

@@ -28,7 +28,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import algorithm.solver.Solver;
 import algorithm.solver.SolverAccuracy;
 import algorithm.parser.exception.CalculatorException;
 
@@ -54,8 +53,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     HashMap<String, CalcButton> fnButtons, opButtons;
     JButton solveButton;
     JMenuBar upMenu;
-    JMenu helpMenu;
-    JMenuItem help, credits;
+    JMenu toolMenu;
+    JMenuItem help, options, credits;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
 
@@ -67,7 +66,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     Boolean showAutoWarning;
 
     /** Arguments to pass further */
-    String f_z;
     int range;
     SolverAccuracy acc;
 
@@ -107,20 +105,25 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         upMenu = new JMenuBar();
         upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
         upMenu.setPreferredSize(new Dimension(600, 30));
-        helpMenu = new JMenu("Help");
+        toolMenu = new JMenu("Tools");
         help = new JMenuItem("Help");
+        options = new JMenuItem("Options");
         credits = new JMenuItem("Credits");
 
+        options.setActionCommand("options");
         help.setActionCommand("help");
         credits.setActionCommand("credits");
 
+        options.addActionListener(this);
         help.addActionListener(this);
         credits.addActionListener(this);
 
-        helpMenu.add(help);
-        helpMenu.add(credits);
+        toolMenu.add(options);
+        toolMenu.add(help);
+        toolMenu.addSeparator();
+        toolMenu.add(credits);
 
-        upMenu.add(helpMenu);
+        upMenu.add(toolMenu);
 
         this.setJMenuBar(upMenu);
 
@@ -293,7 +296,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     /**
      * validateInput.
      *
-     * Prepares the function f_z to be passed further. Sets the accuracy level and
+     * Prepares the funcInput text to be passed further. Sets the accuracy level and
      * checks for closing bracekts.
      *
      * @throws CalculatorException when the input is invalid
@@ -408,29 +411,46 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     @Override
                     public void run() {
                         /** Invoke help window if not visible, bring it up if closed */
-                        if (Help.getInstance().isVisible() == false) {
-                            Help.getInstance().setVisible(true);
+                        if (HelpFrame.getInstance().isVisible() == false) {
+                            HelpFrame.getInstance().setVisible(true);
                         } else {
-                            Help.getInstance().requestFocus();
-                            Help.getInstance().setState(JFrame.NORMAL);
-                            Help.getInstance().toFront();
+                            HelpFrame.getInstance().requestFocus();
+                            HelpFrame.getInstance().setState(JFrame.NORMAL);
+                            HelpFrame.getInstance().toFront();
                         }
                     }
                 });
 
                 break;
 
+            case "options":
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        /** Invoke options window if not visible, bring it up if closed */
+                        if (OptionsFrame.getInstance().isVisible() == false) {
+                            OptionsFrame.getInstance().setVisible(true);
+                        } else {
+                            OptionsFrame.getInstance().requestFocus();
+                            OptionsFrame.getInstance().setState(JFrame.NORMAL);
+                            OptionsFrame.getInstance().toFront();
+                        }
+                    }
+
+                });
+                break;
+
             case "solve":
                 /** Set fz equal to input field and attempt to fix it to meet the standards */
                 try {
                     this.validateInput();
-                    this.f_z = funcInput.getText();
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
                             JOptionPane.ERROR_MESSAGE);
                     break;
                 }
-                FunctionFrame fFrame = new FunctionFrame(f_z, acc, range);
+                FunctionFrame fFrame = new FunctionFrame(funcInput.getText(), acc, range);
                 fFrame.setVisible(true);
                 break;
 
@@ -470,9 +490,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     rangeInput.setEditable(false);
                     if (showAutoWarning) {
                         Object[] choiceOptions = { "Ok", "Do not show again" };
-                        String autoWarningMessage = "This will start with a given range and automatically enlarge it\n";
-                        autoWarningMessage += "until it finds a root or terminates.\n";
-                        autoWarningMessage += "Might result in extended processing time.";
+                        String autoWarningMessage = "This will start with a given range and automatically \n";
+                        autoWarningMessage += "  enlarge it until it finds a root or terminates.\n";
+                        autoWarningMessage += "     Might result in extended processing time.";
                         /** showOptionDialog will return 1 if "Do not show again" button is clicked */
                         showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
                                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,

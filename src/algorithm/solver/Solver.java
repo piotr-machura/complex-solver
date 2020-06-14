@@ -3,7 +3,6 @@ package algorithm.solver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream.GetField;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
