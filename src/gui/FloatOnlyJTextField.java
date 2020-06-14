@@ -21,13 +21,19 @@ public class FloatOnlyJTextField extends JTextField {
         super(columns);
     }
 
-    /** If keypress is not digit/backspace/delete/dot -> do nothing */
+    /** If keypress is not digit/backspace/delete/dot/enter -> do nothing */
     @Override
     public void processKeyEvent(KeyEvent ev) {
         Character c = ev.getKeyChar();
-        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c.equals('.'))) {
+        final int ENTER_KECODE = 10;
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c.equals('.')
+                || c == ENTER_KECODE)) {
             ev.consume();
         } else {
+            if (c.equals('.') && this.getText().contains(".")) {
+                /** There can only be one dot */
+                ev.consume();
+            }
             super.processKeyEvent(ev);
             ev.consume();
         }

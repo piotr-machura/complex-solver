@@ -21,11 +21,12 @@ public class IntOnlyJTextField extends JTextField {
         super(columns);
     }
 
-    /** If keypress is not digit/backspace/delete -> do nothing */
+    /** If keypress is not digit/backspace/delete/enter -> do nothing */
     @Override
     public void processKeyEvent(KeyEvent ev) {
         Character c = ev.getKeyChar();
-        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
+        final int ENTER_KECODE = 10;
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == ENTER_KECODE)) {
             ev.consume();
         } else {
             super.processKeyEvent(ev);

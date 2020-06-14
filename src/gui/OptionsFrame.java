@@ -126,7 +126,6 @@ public class OptionsFrame extends JFrame implements ActionListener {
                     }
                 }
             });
-
         }
 
         /** Press enter to apply */
