@@ -72,16 +72,6 @@ public class OutputSpace extends JPanel {
         }
 
         // draw current point
-        double fi;
-        try {
-            fi = Complex.phase(currentPoint) / 2 / Math.PI;
-        } catch (Exception e) {
-            fi = 0;
-        }
-
-        double r = Complex.abs(currentPoint);
-        if (r > 1)
-            r = 1;
 
         g2.setColor(Color.white);
         int x;

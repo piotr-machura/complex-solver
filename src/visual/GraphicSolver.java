@@ -99,13 +99,13 @@ public class GraphicSolver extends JPanel
         outFrame.add(this.outputSpace);
         outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("main.png")));
 
-        for (int i = 0; i < childPosition.size(); i++) {
-            System.out.println("rect:" + i);
-            System.out.println(childPosition.get(i)[0]);
-            System.out.println(childPosition.get(i)[1]);
-            System.out.println(childPosition.get(i)[2]);
-            System.out.println(childPosition.get(i)[3]);
-        }
+        // for (int i = 0; i < childPosition.size(); i++) {
+        // System.out.println("rect:" + i);
+        // System.out.println(childPosition.get(i)[0]);
+        // System.out.println(childPosition.get(i)[1]);
+        // System.out.println(childPosition.get(i)[2]);
+        // System.out.println(childPosition.get(i)[3]);
+        // }
     }
 
     public void replay() {
