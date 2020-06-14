@@ -437,4 +437,19 @@ public class Solver {
         MIN_LEGAL_WINDING_NUMBER_RATIO = Double.valueOf(args[5]);
         MAX_LEGAL_ABS_OF_ROOT = Double.valueOf(args[6]);
     }
+
+    /**
+     * restoreDefaultConfig.
+     *
+     * Does exactly what its name says
+     */
+    public static void restoreDefaultConfig() {
+        AUTO_RANGE_START = SolverDefaults.AUTO_RANGE_START;
+        AUTO_RANGE_INCREMENT = SolverDefaults.AUTO_RANGE_INCREMENT;
+        AUTO_RANGE_MAX = SolverDefaults.AUTO_RANGE_MAX;
+        MAX_LEGAL_DELTAPHI_RATIO = SolverDefaults.MAX_LEGAL_DELTAPHI_RATIO;
+        STEPS_PER_SIDELENGTH = SolverDefaults.STEPS_PER_SIDELENGTH;
+        MIN_LEGAL_WINDING_NUMBER_RATIO = SolverDefaults.MIN_LEGAL_WINDING_NUMBER_RATIO;
+        MAX_LEGAL_ABS_OF_ROOT = SolverDefaults.MAX_LEGAL_ABS_OF_ROOT;
+    }
 }

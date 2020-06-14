@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.JOptionPane;
@@ -9,6 +8,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import algorithm.solver.Solver;
 import gui.CalculatorFrame;
+import gui.OptionsFrame;
 
 /**
  * MainClass.
@@ -16,6 +16,7 @@ import gui.CalculatorFrame;
  * @Author Piotr Machura
  */
 public class MainClass {
+
     public static void main(final String[] args) {
         /** Set custom look and feel */
         try {
@@ -23,10 +24,9 @@ public class MainClass {
         } catch (Exception e) {
             /** The look and feel is not supported -> do nothing */
         }
-        /** Get config file from cwd */
-        File solverrc = new File(System.getProperty("user.dir") + "\\.solverrc");
+        /** Get config file */
         try {
-            Solver.readConfig(solverrc);
+            Solver.readConfig(OptionsFrame.solverrc);
         } catch (Exception e) {
             if (!(e instanceof FileNotFoundException)) {
                 /** If there is a problem with the file other than it not existing delete it */
@@ -39,7 +39,7 @@ public class MainClass {
                                 "ERROR", JOptionPane.ERROR_MESSAGE);
                     }
                 });
-                solverrc.delete();
+                OptionsFrame.solverrc.delete();
             }
         }
         SwingUtilities.invokeLater(new Runnable() {

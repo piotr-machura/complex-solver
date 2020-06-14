@@ -7,6 +7,7 @@ This program was created as an end-of-semester project for the "Object Oriented 
 1. Class /gui/`TextPrompt` used in function input textfield: https://tips4java.wordpress.com/2009/11/29/text-prompt/
 2. Library /algorithm/parser/* used for `String`-> math formula converstion: https://github.com/sbesada/java.math.expression.parser/
 3. Class /gui/`JTreeExpander` used for managing the JTree: https://www.logicbig.com/tutorials/java-swing/tree-disallow-collapse.html
+4. Custom look and feel: https://www.formdev.com/flatlaf/
 
 # Credits
 [Piotr Machura](https://github.com/piotrmachura16) \

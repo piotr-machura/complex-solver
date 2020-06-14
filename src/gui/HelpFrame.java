@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Desktop;
 import java.awt.Toolkit;
+import java.awt.Color;
 
 /**
  * The singleton class Help.
@@ -59,7 +60,7 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
 
         /**
@@ -128,6 +129,7 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
          */
         htmlPane = new JEditorPane();
         htmlPane.setEditable(false);
+        htmlPane.setBackground(Color.WHITE);
         htmlPane.setEditorKit(new HTMLEditorKit());
         /**
          * Make links clickable

@@ -93,12 +93,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         /** Initializing panels */
         centerPanel = new JPanel();
-        calcButtonsContainer = new JPanel();
-        upperPanel = new JPanel();
-        rangeContainer = new JPanel();
-        solveContainer = new JPanel();
-        accuracyContainer = new JPanel();
-        bottomPanel = new JPanel();
+        calcButtonsContainer = new JPanel(new GridLayout(0, 5, 5, 5));
+        upperPanel = new JPanel(new FlowLayout());
+        rangeContainer = new JPanel(new GridLayout(3, 1, 0, 5));
+        solveContainer = new JPanel(new FlowLayout(FlowLayout.TRAILING, 63, 10));
+        accuracyContainer = new JPanel(new GridLayout(3, 1, 0, 5));
+        bottomPanel = new JPanel(new FlowLayout());
 
         /** Set up upper panel */
         /** Menu bar */
@@ -129,8 +129,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         /** Input text field */
         funcInput = new JTextField();
-        funcInput.setPreferredSize(new Dimension(600, 50));
-        funcInput.setMaximumSize(new Dimension(600, 50));
+        funcInput.setPreferredSize(new Dimension(570, 50));
+        funcInput.setMaximumSize(new Dimension(570, 50));
         mathFont = new Font("SansSerif", Font.PLAIN, 28);
         funcInput.setFont(mathFont);
         funcInput.setHorizontalAlignment(JTextField.CENTER);
@@ -144,12 +144,12 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         funcInput.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(final KeyEvent e) {
-                if (e.getKeyCode() == 10) { /** <- keycode for "Enter" key */
+                final int ENTER_KEYCODE = 10;
+                if (e.getKeyCode() == ENTER_KEYCODE) {
                     solveButton.doClick();
                 }
             }
         });
-        upperPanel.setLayout(new FlowLayout());
         upperPanel.add(funcInput);
 
         /** Set up calculator buttons */
@@ -186,7 +186,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         fnButtons.put("cosh", new CalcButton("cosh", this));
 
         /** Arrange buttons in button container in respective order */
-        calcButtonsContainer.setLayout(new GridLayout(0, 5, 5, 5));
         for (int i = 1; i < 4; i++) {
             calcButtonsContainer.add(nmbButtons[i]);
         }
@@ -233,36 +232,19 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         solveButton.addActionListener(this);
         solveButton.setPreferredSize(new Dimension(150, 50));
 
-        solveContainer.setLayout(new FlowLayout(FlowLayout.TRAILING, 63, 10));
         solveContainer.setPreferredSize(new Dimension(415, 80));
         solveContainer.add(solveButton);
 
         /** Range */
 
         rangeLabel = new JLabel("Range");
-        rangeInput = new JTextField("10") {
-            private static final long serialVersionUID = 1L;
-
-            /** If keypress is not digit/backspace/delete/dot -> do nothing */
-            @Override
-            public void processKeyEvent(KeyEvent ev) {
-                Character c = ev.getKeyChar();
-                if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
-                    ev.consume();
-                } else {
-                    super.processKeyEvent(ev);
-                    ev.consume();
-                }
-                return;
-            }
-        };
-        rangeInput.setPreferredSize(new Dimension(30, 25));
+        rangeInput = new IntOnlyJTextField("10");
+        rangeInput.setColumns(6);
         rangeInput.setEditable(true);
         rangeAuto = new JRadioButton("Auto");
         rangeAuto.setActionCommand("auto");
         showAutoWarning = true;
         rangeAuto.addActionListener(this);
-        rangeContainer.setLayout(new GridLayout(3, 1, 0, 5));
         rangeContainer.setPreferredSize(new Dimension(60, 80));
         rangeContainer.add(rangeLabel);
         rangeContainer.add(rangeInput);
@@ -274,13 +256,11 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         accuracyMenu = new JComboBox<String>(accuracyMenuContents);
         accuracyMenu.setBackground(Color.WHITE);
         accuracyMenu.setSelectedItem("MED");
-        accuracyContainer.setLayout(new GridLayout(3, 1, 0, 5));
         accuracyContainer.add(accMenuLabel);
         accuracyContainer.add(accuracyMenu);
-        accuracyContainer.setPreferredSize(new Dimension(60, 80));
+        accuracyContainer.setPreferredSize(new Dimension(65, 80));
 
         /** Add containers to bottom panel */
-        bottomPanel.setLayout(new FlowLayout());
         bottomPanel.add(solveContainer);
         bottomPanel.add(rangeContainer);
         bottomPanel.add(accuracyContainer);
@@ -491,8 +471,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     if (showAutoWarning) {
                         Object[] choiceOptions = { "Ok", "Do not show again" };
                         String autoWarningMessage = "This will start with a given range and automatically \n";
-                        autoWarningMessage += "  enlarge it until it finds a root or terminates.\n";
-                        autoWarningMessage += "     Might result in extended processing time.";
+                        autoWarningMessage += "enlarge it until it finds a root or terminates.\n";
+                        autoWarningMessage += "Might result in extended processing time.";
                         /** showOptionDialog will return 1 if "Do not show again" button is clicked */
                         showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
                                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,

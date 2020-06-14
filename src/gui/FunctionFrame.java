@@ -57,7 +57,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     /** Panels */
-    JPanel centerPanel, bottomPanel;
+    JPanel bottomPanel;
     JPanel utilContainer;
     JScrollPane solutionsWrapper;
 
@@ -121,15 +121,15 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.acc = acc;
 
         /** Panels */
-        centerPanel = new JPanel();
-        bottomPanel = new JPanel();
-        utilContainer = new JPanel();
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 10, 5));
+        utilContainer = new JPanel(new GridLayout(2, 2, 0, 5));
 
         /** Set up bottom panel */
         /** Scrollable solutions display */
         solutionsDisplay = new JTextArea();
         solutionsDisplay.setEditable(false);
         solutionsDisplay.setDisabledTextColor(Color.BLACK);
+        solutionsDisplay.setBackground(Color.WHITE);
         solutionsDisplay.setFont(new Font("Sans Serrif", Font.PLAIN, 16));
         solutionsDisplay.setText("Solving...");
         solutionsDisplay.setTabSize(2);
@@ -237,13 +237,11 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveSolutions.setFont(font.deriveFont(attributes));
 
         /** Put buttons and hyperlinks in a neat container */
-        utilContainer.setLayout(new GridLayout(2, 2, 0, 5));
         utilContainer.add(outSpaceButton);
         utilContainer.add(saveGraph);
         utilContainer.add(animButton);
         utilContainer.add(saveSolutions);
 
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.TRAILING, 10, 5));
         bottomPanel.add(solutionsWrapper);
         bottomPanel.add(utilContainer);
 
