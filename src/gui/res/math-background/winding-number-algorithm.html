@@ -49,6 +49,7 @@
         into four or discarding it if the winding number is 0. It stops when the area of the square is sufficiently
         small (this is determined by the provided accuracy, see article "Accuracy options") and adds its middle to the
         list of solutions.</p>
+    <img src="algorithmAtWork.jpg" alt="algorithm-at-work" width="400" />
     <p>There are problems with this algorithm, which stem from the oddities discussed in the "Riemann sphere" article.
         Mainly, if both a root and a pole of a function end up in one square, then it's winding number will evaluate to
         0 and the square will be discarded, even though there is a perfectly good root inside. The algorithm also treats
