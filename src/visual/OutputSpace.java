@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import algorithm.parser.exception.CalculatorException;
 import algorithm.parser.function.Complex;
 
 /**
@@ -33,6 +34,7 @@ public class OutputSpace extends JPanel {
 
     public void setCurrent(Complex c) {
         this.currentPoint = c;
+        repaint();
     }
 
     @Override
@@ -81,9 +83,17 @@ public class OutputSpace extends JPanel {
         if (r > 1)
             r = 1;
 
-        g2.setColor(Color.getHSBColor((float) (1 - fi), 1, (float) (1 - r)));
-        int x = (int) (currentPoint.getRe() * zoomX / scaleX);
-        int y = (int) (currentPoint.getIm() * zoomY / scaleY);
+        g2.setColor(Color.white);
+        int x;
+        int y;
+        try {
+            double R = Complex.abs(currentPoint) * 10;
+            x = (int) (R * Math.cos(Complex.phase(currentPoint)));
+            y = (int) (R * Math.sin(Complex.phase(currentPoint)));
+        } catch (CalculatorException e) {
+            x = 0;
+            y = 0;
+        }
         g2.fillArc(x - 5, y - 5, 10, 10, 0, 360);
 
         g2.setColor(Color.gray);

@@ -54,9 +54,10 @@ public class GraphicSolver extends JPanel
     ArrayList<Complex[]> childPosition = new ArrayList<Complex[]>();
     int range;
     double res; // rect resolution - difference between points
-    int divideDeep = 1;
+    int divideDeep = 6;
     int deepCounter = 0;
     Timer graphicTime;
+    Boolean newSquare = true;
 
     int speed = 0; // ms timer delay
 
@@ -97,6 +98,14 @@ public class GraphicSolver extends JPanel
         outFrame.setLocationRelativeTo(null);
         outFrame.add(this.outputSpace);
         outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("main.png")));
+
+        for (int i = 0; i < childPosition.size(); i++) {
+            System.out.println("rect:" + i);
+            System.out.println(childPosition.get(i)[0]);
+            System.out.println(childPosition.get(i)[1]);
+            System.out.println(childPosition.get(i)[2]);
+            System.out.println(childPosition.get(i)[3]);
+        }
     }
 
     public void replay() {
@@ -107,12 +116,12 @@ public class GraphicSolver extends JPanel
         D = new Complex(-range, range);
         deepCounter = 0;
         dir = Direction.RIGHT;
+        newSquare = true;
         this.repaint();
     }
 
     public void addPoint(final Complex p) {
         sq_points.add(p);
-        this.repaint();
     }
 
     ArrayList<Complex[]> getChildPositions(int deep, Complex[] parents) {
@@ -136,25 +145,25 @@ public class GraphicSolver extends JPanel
         Boolean rect1zero = new Solver(parents[0], AB_mid, MIDDLE, AD_mid, SolverAccuracy.LOW)
                 .checkWindingNumber(this.f);
         ArrayList<Complex[]> rect1 = new ArrayList<Complex[]>();
-        if (!rect1zero)
+        if (rect1zero)
             rect1 = getChildPositions(deep - 1, new Complex[] { parents[0], AB_mid, MIDDLE, AD_mid });
 
         Boolean rect2zero = new Solver(AB_mid, parents[1], BC_mid, MIDDLE, SolverAccuracy.LOW)
                 .checkWindingNumber(this.f);
         ArrayList<Complex[]> rect2 = new ArrayList<Complex[]>();
-        if (!rect2zero)
+        if (rect2zero)
             rect2 = getChildPositions(deep - 1, new Complex[] { AB_mid, parents[1], BC_mid, MIDDLE });
 
         Boolean rect3zero = new Solver(MIDDLE, BC_mid, parents[2], CD_mid, SolverAccuracy.LOW)
                 .checkWindingNumber(this.f);
         ArrayList<Complex[]> rect3 = new ArrayList<Complex[]>();
-        if (!rect3zero)
+        if (rect3zero)
             rect3 = getChildPositions(deep - 1, new Complex[] { MIDDLE, BC_mid, parents[2], CD_mid });
 
         Boolean rect4zero = new Solver(AD_mid, MIDDLE, CD_mid, parents[3], SolverAccuracy.LOW)
                 .checkWindingNumber(this.f);
         ArrayList<Complex[]> rect4 = new ArrayList<Complex[]>();
-        if (!rect4zero)
+        if (rect4zero)
             rect4 = getChildPositions(deep - 1, new Complex[] { AD_mid, MIDDLE, CD_mid, parents[3] });
 
         tmpChilds.addAll(rect1);
@@ -237,8 +246,9 @@ public class GraphicSolver extends JPanel
     public void update() {
         // add square points
         int sq_pts_len = sq_points.size();
-        if (sq_pts_len < 1) {
+        if (newSquare) {
             sq_points.add(A);
+            newSquare = false;
         } else if (dir != Direction.STOP) {
             Complex last = sq_points.get(sq_pts_len - 1);
             double l_re = last.getRe();
@@ -247,7 +257,7 @@ public class GraphicSolver extends JPanel
             if (dir == Direction.RIGHT) {
                 Complex new_pt = new Complex(l_re + res, l_im);
                 sq_points.add(new_pt);
-                this.outputSpace.setCurrent(new_pt);
+                outputSpace.setCurrent(new_pt);
                 if (new_pt.getRe() > B.getRe()) {
                     sq_points.add(B);
                     dir = Direction.DOWN;
@@ -255,7 +265,7 @@ public class GraphicSolver extends JPanel
             } else if (dir == Direction.DOWN) {
                 Complex new_pt = new Complex(l_re, l_im + res);
                 sq_points.add(new_pt);
-                this.outputSpace.setCurrent(new_pt);
+                outputSpace.setCurrent(new_pt);
                 if (new_pt.getIm() > C.getIm()) {
                     sq_points.add(C);
                     dir = Direction.LEFT;
@@ -263,25 +273,33 @@ public class GraphicSolver extends JPanel
             } else if (dir == Direction.LEFT) {
                 Complex new_pt = new Complex(l_re - res, l_im);
                 sq_points.add(new_pt);
-                this.outputSpace.setCurrent(new_pt);
-                if (new_pt.getRe() < D.getRe())
+                outputSpace.setCurrent(new_pt);
+                if (new_pt.getRe() < D.getRe()) {
+                    sq_points.add(D);
                     dir = Direction.UP;
+                }
             } else if (dir == Direction.UP) {
                 Complex new_pt = new Complex(l_re, l_im - res);
                 sq_points.add(new_pt);
-                this.outputSpace.setCurrent(new_pt);
-                if (new_pt.getIm() - res < A.getIm()) {
+                outputSpace.setCurrent(new_pt);
+                if (new_pt.getIm() < A.getIm()) {
+                    sq_points.add(A);
                     dir = Direction.STOP;
                 }
             }
         } else {
             if (deepCounter < childPosition.size()) {
-                A = childPosition.get(deepCounter)[0];
-                B = childPosition.get(deepCounter)[1];
-                C = childPosition.get(deepCounter)[2];
-                D = childPosition.get(deepCounter)[3];
+                // sq_points = new ArrayList<Complex>();
+                Complex[] nexSquare = childPosition.get(deepCounter);
+                A = nexSquare[0];
+                B = nexSquare[1];
+                C = nexSquare[2];
+                D = nexSquare[3];
                 dir = Direction.RIGHT;
                 deepCounter++;
+                newSquare = true;
+            } else {
+                dir = Direction.STOP;
             }
         }
     }
