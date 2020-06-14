@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
 import java.io.File;
@@ -206,6 +208,37 @@ class FunctionFrame extends JFrame implements ActionListener {
         /** GraphicSolver definition */
         graphicSolver = new GraphicSolver(f_z, range);
         graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
+        graphicSolverFrame.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                graphicSolver.graphicExec.shutdownNow();
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+        });
 
         /** Set GraphicSolver frame */
         graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

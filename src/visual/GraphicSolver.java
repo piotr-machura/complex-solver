@@ -61,7 +61,7 @@ public class GraphicSolver extends JPanel
 
     int speed = 0; // ms timer delay
 
-    ExecutorService graphicExec = Executors.newSingleThreadExecutor();
+    public ExecutorService graphicExec = Executors.newSingleThreadExecutor();
 
     public JFrame outFrame;
     OutputSpace outputSpace;
@@ -98,14 +98,6 @@ public class GraphicSolver extends JPanel
         outFrame.setLocationRelativeTo(null);
         outFrame.add(this.outputSpace);
         outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("main.png")));
-
-        // for (int i = 0; i < childPosition.size(); i++) {
-        // System.out.println("rect:" + i);
-        // System.out.println(childPosition.get(i)[0]);
-        // System.out.println(childPosition.get(i)[1]);
-        // System.out.println(childPosition.get(i)[2]);
-        // System.out.println(childPosition.get(i)[3]);
-        // }
     }
 
     public void replay() {
@@ -244,6 +236,7 @@ public class GraphicSolver extends JPanel
     }
 
     public void update() {
+
         // add square points
         int sq_pts_len = sq_points.size();
         if (newSquare) {
@@ -289,7 +282,6 @@ public class GraphicSolver extends JPanel
             }
         } else {
             if (deepCounter < childPosition.size()) {
-                // sq_points = new ArrayList<Complex>();
                 Complex[] nexSquare = childPosition.get(deepCounter);
                 A = nexSquare[0];
                 B = nexSquare[1];
@@ -300,6 +292,7 @@ public class GraphicSolver extends JPanel
                 newSquare = true;
             } else {
                 dir = Direction.STOP;
+                graphicExec.shutdownNow();
             }
         }
     }
