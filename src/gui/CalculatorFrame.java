@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import algorithm.solver.Solver;
 import algorithm.solver.SolverAccuracy;
 import algorithm.parser.exception.CalculatorException;
 
@@ -469,8 +470,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                     rangeInput.setEditable(false);
                     if (showAutoWarning) {
                         Object[] choiceOptions = { "Ok", "Do not show again" };
-                        String autoWarningMessage = "This will start with range 5 and automatically enlarge it until it finds a root or reaches 100.";
-                        autoWarningMessage += "\nMight result in extended processing time.";
+                        String autoWarningMessage = "This will start with a given range and automatically enlarge it\n";
+                        autoWarningMessage += "until it finds a root or terminates.\n";
+                        autoWarningMessage += "Might result in extended processing time.";
                         /** showOptionDialog will return 1 if "Do not show again" button is clicked */
                         showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
                                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,

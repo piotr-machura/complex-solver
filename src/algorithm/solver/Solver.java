@@ -1,5 +1,10 @@
 package algorithm.solver;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream.GetField;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -28,21 +33,15 @@ import algorithm.parser.util.Variable;
 public class Solver {
 
     /** Automatic range founder parameters */
-    private static final int AUTO_RANGE_START = 5;
-    private static final int AUTO_RANGE_INCREMENT = 5;
-    private static final int AUTO_RANGE_MAX = 100;
-    private static final int AUTO_RANGE_FAILED = 0;
+    private static int AUTO_RANGE_START = SolverDefaults.AUTO_RANGE_START;
+    private static int AUTO_RANGE_INCREMENT = SolverDefaults.AUTO_RANGE_INCREMENT;
+    private static int AUTO_RANGE_MAX = SolverDefaults.AUTO_RANGE_MAX;
 
     /** Algorithm adjustments */
-    private static final double MAX_LEGAL_DELTAPHI = 1.8 * Math.PI;
-    private static final double STEPS_PER_SIDELENGTH = 200;
-    private static final double MIN_LEGAL_WINDING_NUMBER = 0.95 * 2 * Math.PI;
-    private static final double MAX_LEGAL_ABS_OF_ROOT = 1;
-
-    /** Output formatting adjustments */
-    private static final double ROUNDER_LOW = 1000d;
-    private static final double ROUNDER_MED = 10000d;
-    private static final double ROUNDER_HIGH = 100000d;
+    private static double MAX_LEGAL_DELTAPHI_RATIO = SolverDefaults.MAX_LEGAL_DELTAPHI_RATIO;
+    private static int STEPS_PER_SIDELENGTH = SolverDefaults.STEPS_PER_SIDELENGTH;
+    private static double MIN_LEGAL_WINDING_NUMBER_RATIO = SolverDefaults.MIN_LEGAL_WINDING_NUMBER_RATIO;
+    private static double MAX_LEGAL_ABS_OF_ROOT = SolverDefaults.MAX_LEGAL_ABS_OF_ROOT;
 
     Complex A, B, C, D;
     Complex AB_mid, BC_mid, CD_mid, AD_mid, MIDDLE;
@@ -66,7 +65,7 @@ public class Solver {
      */
     public static ArrayList<Complex> solve(final int range, final String f_z, final SolverAccuracy accuracyLevel) {
         ArrayList<Complex> solutions = new ArrayList<Complex>();
-        if (range == AUTO_RANGE_FAILED) {
+        if (range == SolverDefaults.AUTO_RANGE_FAILED) {
             return solutions;
         } else {
             /**
@@ -85,11 +84,11 @@ public class Solver {
             }
 
             /** Set up an approprieate rounder */
-            double rd = ROUNDER_MED;
+            double rd = SolverDefaults.ROUNDER_MED;
             if (accuracyLevel == SolverAccuracy.LOW) {
-                rd = ROUNDER_LOW;
+                rd = SolverDefaults.ROUNDER_LOW;
             } else if (accuracyLevel == SolverAccuracy.HIGH) {
-                rd = ROUNDER_HIGH;
+                rd = SolverDefaults.ROUNDER_HIGH;
             }
             /** Round decimals according to accuracyLevel */
             for (int i = 0; i < solutions.size(); i++) {
@@ -138,7 +137,7 @@ public class Solver {
                 break;
             } else if (!isCurrentRangeValid) {
                 if (range > AUTO_RANGE_MAX) {
-                    range = AUTO_RANGE_FAILED;
+                    range = SolverDefaults.AUTO_RANGE_FAILED;
                     break;
                 } else {
                     range += AUTO_RANGE_INCREMENT;
@@ -227,7 +226,7 @@ public class Solver {
          * this means that Re+ axis was crossed NEGATIVELY, hence substract 2PI from
          * deltaPhi (1.8PI - 2PI = -0.2PI, correct phase change)
          */
-        if (deltaPhi > MAX_LEGAL_DELTAPHI) {
+        if (deltaPhi > MAX_LEGAL_DELTAPHI_RATIO * Math.PI) {
             deltaPhi -= 2 * Math.PI;
         }
         /**
@@ -235,7 +234,7 @@ public class Solver {
          * this means that Re+ axis was crossed POSITIVELY, hence add 2PI to deltaPhi
          * (-1.8PI +2PI = 0.2PI, correct phase change).
          */
-        else if (deltaPhi < -MAX_LEGAL_DELTAPHI) {
+        else if (deltaPhi < -MAX_LEGAL_DELTAPHI_RATIO * Math.PI) {
             deltaPhi += 2 * Math.PI;
         }
         return deltaPhi;
@@ -344,7 +343,7 @@ public class Solver {
                 }
             }
         }
-        return Math.abs(windingNumber) > MIN_LEGAL_WINDING_NUMBER;
+        return Math.abs(windingNumber) > MIN_LEGAL_WINDING_NUMBER_RATIO * 2 * Math.PI;
     }
 
     /**
@@ -400,5 +399,43 @@ public class Solver {
                 }
             }
         }
+    }
+
+    /**
+     * readConfig.
+     *
+     * Reads the config values from a .solverrc file to override SolverDefaults. The
+     * .solverrc file has to have exactly 8 fields with values in the same order as
+     * the ones found in SolverDefaults separated by a space.
+     *
+     * Sample .solverrc with values the same as SolverDefaults:
+     *
+     * 5 5 100 1.8 200 0.95 1
+     *
+     * @param solverrc the .solverrc file to read from
+     */
+    public static void readConfig(File solverrc) throws Exception {
+        /** Read the file to fileContents with isr */
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(solverrc),
+                Charset.forName("UTF-8").newDecoder());
+        int data = isr.read();
+        String fileContents = "";
+        while (data != -1) {
+            fileContents += (char) data;
+            data = isr.read();
+        }
+        isr.close();
+        fileContents = fileContents.trim();
+        String[] args = fileContents.split(" ");
+        if (args.length != 7) {
+            throw new NumberFormatException("Incorrect argument count");
+        }
+        AUTO_RANGE_START = Integer.parseInt(args[0]);
+        AUTO_RANGE_INCREMENT = Integer.parseInt(args[1]);
+        AUTO_RANGE_MAX = Integer.parseInt(args[2]);
+        MAX_LEGAL_DELTAPHI_RATIO = Double.valueOf(args[3]);
+        STEPS_PER_SIDELENGTH = Integer.parseInt(args[4]);
+        MIN_LEGAL_WINDING_NUMBER_RATIO = Double.valueOf(args[5]);
+        MAX_LEGAL_ABS_OF_ROOT = Double.valueOf(args[6]);
     }
 }
