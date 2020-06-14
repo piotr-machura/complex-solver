@@ -117,6 +117,15 @@ public class OptionsFrame extends JFrame implements ActionListener {
             }
             optionFields[i].setPreferredSize(new Dimension(40, 30));
             optionFields[i].setFont(new Font("SansSerif", Font.PLAIN, 16));
+            optionFields[i].addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(final KeyEvent e) {
+                    final int ENTER_KEYCODE = 10;
+                    if (e.getKeyCode() == ENTER_KEYCODE) {
+                        applyButton.doClick();
+                    }
+                }
+            });
 
         }
 
@@ -168,7 +177,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
      * setVisible.
      *
      * When the options window is invoked it reads the current config file and sets
-     * the optionsFields accordingly.
+     * the optionFields accordingly.
      */
     @Override
     public void setVisible(boolean b) {
@@ -194,7 +203,10 @@ public class OptionsFrame extends JFrame implements ActionListener {
                 optionFields[i].setText(args[i]);
             }
         } catch (Exception e) {
-            /** Something is wrong with the .solverrc file - load defaults */
+            /**
+             * Something is wrong with the .solverrc file (or it doesn't exist) - load
+             * defaults
+             */
             restoreDefaults();
         }
         super.setVisible(b);

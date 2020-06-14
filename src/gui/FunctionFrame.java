@@ -84,7 +84,7 @@ class FunctionFrame extends JFrame implements ActionListener {
     GraphicSolver graphicSolver;
 
     /** Abort calculations after a time threshold has passed */
-    private static final int TIMEOUT_THRESHOLD = 1000;
+    private static final int TIMEOUT_THRESHOLD = 3000;
     private Boolean calculationsFinished = false;
 
     /**
@@ -235,7 +235,8 @@ class FunctionFrame extends JFrame implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (!calculationsFinished) {
-                            solutionsDisplay.setText("The solver timed out after " + 30000 / 1000 + " seconds.");
+                            solutionsDisplay
+                                    .setText("The solver timed out after " + TIMEOUT_THRESHOLD / 1000 + " seconds.");
                         }
                         solverExec.shutdownNow();
 

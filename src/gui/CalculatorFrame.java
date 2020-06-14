@@ -146,16 +146,6 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         inputPrompt.changeAlpha((float) 0.6);
         inputPrompt.setHorizontalAlignment(SwingConstants.CENTER);
 
-        /** Press enter to solve */
-        funcInput.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(final KeyEvent e) {
-                final int ENTER_KEYCODE = 10;
-                if (e.getKeyCode() == ENTER_KEYCODE) {
-                    solveButton.doClick();
-                }
-            }
-        });
         upperPanel.add(funcInput);
 
         /** Set up calculator buttons */
@@ -277,6 +267,43 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
+        /** Press enter to solve */
+        funcInput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                final int ENTER_KEYCODE = 10;
+                if (e.getKeyCode() == ENTER_KEYCODE) {
+                    solveButton.doClick();
+                }
+            }
+        });
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                final int ENTER_KEYCODE = 10;
+                if (e.getKeyCode() == ENTER_KEYCODE) {
+                    solveButton.doClick();
+                }
+            }
+        });
+        rangeInput.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                final int ENTER_KEYCODE = 10;
+                if (e.getKeyCode() == ENTER_KEYCODE) {
+                    solveButton.doClick();
+                }
+            }
+        });
+        accuracyMenu.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                final int ENTER_KEYCODE = 10;
+                if (e.getKeyCode() == ENTER_KEYCODE) {
+                    solveButton.doClick();
+                }
+            }
+        });
     }
 
     /**
@@ -300,6 +327,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
          * Remove all function names and all other valid tokens. If anything remains
          * invalidate input.
          */
+        fTmp = fTmp.replaceAll("sinh", "");
+        fTmp = fTmp.replaceAll("cosh", "");
         for (String functionToken : fnButtons.keySet()) {
             fTmp = fTmp.replaceAll(functionToken, "");
         }

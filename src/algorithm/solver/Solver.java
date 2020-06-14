@@ -374,6 +374,9 @@ public class Solver {
      * @Author Piotr Machura, Kacper Ledwosiński
      */
     private void solveInside(final String f_z, ArrayList<Complex> solutions) {
+        if (Thread.currentThread().isInterrupted()) {
+            return;
+        }
         if (this.checkWindingNumber(f_z)) {
             if (this.area <= this.MIN_LEGAL_AREA) {
                 /**
