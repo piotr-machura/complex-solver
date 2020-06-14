@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,8 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
@@ -30,7 +27,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -66,7 +65,9 @@ class FunctionFrame extends JFrame implements ActionListener {
 
     /** Other components */
     JTextArea solutionsDisplay;
-    JLabel saveGraph, saveSolutions;
+    JMenuBar upMenu;
+    JMenu fileMenu;
+    JMenuItem saveGraph, saveSolutions, rerunCalculations;
 
     /** Algorithm components */
     final String f_z;
@@ -97,9 +98,34 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
 
+        /** Add menu bar */
+        upMenu = new JMenuBar();
+        fileMenu = new JMenu("File");
+
+        saveGraph = new JMenuItem("Save current graph");
+        saveGraph.setActionCommand("saveGraph");
+        saveGraph.addActionListener(this);
+
+        saveSolutions = new JMenuItem("Save solutions");
+        saveSolutions.setActionCommand("saveSolutions");
+        saveSolutions.addActionListener(this);
+
+        rerunCalculations = new JMenuItem("Rerun calculations");
+        rerunCalculations.setActionCommand("recalculate");
+        rerunCalculations.addActionListener(this);
+
+        fileMenu.add(saveSolutions);
+        fileMenu.add(saveGraph);
+        fileMenu.addSeparator();
+        fileMenu.add(rerunCalculations);
+
+        upMenu.add(fileMenu);
+        this.setJMenuBar(upMenu);
+
         /** Set up algorithm components */
         this.range = range;
         solutions = null;
+
         /** Create input space in a new thread and add it to frame */
         ExecutorService inpSpaceExec = Executors.newSingleThreadExecutor();
         inpSpaceExec.execute(new Runnable() {
@@ -121,7 +147,7 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.acc = acc;
 
         /** Panels */
-        bottomPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 10, 5));
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         utilContainer = new JPanel(new GridLayout(2, 2, 0, 5));
 
         /** Set up bottom panel */
@@ -150,98 +176,12 @@ class FunctionFrame extends JFrame implements ActionListener {
         animButton.setActionCommand("animation");
         animButton.addActionListener(this);
 
-        /** Hyperlinks to save results */
-        saveGraph = new JLabel("Save graph");
-        saveGraph.setHorizontalAlignment(JLabel.CENTER);
-        saveGraph.setForeground(Color.BLUE.darker());
-        saveGraph.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        saveSolutions = new JLabel("Save solutions");
-        saveSolutions.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        saveSolutions.setForeground(Color.BLUE.darker());
-        saveSolutions.setHorizontalAlignment(JLabel.CENTER);
-
-        /** Add listeners to hyperlinks */
-        saveSolutions.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
-                    fileChooser.setDialogTitle("Save solutions");
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text (.txt)", "txt"));
-                    if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
-                        File outputFile = null;
-                        if (fileChooser.getSelectedFile().toString().endsWith(".txt")) {
-                            outputFile = new File(fileChooser.getSelectedFile().toString());
-                        } else {
-                            outputFile = new File(fileChooser.getSelectedFile() + ".txt");
-                        }
-                        /** osw writes text form textArea to selected file */
-                        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputFile),
-                                Charset.forName("UTF-8").newEncoder());
-                        osw.write("Function: " + f_z + "\n");
-                        osw.write(solutionsDisplay.getText());
-                        osw.close();
-
-                        /** Notify user about succesful write */
-                        JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved solutions to:\n" + outputFile.getName(), "Succes",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        saveGraph.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                /** Create BufferedImage from inpSpace */
-                BufferedImage savedImage = new BufferedImage(inpSpace.getWidth(), inpSpace.getHeight(),
-                        BufferedImage.TYPE_INT_ARGB);
-                Graphics2D g2d = savedImage.createGraphics();
-                inpSpace.paintAll(g2d);
-                try {
-                    /** Choose file to save to with fileChooser */
-                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
-                    fileChooser.setDialogTitle("Save graph");
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("Portable Network Graphics (.png)", "png"));
-                    if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
-                        File outputFile = null;
-                        if (fileChooser.getSelectedFile().toString().endsWith(".png")) {
-                            outputFile = new File(fileChooser.getSelectedFile().toString());
-                        } else {
-                            outputFile = new File(fileChooser.getSelectedFile() + ".png");
-                        }
-                        /** ImageIO writes the image to outputFile */
-                        ImageIO.write(savedImage, "png", outputFile);
-                        /** Notify user about succesful write */
-                        JOptionPane.showMessageDialog(FunctionFrame.this,
-                                "Succesfully saved graph to:\n" + outputFile.getName(), "Succes",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        /** Underline hyperlinks (harder than it should be) */
-        Font font = saveGraph.getFont();
-        Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
-        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-        saveGraph.setFont(font.deriveFont(attributes));
-        saveSolutions.setFont(font.deriveFont(attributes));
-
         /** Put buttons and hyperlinks in a neat container */
         utilContainer.add(outSpaceButton);
-        utilContainer.add(saveGraph);
         utilContainer.add(animButton);
-        utilContainer.add(saveSolutions);
-
+        JPanel invisibleEqualizer = new JPanel();
+        invisibleEqualizer.setPreferredSize(new Dimension(120, 30));
+        bottomPanel.add(invisibleEqualizer);
         bottomPanel.add(solutionsWrapper);
         bottomPanel.add(utilContainer);
 
@@ -250,6 +190,24 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         /* Solve and showcase roots */
+        this.calculate();
+
+        /** GraphicSolver definition */
+        graphicSolver = new GraphicSolver(f_z, range);
+        graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
+
+        /** Set GraphicSolver frame */
+        graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        graphicSolverFrame.setSize(500, 500);
+        graphicSolverFrame.setResizable(false);
+        graphicSolverFrame.setLocationRelativeTo(null);
+        graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        graphicSolverFrame.add(graphicSolver);
+
+    }
+
+    private void calculate() {
+
         ExecutorService solverExec = Executors.newSingleThreadExecutor();
         solverExec.execute(new Runnable() {
             @Override
@@ -293,19 +251,6 @@ class FunctionFrame extends JFrame implements ActionListener {
                 solverExec.shutdown();
             }
         });
-
-        /** GraphicSolver definition */
-        graphicSolver = new GraphicSolver(f_z, range);
-        graphicSolverFrame = new JFrame("Animating input space for f(z) = " + f_z);
-
-        /** Set GraphicSolver frame */
-        graphicSolverFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        graphicSolverFrame.setSize(500, 500);
-        graphicSolverFrame.setResizable(false);
-        graphicSolverFrame.setLocationRelativeTo(null);
-        graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
-        graphicSolverFrame.add(graphicSolver);
-
     }
 
     @Override
@@ -331,6 +276,70 @@ class FunctionFrame extends JFrame implements ActionListener {
                     graphicSolverFrame.toFront();
                     graphicSolverFrame.requestFocus();
                 }
+                break;
+            case "saveSolutions":
+                try {
+                    /** Choose file to save to with fileChooser */
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save solutions");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Plain text (.txt)", "txt"));
+                    if (fileChooser.showOpenDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
+                        File outputFile = null;
+                        if (fileChooser.getSelectedFile().toString().endsWith(".txt")) {
+                            outputFile = new File(fileChooser.getSelectedFile().toString());
+                        } else {
+                            outputFile = new File(fileChooser.getSelectedFile() + ".txt");
+                        }
+                        /** osw writes text form textArea to selected file */
+                        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputFile),
+                                Charset.forName("UTF-8").newEncoder());
+                        osw.write("Function: " + f_z + "\n");
+                        osw.write(solutionsDisplay.getText());
+                        osw.close();
+
+                        /** Notify user about succesful write */
+                        JOptionPane.showMessageDialog(FunctionFrame.this,
+                                "Succesfully saved solutions to:\n" + outputFile.getName(), "Succes",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            case "saveGraph":
+                /** Create BufferedImage from inpSpace */
+                BufferedImage savedImage = new BufferedImage(inpSpace.getWidth(), inpSpace.getHeight(),
+                        BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = savedImage.createGraphics();
+                inpSpace.paintAll(g2d);
+                try {
+                    /** Choose file to save to with fileChooser */
+                    JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+                    fileChooser.setDialogTitle("Save graph");
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Portable Network Graphics (.png)", "png"));
+                    if (fileChooser.showSaveDialog(FunctionFrame.this) == JFileChooser.APPROVE_OPTION) {
+                        File outputFile = null;
+                        if (fileChooser.getSelectedFile().toString().endsWith(".png")) {
+                            outputFile = new File(fileChooser.getSelectedFile().toString());
+                        } else {
+                            outputFile = new File(fileChooser.getSelectedFile() + ".png");
+                        }
+                        /** ImageIO writes the image to outputFile */
+                        ImageIO.write(savedImage, "png", outputFile);
+                        /** Notify user about succesful write */
+                        JOptionPane.showMessageDialog(FunctionFrame.this,
+                                "Succesfully saved graph to:\n" + outputFile.getName(), "Succes",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(FunctionFrame.this, ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            case "recalculate":
+                this.solutionsDisplay.setText("Recalculating...");
+                this.calculate();
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "Unsupported operation: " + buttonID, "Error",

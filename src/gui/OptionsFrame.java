@@ -255,7 +255,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
                         }
                     });
                 }
-
+                this.setVisible(false);
                 break;
             case "restore":
                 this.restoreDefaults();
