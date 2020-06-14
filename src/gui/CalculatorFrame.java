@@ -14,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.Toolkit;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -52,8 +53,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     CalcButton[] nmbButtons;
     HashMap<String, CalcButton> fnButtons, opButtons;
     JButton solveButton;
-    JMenuBar upMenu;
-    JMenu toolMenu;
+    JMenuBar menuBar;
+    JMenu menu;
     JMenuItem help, options, credits;
     JRadioButton rangeAuto;
     JComboBox<String> accuracyMenu;
@@ -88,7 +89,7 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setResizable(false);
         this.setTitle("Complex Solver");
 
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
         this.range = 10;
 
         /** Initializing panels */
@@ -102,30 +103,35 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         /** Set up upper panel */
         /** Menu bar */
-        upMenu = new JMenuBar();
-        upMenu.setLayout(new FlowLayout(FlowLayout.TRAILING));
-        upMenu.setPreferredSize(new Dimension(600, 30));
-        toolMenu = new JMenu("Tools");
+        menuBar = new JMenuBar();
+        menuBar.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        menu = new JMenu("Menu");
+
         help = new JMenuItem("Help");
-        options = new JMenuItem("Options");
-        credits = new JMenuItem("Credits");
-
-        options.setActionCommand("options");
         help.setActionCommand("help");
-        credits.setActionCommand("credits");
-
-        options.addActionListener(this);
         help.addActionListener(this);
+        help.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/help.png"))));
+
+        options = new JMenuItem("Options");
+        options.addActionListener(this);
+        options.setActionCommand("options");
+        options.setIcon(
+                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/cogs.png"))));
+
+        credits = new JMenuItem("Credits");
+        credits.setActionCommand("credits");
         credits.addActionListener(this);
+        credits.setIcon(
+                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/user.png"))));
 
-        toolMenu.add(options);
-        toolMenu.add(help);
-        toolMenu.addSeparator();
-        toolMenu.add(credits);
+        menu.add(help);
+        menu.add(options);
+        menu.addSeparator();
+        menu.add(credits);
 
-        upMenu.add(toolMenu);
+        menuBar.add(menu);
 
-        this.setJMenuBar(upMenu);
+        this.setJMenuBar(menuBar);
 
         /** Input text field */
         funcInput = new JTextField();
@@ -381,8 +387,9 @@ public class CalculatorFrame extends JFrame implements ActionListener {
 
         switch (buttonID) {
             case "credits":
-                JOptionPane.showMessageDialog(null, "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński ID 298179",
-                        "Credits", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(CalculatorFrame.this,
+                        "Mady by:\nPiotr Machura ID 298 183\nKacper Ledwosiński ID 298179", "Credits",
+                        JOptionPane.INFORMATION_MESSAGE);
                 break;
 
             case "help":
@@ -426,8 +433,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                 try {
                     this.validateInput();
                 } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(null, "Provided input is invalid:\n" + exc.getMessage(), "ERROR",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(CalculatorFrame.this,
+                            "Provided input is invalid:\n" + exc.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                     break;
                 }
                 FunctionFrame fFrame = new FunctionFrame(funcInput.getText(), acc, range);
@@ -474,8 +481,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
                         autoWarningMessage += "enlarge it until it finds a root or terminates.\n";
                         autoWarningMessage += "Might result in extended processing time.";
                         /** showOptionDialog will return 1 if "Do not show again" button is clicked */
-                        showAutoWarning = (JOptionPane.showOptionDialog(null, autoWarningMessage, "Warning",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,
+                        showAutoWarning = (JOptionPane.showOptionDialog(CalculatorFrame.this, autoWarningMessage,
+                                "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, choiceOptions,
                                 choiceOptions[1]) != 1);
                     }
                 } else {

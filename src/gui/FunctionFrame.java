@@ -9,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.awt.Toolkit;
 import java.io.File;
@@ -18,12 +17,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -35,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import visual.InputSpace;
@@ -65,7 +64,7 @@ class FunctionFrame extends JFrame implements ActionListener {
 
     /** Other components */
     JTextArea solutionsDisplay;
-    JMenuBar upMenu;
+    JMenuBar menuBar;
     JMenu fileMenu;
     JMenuItem saveGraph, saveSolutions, rerunCalculations;
 
@@ -82,6 +81,10 @@ class FunctionFrame extends JFrame implements ActionListener {
     JFrame graphicSolverFrame;
     GraphicSolver graphicSolver;
 
+    /** Abort calculations after a time threshold has passed */
+    private static final int TIMEOUT_THRESHOLD = 1000;
+    private Boolean calculationsFinished = false;
+
     /**
      * FunctionFrame constructor.
      *
@@ -96,31 +99,37 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.f_z = f_z;
         this.setTitle("f(z) = " + this.f_z);
         this.setLocationRelativeTo(null);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
 
         /** Add menu bar */
-        upMenu = new JMenuBar();
+        menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
 
         saveGraph = new JMenuItem("Save current graph");
         saveGraph.setActionCommand("saveGraph");
         saveGraph.addActionListener(this);
+        saveGraph.setIcon(
+                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/image.png"))));
 
         saveSolutions = new JMenuItem("Save solutions");
         saveSolutions.setActionCommand("saveSolutions");
         saveSolutions.addActionListener(this);
+        saveSolutions.setIcon(
+                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/file.png"))));
 
         rerunCalculations = new JMenuItem("Rerun calculations");
         rerunCalculations.setActionCommand("recalculate");
         rerunCalculations.addActionListener(this);
+        rerunCalculations.setIcon(
+                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/reset.png"))));
 
         fileMenu.add(saveSolutions);
         fileMenu.add(saveGraph);
         fileMenu.addSeparator();
         fileMenu.add(rerunCalculations);
 
-        upMenu.add(fileMenu);
-        this.setJMenuBar(upMenu);
+        menuBar.add(fileMenu);
+        this.setJMenuBar(menuBar);
 
         /** Set up algorithm components */
         this.range = range;
@@ -201,17 +210,28 @@ class FunctionFrame extends JFrame implements ActionListener {
         graphicSolverFrame.setSize(500, 500);
         graphicSolverFrame.setResizable(false);
         graphicSolverFrame.setLocationRelativeTo(null);
-        graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        graphicSolverFrame
+                .setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
         graphicSolverFrame.add(graphicSolver);
 
     }
 
     private void calculate() {
-
         ExecutorService solverExec = Executors.newSingleThreadExecutor();
         solverExec.execute(new Runnable() {
             @Override
             public void run() {
+                Timer timeoutTimer = new Timer(TIMEOUT_THRESHOLD, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (!calculationsFinished) {
+                            solutionsDisplay.setText("The solver timed out after " + 30000 / 1000 + " seconds.");
+                        }
+                        solverExec.shutdownNow();
+
+                    }
+                });
+                timeoutTimer.start();
                 /** Use solver to get solutions */
                 if (range == AUTO_RANGE) {
                     solutions = Solver.solve(f_z, acc);
@@ -248,7 +268,7 @@ class FunctionFrame extends JFrame implements ActionListener {
                         solutionsDisplay.setCaretPosition(0);
                     }
                 });
-                solverExec.shutdown();
+                calculationsFinished = true;
             }
         });
     }

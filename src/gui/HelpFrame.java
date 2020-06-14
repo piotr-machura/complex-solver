@@ -61,7 +61,7 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
 
         /**
          * Set up the tree structure
@@ -99,12 +99,11 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         article = new DefaultMutableTreeNode(
                 new HelpArticle("Some roots were not found", "res/troubleshooting/roots-not-found.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(
-                new HelpArticle("Graph takes a long time to load \\ solutions stuck at \"Solving...\"",
-                        "res/troubleshooting/long-time-to-load-stuck-at-solving.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load \\ solutions timed out",
+                "res/troubleshooting/long-time-to-load-timed-out.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Graph looks wrong", "res/troubleshooting/graph-looks-wrong.html"));
+                new HelpArticle("Advanced solver parameters", "res/troubleshooting/advanced-solver-parameters.html"));
         category.add(article);
 
         /** Set up articles in category: Math background */
@@ -153,7 +152,7 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
                                 Desktop.getDesktop().browse(e.getURL().toURI());
                             } else {
                                 /** Provide the user with link to open themselves */
-                                JOptionPane.showMessageDialog(null,
+                                JOptionPane.showMessageDialog(HelpFrame.this,
                                         "Opening links in browser nor supported.\nLink: " + e.getURL(), "ERROR",
                                         JOptionPane.ERROR_MESSAGE);
                             }

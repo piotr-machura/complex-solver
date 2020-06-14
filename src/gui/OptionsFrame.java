@@ -1,5 +1,25 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,23 +30,6 @@ import javax.swing.SwingUtilities;
 
 import algorithm.solver.Solver;
 import algorithm.solver.SolverDefaults;
-
-import java.awt.event.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.Toolkit;
 
 /**
  * The singleton class OptionsFrame.
@@ -66,7 +69,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 5));
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cIcon.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
 
         /**
          * The panel displaying the warning
@@ -86,18 +89,19 @@ public class OptionsFrame extends JFrame implements ActionListener {
          */
         optionsPanel = new JPanel(new GridLayout(4, 2, 0, 0));
         optionLabels = new JTextArea[7];
-        optionLabels[0] = new JTextArea("Auto range\nstart");
-        optionLabels[1] = new JTextArea("Auto range\nincrement");
-        optionLabels[2] = new JTextArea("Auto range\nmax");
-        optionLabels[3] = new JTextArea("Max legal\ndelta phi");
-        optionLabels[4] = new JTextArea("Steps per\nsidelength");
-        optionLabels[5] = new JTextArea("Min legal\nwinding number");
-        optionLabels[6] = new JTextArea("Max legal\nabs of root");
+        optionLabels[0] = new JTextArea("Auto range start");
+        optionLabels[1] = new JTextArea("Auto range increment");
+        optionLabels[2] = new JTextArea("Auto range max");
+        optionLabels[3] = new JTextArea("Maximum legal delta phi");
+        optionLabels[4] = new JTextArea("Steps per sidelength");
+        optionLabels[5] = new JTextArea("Minimum legal winding number");
+        optionLabels[6] = new JTextArea("Maximum legal abs of root");
 
         for (JTextArea label : optionLabels) {
             label.setLineWrap(true);
             label.setBackground(Color.WHITE);
             label.setLineWrap(true);
+            label.setWrapStyleWord(true);
             label.setEditable(false);
             label.setPreferredSize(new Dimension(110, 40));
         }

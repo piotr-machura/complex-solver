@@ -3,6 +3,7 @@ package visual;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -95,6 +96,7 @@ public class GraphicSolver extends JPanel
         outFrame.setResizable(false);
         outFrame.setLocationRelativeTo(null);
         outFrame.add(this.outputSpace);
+        outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("main.png")));
     }
 
     public void replay() {
