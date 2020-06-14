@@ -3,17 +3,26 @@ import java.io.FileNotFoundException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 import algorithm.solver.Solver;
 import gui.CalculatorFrame;
 
 /**
  * MainClass.
- * 
+ *
  * @Author Piotr Machura
  */
 public class MainClass {
     public static void main(final String[] args) {
+        /** Set custom look and feel */
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception e) {
+            /** The look and feel is not supported -> do nothing */
+        }
         /** Get config file from cwd */
         File solverrc = new File(System.getProperty("user.dir") + "\\.solverrc");
         try {
