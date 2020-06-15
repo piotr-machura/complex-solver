@@ -34,8 +34,8 @@ public class MainClass {
                     @Override
                     public void run() {
                         JOptionPane.showMessageDialog(null,
-                                "The .solverrc file has been corrupted:\n\n" + e.getMessage()
-                                        + "\n\nand will now be deleted. Defaults restored.",
+                                "The .solverrc file has been corrupted:\n" + e.getMessage()
+                                        + "\nand will now be deleted. Defaults restored.",
                                 "ERROR", JOptionPane.ERROR_MESSAGE);
                     }
                 });

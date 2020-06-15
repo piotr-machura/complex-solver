@@ -259,6 +259,7 @@ public class OptionsFrame extends JFrame implements ActionListener {
                         public void run() {
                             JOptionPane.showMessageDialog(OptionsFrame.this, "Succesfully applied changes", "Success",
                                     JOptionPane.INFORMATION_MESSAGE);
+                            OptionsFrame.this.setVisible(false);
                         }
                     });
                 } catch (Exception exc) {
@@ -270,7 +271,6 @@ public class OptionsFrame extends JFrame implements ActionListener {
                         }
                     });
                 }
-                this.setVisible(false);
                 break;
             case "restore":
                 this.restoreDefaults();
