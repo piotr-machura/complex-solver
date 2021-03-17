@@ -1,5 +1,8 @@
 .idea/
 .vscode/
+.settings
 .solverrc
 .DS_Store
+.project
+target
 bin
