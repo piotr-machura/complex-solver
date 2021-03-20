@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import algorithm.solver.Solver;
 import gui.CalculatorFrame;

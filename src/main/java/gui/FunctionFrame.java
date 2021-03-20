@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -102,7 +103,8 @@ class FunctionFrame extends JFrame implements ActionListener {
         this.f_z = f_z;
         this.setTitle("f(z) = " + this.f_z);
         this.setLocationRelativeTo(null);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
+        URL url = Thread.currentThread().getContextClassLoader().getResource("icons/main.png");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 
         /** Add menu bar */
         menuBar = new JMenuBar();
@@ -111,20 +113,20 @@ class FunctionFrame extends JFrame implements ActionListener {
         saveGraph = new JMenuItem("Save current graph");
         saveGraph.setActionCommand("saveGraph");
         saveGraph.addActionListener(this);
-        saveGraph.setIcon(
-                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/image.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/image.png");
+        saveGraph.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         saveSolutions = new JMenuItem("Save solutions");
         saveSolutions.setActionCommand("saveSolutions");
         saveSolutions.addActionListener(this);
-        saveSolutions.setIcon(
-                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/file.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/file.png");
+        saveSolutions.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         rerunCalculations = new JMenuItem("Rerun calculations");
         rerunCalculations.setActionCommand("recalculate");
         rerunCalculations.addActionListener(this);
-        rerunCalculations.setIcon(
-                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/reset.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/reset.png");
+        rerunCalculations.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         fileMenu.add(saveSolutions);
         fileMenu.add(saveGraph);
@@ -244,8 +246,8 @@ class FunctionFrame extends JFrame implements ActionListener {
         graphicSolverFrame.setSize(500, 500);
         graphicSolverFrame.setResizable(false);
         graphicSolverFrame.setLocationRelativeTo(null);
-        graphicSolverFrame
-                .setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/reset.png");
+        graphicSolverFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

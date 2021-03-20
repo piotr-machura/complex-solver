@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.net.URL;
 
 import algorithm.parser.exception.CalculatorException;
 import algorithm.parser.function.Complex;
@@ -97,7 +98,8 @@ public class GraphicSolver extends JPanel
         outFrame.setResizable(false);
         outFrame.setLocationRelativeTo(null);
         outFrame.add(this.outputSpace);
-        outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("main.png")));
+        URL url = Thread.currentThread().getContextClassLoader().getResource("icons/main.png");
+        outFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
     }
 
     public void replay() {

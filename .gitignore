@@ -2,6 +2,7 @@
 .vscode/
 .settings
 .solverrc
+.classpath
 .DS_Store
 .project
 target
