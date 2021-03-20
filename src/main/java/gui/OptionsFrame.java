@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -69,7 +70,8 @@ public class OptionsFrame extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 5));
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
+        URL url = Thread.currentThread().getContextClassLoader().getResource("icons/main.png");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 
         /**
          * The panel displaying the warning

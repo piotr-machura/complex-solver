@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.Toolkit;
 import java.util.HashMap;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -89,7 +90,8 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         this.setResizable(false);
         this.setTitle("Complex Solver");
 
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
+        URL url = Thread.currentThread().getContextClassLoader().getResource("icons/main.png");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
         this.range = 10;
 
         /** Initializing panels */
@@ -110,19 +112,20 @@ public class CalculatorFrame extends JFrame implements ActionListener {
         help = new JMenuItem("Help");
         help.setActionCommand("help");
         help.addActionListener(this);
-        help.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/help.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/help.png");
+        help.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         options = new JMenuItem("Options");
         options.addActionListener(this);
         options.setActionCommand("options");
-        options.setIcon(
-                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/cogs.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/cogs.png");
+        options.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         credits = new JMenuItem("Credits");
         credits.setActionCommand("credits");
         credits.addActionListener(this);
-        credits.setIcon(
-                new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/user.png"))));
+        url = Thread.currentThread().getContextClassLoader().getResource("icons/user.png");
+        credits.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(url)));
 
         menu.add(help);
         menu.add(options);

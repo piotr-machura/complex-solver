@@ -61,7 +61,8 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("res/icons/main.png")));
+        URL url = Thread.currentThread().getContextClassLoader().getResource("icons/main.png");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 
         /**
          * Set up the tree structure
@@ -83,13 +84,13 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         category = new DefaultMutableTreeNode("How to");
         top.add(category);
 
-        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "res/how-to/step-by-step.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Step by step", "html/how-to/step-by-step.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Range options", "res/how-to/range-options.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Range options", "html/how-to/range-options.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "res/how-to/accuracy-options.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Accuracy options", "html/how-to/accuracy-options.html"));
         category.add(article);
-        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "res/how-to/saving-results.html"));
+        article = new DefaultMutableTreeNode(new HelpArticle("Saving results", "html/how-to/saving-results.html"));
         category.add(article);
 
         /** Set up articles in category: Troubleshooting */
@@ -97,13 +98,13 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         top.add(category);
 
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Some roots were not found", "res/troubleshooting/roots-not-found.html"));
+                new HelpArticle("Some roots were not found", "html/troubleshooting/roots-not-found.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(new HelpArticle("Graph takes a long time to load \\ solutions timed out",
-                "res/troubleshooting/long-time-to-load-timed-out.html"));
+                "troubleshooting/long-time-to-load-timed-out.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Advanced solver parameters", "res/troubleshooting/advanced-solver-parameters.html"));
+                new HelpArticle("Advanced solver parameters", "html/troubleshooting/advanced-solver-parameters.html"));
         category.add(article);
 
         /** Set up articles in category: Math background */
@@ -111,16 +112,16 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         top.add(category);
 
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Complex functions", "res/math-background/complex-functions.html"));
+                new HelpArticle("Complex functions", "html/math-background/complex-functions.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Roots and poles of complex functions", "res/math-background/roots-and-poles.html"));
+                new HelpArticle("Roots and poles of complex functions", "html/math-background/roots-and-poles.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
-                new HelpArticle("The Riemann Sphere", "res/math-background/riemann-sphere.html"));
+                new HelpArticle("The Riemann Sphere", "html/math-background/riemann-sphere.html"));
         category.add(article);
         article = new DefaultMutableTreeNode(
-                new HelpArticle("Winding number algorithm", "res/math-background/winding-number-algorithm.html"));
+                new HelpArticle("Winding number algorithm", "html/math-background/winding-number-algorithm.html"));
         category.add(article);
 
         /**
@@ -164,9 +165,9 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
             }
         });
         try {
-            htmlPane.setPage(getClass().getResource("res/README.html"));
+            htmlPane.setPage(Thread.currentThread().getContextClassLoader().getResource("html/README.html"));
         } catch (IOException e) {
-            htmlPane.setText("Could not load page: res/README.html");
+            htmlPane.setText("Could not load page: README.html");
         }
         JScrollPane htmlDisplay = new JScrollPane(htmlPane);
         htmlDisplay.setPreferredSize(new Dimension(600, 600));
@@ -202,7 +203,7 @@ public class HelpFrame extends JFrame implements TreeSelectionListener {
         public HelpArticle(String articleName, String filepath) {
             this.articleName = articleName;
             this.filepath = filepath;
-            this.articleURL = getClass().getResource(filepath);
+            this.articleURL = Thread.currentThread().getContextClassLoader().getResource(filepath);
         }
 
         public String toString() {
