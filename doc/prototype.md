@@ -11,7 +11,7 @@ Celem projektu jest stworzenie kalkulatora rysującego oraz znajdującego miejsc
 
 Zrezygnowano z wykorzystania `JavaFX`, zamiast tego zostaną napisane testy `JUnittest` sprawdzające działanie programu.
 
-<img src="gui1.jpg" alt="calc_main" width="600"/>
+<img src="img/gui1.jpg" alt="calc_main" width="600"/>
 
 Pasek menu pozwala wyświetlić okienko pomocy oraz zmienić jezyk programu.
 
@@ -23,7 +23,7 @@ Menu `Accuracy` pozwala określić kiedy zakończyć rekurencję.
 
 Po kliknięciu przycisku `Solve` otwiera się nowe okno z wykresem podanej funkcji, podczas gdy główne okno pozostaje otwarte do dalszego wykorzystania.
 
-<img src="gui2.jpg" alt="calc_main" width="600"/>
+<img src="img/gui2.jpg" alt="calc_main" width="600"/>
 
 Pole tekstowe zawiera w sobie znalezione rozwiązania wraz z danymi na temat obszaru poszukiwań.
 

@@ -12,7 +12,7 @@ Dodatkowo kalkulator wykorzystuje metodę kolorowania dziedziny aby wyświetlić
 
 ## Podłoże matematyczne
 
-<img src="io_spac.jpg" alt="iospace" width="350"/>
+<img src="img/io_spac.jpg" alt="iospace" width="350"/>
 
 ### Metoda kolorowania dziedziny
 
@@ -20,7 +20,7 @@ NArysowanie wykresu funkcji $f: \mathbb{C}\rightarrow \mathbb{C}$ ze względu na
 
 ### Indeks punktu względem krzywej
 
-<img src="wn.jpg" alt="iospace" width="350"/>
+<img src="img/wn.jpg" alt="iospace" width="350"/>
 
 **Indeks punktu** $z_0$ **względem krzywej** $C$ jest to ilość okrążeń wykonywanych przez punkt $z$ wokół $z_0$ przy jednym okrążeniu krzywej $C$. Przyjmuje on zatem jedynie wartości całkowite lub 0, jeśli $z_0$ nie zawiera się wewnatrz krzywej $C$. Na płaszczyźnie zespolonej określony jest jako:
 
@@ -46,11 +46,11 @@ Rekurencja zatrzymuje się w momencie, gdy pola prostokątów o niezerowym _W_ s
 
 ## Interfejs użytkownika
 
-<img src="main_window.jpg" alt="iospace" width="350"/>
+<img src="img/main_window.jpg" alt="iospace" width="350"/>
 
 Program akceptuje wzór funkcji zarówno z klawiatury jak z wbudowanych przycisków. Rozmiar początkowego prostokąta określa `Radius size` - `Auto` narysuje prostokąt 20x20 lub wystarczająco duży, by znaleźć jedno miejsce zerowe (hiperłącze wyświetla tą informację), pole tekstowe `Custom` pozwala wprowadzić własny rozmiar startowego prostokąta. Po kliknięciu przycisku `Solve` otwiera się nowe okno z rozwiązaniem, podczas gdy główne okno pozostaje otwarte do dalszego wykorzystania.
 
-<img src="func_window.jpg" alt="iospace" width="350"/>
+<img src="img/func_window.jpg" alt="iospace" width="350"/>
 
 Wykresy `Input space` i `Output space` można przewijać oraz ''rozszerzać'', okienko `Solutions` wyświetla listę znalezionych rozwiązań ( z suwakiem), przycisk `More Accuracy` pozwala dokładniej obliczyć miejsca zerowe (zmniejsza najmniejszy dopuszczalny prostokąt np. 10-krotnie), przycisk `How did you find this?` odtwarza na `Input space` animację algorytmu rysujacego prostokąty i liczącego ich _winding number_ w spowolnieniu (nie będzie też śledził całego procesu, tylko do pewnego momentu). Hiperłącza `Log to .txt` i `Save output as .jpg` robią to, co na nich pisze.
 
